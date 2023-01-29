@@ -1,10 +1,7 @@
 package com.ah.studio.blueapp.ui.screens.authentication
 
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -15,12 +12,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.ah.studio.blueapp.R
+import com.ah.studio.blueapp.navigation.ScreenController
 import com.ah.studio.blueapp.ui.component.Button
 import com.ah.studio.blueapp.ui.component.CustomTextField
 import com.ah.studio.blueapp.ui.theme.*
@@ -28,15 +24,9 @@ import com.ah.studio.blueapp.ui.theme.*
 
 @Composable
 fun SignUpScreen(navHostController: NavHostController) {
-    val scrollState = rememberScrollState()
-
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .scrollable(
-                state = scrollState,
-                orientation = Orientation.Vertical
-            )
     ) {
         Box(
             modifier = Modifier
@@ -49,7 +39,7 @@ fun SignUpScreen(navHostController: NavHostController) {
                 contentDescription = "",
                 modifier = Modifier.padding(start = PaddingTripleLarge)
             )
-            RegistrationForm()
+            RegistrationForm(navHostController)
         }
 
     }
@@ -57,6 +47,7 @@ fun SignUpScreen(navHostController: NavHostController) {
 
 @Composable
 fun RegistrationForm(
+    navHostController: NavHostController,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -109,6 +100,7 @@ fun RegistrationForm(
         Button(
             width = 280.dp,
             height = 50.dp,
+            text = stringResource(id = R.string.register),
             backgroundColor = SeaBlue400,
             shape = Shapes.medium,
             modifier = modifier.padding(top = PaddingDouble)
@@ -128,13 +120,15 @@ fun RegistrationForm(
                 text = stringResource(R.string.already_have_an_account),
                 fontSize = 16.sp,
                 color = Color.Black,
-                )
+            )
             Text(
                 text = stringResource(R.string.signIn),
                 fontSize = 16.sp,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
-                modifier = modifier.clickable {}
+                modifier = modifier.clickable {
+                    navHostController.navigate(ScreenController.SignIn.route)
+                }
             )
         }
     }

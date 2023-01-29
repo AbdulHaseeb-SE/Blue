@@ -8,3 +8,6 @@ val PaddingDouble = 16.dp
 val PaddingMedium = 19.dp
 val PaddingLarge = 24.dp
 val PaddingTripleLarge = 74.dp
+
+
+val ButtonHeight = 50.dp

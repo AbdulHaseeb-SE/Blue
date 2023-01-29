@@ -1,5 +1,6 @@
 package com.ah.studio.blueapp.ui.component
 
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
@@ -7,19 +8,17 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
-import com.ah.studio.blueapp.R
 import com.ah.studio.blueapp.ui.theme.SeaBlue400
 
 @Composable
 fun Button(
     width: Dp,
     height: Dp,
+    text: String,
     backgroundColor: Color,
     shape: Shape,
     modifier: Modifier = Modifier,
@@ -38,7 +37,7 @@ fun Button(
             .height(height)
     ) {
         Text(
-            text = stringResource(id = R.string.register),
+            text = text,
             fontSize = 17.sp,
             color = Color.Black
         )

@@ -11,4 +11,15 @@
     <string name="civil_id">Civil Id</string>
     <string name="already_have_an_account">Already have an account ? </string>
     <string name="signIn">Sign In</string>
+    <string name="sign_in">Sign In</string>
+    <string name="hello_again">Hello Again!</string>
+    <string name="welcome_back">Welcome Back You\'ve been Missed</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="login">Login</string>
+    <string name="or_continue_with">Or Continue With</string>
+    <string name="sign_in_google_account">Sign In with Google Account</string>
+    <string name="sign_in_apple_account">Sign In with Apple Account</string>
+    <string name="owns_a_boat_yacht">Owns a Boat/Yacht?</string>
+    <string name="dont_have_an_account">"Don't have an account ? "</string>
+    <string name="signUp">Sign Up</string>
 </resources>
