@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import com.ah.studio.blueapp.ui.theme.SeaBlue400
+import com.ah.studio.blueapp.ui.theme.fontFamily
 
 @Composable
 fun Button(
@@ -39,7 +40,8 @@ fun Button(
         Text(
             text = text,
             fontSize = 17.sp,
-            color = Color.Black
+            color = Color.Black,
+            fontFamily = fontFamily
         )
     }
 }

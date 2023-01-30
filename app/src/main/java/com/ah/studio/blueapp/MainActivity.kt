@@ -15,6 +15,7 @@ import com.ah.studio.blueapp.navigation.navHost.RootNavGraph
 import com.ah.studio.blueapp.ui.screens.main.domain.dto.BottomNavItemResponse
 import com.ah.studio.blueapp.ui.screens.main.viewModel.BottomNavViewModel
 import com.ah.studio.blueapp.ui.theme.BlueAppTheme
+import com.ah.studio.blueapp.ui.theme.fontFamily
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,6 +31,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            fontFamily
             BlueAppTheme {
                 navHostController = rememberNavController()
                 ObserverBottomNavItems(

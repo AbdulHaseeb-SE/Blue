@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.ah.studio.blueapp.navigation.ScreenController
-import com.ah.studio.blueapp.navigation.destination.mainScreenComposable
+import com.ah.studio.blueapp.navigation.destination.*
 import com.ah.studio.blueapp.util.Graph
 
 @Composable
@@ -12,8 +12,11 @@ fun HomeNavGraph(navHostController: NavHostController) {
     NavHost(
         navController = navHostController,
         route = Graph.Home,
-        startDestination = ScreenController.MainScreen.route
+        startDestination = ScreenController.Home.route
     ) {
-        mainScreenComposable(navHostController)
+        homeComposable(navHostController)
+        myParkingComposable(navHostController)
+        seafarerComposable(navHostController)
+        accountComposable(navHostController)
     }
 }

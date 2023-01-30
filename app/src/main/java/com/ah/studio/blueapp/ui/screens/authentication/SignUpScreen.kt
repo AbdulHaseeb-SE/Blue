@@ -62,6 +62,7 @@ fun RegistrationForm(
             color = OxfordBlue900,
             fontSize = 34.sp,
             fontWeight = FontWeight.Bold,
+            fontFamily = fontFamily,
             modifier = modifier.padding(vertical = 58.dp)
         )
         CustomTextField(
@@ -120,12 +121,14 @@ fun RegistrationForm(
                 text = stringResource(R.string.already_have_an_account),
                 fontSize = 16.sp,
                 color = Color.Black,
+                fontFamily = fontFamily
             )
             Text(
                 text = stringResource(R.string.signIn),
                 fontSize = 16.sp,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
+                fontFamily = fontFamily,
                 modifier = modifier.clickable {
                     navHostController.navigate(ScreenController.SignIn.route)
                 }

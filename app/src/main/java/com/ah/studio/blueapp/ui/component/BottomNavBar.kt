@@ -5,8 +5,7 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,6 +17,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.ah.studio.blueapp.ui.screens.main.domain.dto.BottomNavItemResponse
 import com.ah.studio.blueapp.ui.theme.SeaBlue400
+import com.ah.studio.blueapp.ui.theme.SeaBlue50
+import com.ah.studio.blueapp.ui.theme.fontFamily
 
 @Composable
 fun BottomNavBar(
@@ -29,15 +30,21 @@ fun BottomNavBar(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
     BottomNavigation(
-        modifier = modifier.padding(horizontal = 16.dp),
-        backgroundColor = Color.White,
+        backgroundColor = SeaBlue50,
         elevation = 0.dp,
     ) {
-        items.forEach { item ->
+        var selectedIndex by remember {
+            mutableStateOf(0)
+        }
+
+        items.forEachIndexed { index, item ->
             val currentDestination = item.route == navBackStackEntry?.destination?.route
             BottomNavigationItem(
                 selected = currentDestination,
-                onClick = { onItemClick(item) },
+                onClick = {
+                    onItemClick(item)
+                    selectedIndex = index
+                },
                 selectedContentColor = SeaBlue400,
                 unselectedContentColor = Color.Black,
                 icon = {
@@ -48,17 +55,26 @@ fun BottomNavBar(
                             painter = painterResource(id = item.icon),
                             contentDescription = item.name,
                             modifier = modifier
-                                .height(24.dp)
-                                .width(48.dp)
-                                .padding(top = 8.dp)
+                                .height(20.dp)
+                                .width(40.dp)
+                                .padding(top = 4.dp)
                         )
                         Spacer(modifier = Modifier.padding(2.dp))
                         Text(
                             text = item.name,
                             fontSize = 12.sp,
-                            textAlign = TextAlign.Justify
+                            textAlign = TextAlign.Justify,
+                            fontFamily = fontFamily
                         )
                         Spacer(modifier = Modifier.padding(2.dp))
+                        if (selectedIndex == index) {
+                            RoundedCornerLine(
+                                width = 12.dp,
+                                height = 4.dp,
+                                color = SeaBlue400,
+                                cornerRadius = 4.dp
+                            )
+                        }
                     }
                 }
             )
