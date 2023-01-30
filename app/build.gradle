@@ -72,4 +72,7 @@ dependencies {
     implementation "io.insert-koin:koin-androidx-workmanager:$koin_version"
     // Koin for Jetpack Compose
     implementation "io.insert-koin:koin-androidx-compose:$koin_version"
+
+    implementation "androidx.compose.material3:material3:$material3_version"
+
 }
