@@ -20,6 +20,7 @@ import com.ah.studio.blueapp.R
 import com.ah.studio.blueapp.ui.theme.Black25Percent
 import com.ah.studio.blueapp.ui.theme.PaddingDouble
 import com.ah.studio.blueapp.ui.theme.PaddingMedium
+import com.ah.studio.blueapp.ui.theme.fontFamily
 
 @Composable
 fun PasswordTextField(
@@ -54,6 +55,7 @@ fun PasswordTextField(
             text = label,
             color = Color.Black,
             fontSize = 16.sp,
+            fontFamily = fontFamily,
             modifier = modifier.padding(
                 horizontal = PaddingMedium,
                 vertical = 0.dp
@@ -68,7 +70,8 @@ fun PasswordTextField(
             placeholder = {
                 Text(
                     text = placeholder,
-                    fontSize = 20.sp
+                    fontSize = 20.sp,
+                    fontFamily = fontFamily
                 )
             },
             singleLine = true,
@@ -91,7 +94,10 @@ fun PasswordTextField(
                 textColor = Color.Black,
                 focusedIndicatorColor = Black25Percent,
             ),
-            textStyle = TextStyle(fontSize = 20.sp),
+            textStyle = TextStyle(
+                fontSize = 20.sp,
+                fontFamily = fontFamily
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .safeContentPadding()

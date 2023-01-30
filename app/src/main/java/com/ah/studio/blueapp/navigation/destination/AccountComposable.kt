@@ -4,11 +4,13 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.ah.studio.blueapp.navigation.ScreenController
+import com.ah.studio.blueapp.ui.screens.account.AccountScreen
 import com.ah.studio.blueapp.ui.screens.authentication.SignInScreen
 
 fun NavGraphBuilder.accountComposable(navHostController: NavHostController){
     composable(
         route = ScreenController.Account.route
     ){
+        AccountScreen(navHostController = navHostController)
     }
 }

@@ -22,12 +22,12 @@ import com.ah.studio.blueapp.navigation.ScreenController
 import com.ah.studio.blueapp.ui.component.*
 import com.ah.studio.blueapp.ui.screens.main.domain.dto.BottomNavItemResponse
 import com.ah.studio.blueapp.ui.theme.*
+import com.ah.studio.blueapp.util.Graph
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun SignInScreen(
-    navHostController: NavHostController,
-    bottomNavItemList: MutableList<BottomNavItemResponse>
+    navHostController: NavHostController
 ) {
     Scaffold(
         modifier = Modifier
@@ -66,6 +66,7 @@ fun Sign_In(
             text = stringResource(R.string.sign_in),
             color = OxfordBlue900,
             fontSize = 34.sp,
+            fontFamily = fontFamily,
             fontWeight = FontWeight.Bold,
             modifier = modifier.padding(top = 58.dp, bottom = 48.dp)
         )
@@ -74,6 +75,7 @@ fun Sign_In(
             text = stringResource(R.string.hello_again),
             color = Color.Black,
             fontSize = 42.sp,
+            fontFamily = fontFamily,
             fontWeight = FontWeight.Bold,
         )
 
@@ -81,6 +83,7 @@ fun Sign_In(
             text = stringResource(R.string.welcome_back),
             color = Color.Black,
             fontSize = 16.sp,
+            fontFamily = fontFamily,
             modifier = modifier
                 .padding(top = 10.dp)
                 .width(160.dp),
@@ -109,6 +112,7 @@ fun Sign_In(
                 fontSize = 16.sp,
                 textAlign = TextAlign.End,
                 color = Color.Black,
+                fontFamily = fontFamily,
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(end = 2.dp)
@@ -122,6 +126,7 @@ fun Sign_In(
                 shape = Shapes.medium,
                 modifier = modifier.padding(top = PaddingLarge)
             ) {
+                navHostController.navigate(Graph.Home)
             }
 
             Row(
@@ -148,6 +153,7 @@ fun Sign_In(
                     text = stringResource(R.string.or_continue_with),
                     fontSize = 16.sp,
                     color = Color.Black,
+                    fontFamily = fontFamily,
                     modifier = modifier
                         .padding(horizontal = PaddingSmall)
                 )
@@ -207,11 +213,13 @@ fun Sign_In(
                     text = stringResource(R.string.dont_have_an_account),
                     fontSize = 16.sp,
                     color = Color.Black,
+                    fontFamily = fontFamily
                 )
                 Text(
                     text = stringResource(R.string.signUp),
                     fontSize = 16.sp,
                     color = Color.Black,
+                    fontFamily = fontFamily,
                     fontWeight = FontWeight.Bold,
                     modifier = modifier.clickable {
                         navHostController.navigate(ScreenController.SignUp.route)

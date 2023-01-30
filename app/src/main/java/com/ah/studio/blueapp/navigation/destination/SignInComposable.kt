@@ -8,15 +8,13 @@ import com.ah.studio.blueapp.ui.screens.authentication.SignInScreen
 import com.ah.studio.blueapp.ui.screens.main.domain.dto.BottomNavItemResponse
 
 fun NavGraphBuilder.signInComposable(
-    navHostController: NavHostController,
-    bottomNavItemList: MutableList<BottomNavItemResponse>
+    navHostController: NavHostController
 ) {
     composable(
         route = ScreenController.SignIn.route
     ) {
         SignInScreen(
-            navHostController = navHostController,
-            bottomNavItemList
+            navHostController = navHostController
         )
     }
 }

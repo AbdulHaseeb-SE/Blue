@@ -4,12 +4,17 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.ah.studio.blueapp.navigation.ScreenController
-import com.ah.studio.blueapp.ui.screens.authentication.SignInScreen
+import com.ah.studio.blueapp.ui.screens.main.MainScreen
+import com.ah.studio.blueapp.ui.screens.main.domain.dto.BottomNavItemResponse
+import com.ah.studio.blueapp.util.Graph
 
 
-fun NavGraphBuilder.mainScreenComposable(navHostController: NavHostController){
+fun NavGraphBuilder.mainScreenComposable(
+    bottomNavItemList: MutableList<BottomNavItemResponse>
+){
     composable(
-        route = ScreenController.MainScreen.route
+        route = Graph.Home
     ){
+        MainScreen(bottomNavItemList = bottomNavItemList)
     }
 }
