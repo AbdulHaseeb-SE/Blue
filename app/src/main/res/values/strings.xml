@@ -37,4 +37,26 @@
     <string name="pick_up_address">Pick Up Address</string>
     <string name="captian">Captian</string>
     <string name="book_now">Book Now</string>
+    <string name="boat_Image">Boat Image</string>
+    <string name="no_boat_message">You Currently don\'t have any boats</string>
+    <string name="add_boats">Add Boats</string>
+    <string name="boat_name">Boat Name</string>
+    <string name="height">Height</string>
+    <string name="width">Width</string>
+    <string name="boat_type">Boat Type</string>
+    <string name="add_images">Add images</string>
+    <string name="arrow_down">Arrow Down</string>
+    <string name="your_available_careers">Your Available Careers</string>
+    <string name="catamaran">Catamaran</string>
+    <string name="not_parked">Not Parked</string>
+    <string name="view_on_map">View on Map</string>
+    <string name="park_now">Park Now</string>
+    <string name="parked">Parked</string>
+    <string name="open_maps">Open Maps</string>
+    <string name="rating_star">Rating Star</string>
+    <string name="home">Home</string>
+    <string name="slot_booked">Slot Booked</string>
+    <string name="parking_details">Parking Details</string>
+    <string name="done">DONE!</string>
+    <string name="bookings">Bookings</string>
 </resources>

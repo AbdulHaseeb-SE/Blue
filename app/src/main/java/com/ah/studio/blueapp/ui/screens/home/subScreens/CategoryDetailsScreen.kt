@@ -1,5 +1,6 @@
 package com.ah.studio.blueapp.ui.screens.home.subScreens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -27,12 +28,10 @@ import com.ah.studio.blueapp.ui.theme.PaddingLarge
 import com.ah.studio.blueapp.ui.theme.SeaBlue400
 
 @Composable
-fun CategoryDetailsScreen(navHostController: NavHostController) {
-
-    val receivedCategoryText by remember {
-        mutableStateOf("Boats")
-    }
-
+fun CategoryDetailsScreen(
+    navHostController: NavHostController = rememberNavController(),
+    categoryName : String
+) {
     val boatList: MutableList<Boat> = mutableListOf(
         Boat(
             boatImage = painterResource(id = R.drawable.ic_boat),
@@ -72,7 +71,7 @@ fun CategoryDetailsScreen(navHostController: NavHostController) {
                 backgroundColor = Color.White,
                 contentColor = Color.Black,
                 navigationIcon = painterResource(id = R.drawable.ic_back),
-                text = receivedCategoryText,
+                text = categoryName,
                 elevation = 0.dp,
                 navigationIconContentDescription = stringResource(R.string.back_button),
                 actionIcons = {
@@ -163,5 +162,5 @@ fun BoatListSection(
 @Preview
 @Composable
 fun PreviewDetails() {
-    CategoryDetailsScreen(navHostController = rememberNavController())
+    CategoryDetailsScreen(navHostController = rememberNavController(), "Yatch")
 }

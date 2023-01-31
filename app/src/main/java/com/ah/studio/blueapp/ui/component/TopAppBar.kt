@@ -24,7 +24,7 @@ import com.ah.studio.blueapp.ui.theme.fontFamily
 fun TopAppBar(
     backgroundColor: Color,
     contentColor: Color,
-    navigationIcon: Painter,
+    navigationIcon: Painter?,
     text: String,
     elevation: Dp,
     navigationIconContentDescription: String,
@@ -40,12 +40,15 @@ fun TopAppBar(
             titleContentColor = contentColor
         ),
         navigationIcon = {
-            IconButton(onClick = { onNavigationIconClick() }) {
-                Icon(
-                    modifier = modifier.size(24.dp),
-                    painter = navigationIcon,
-                    contentDescription = navigationIconContentDescription
-                )
+            if (navigationIcon != null) {
+                IconButton(onClick = { onNavigationIconClick() }) {
+
+                    Icon(
+                        modifier = modifier.size(24.dp),
+                        painter = navigationIcon,
+                        contentDescription = navigationIconContentDescription
+                    )
+                }
             }
         },
         title = {

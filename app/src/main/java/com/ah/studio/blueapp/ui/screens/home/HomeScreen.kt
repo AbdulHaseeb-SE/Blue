@@ -1,19 +1,16 @@
 package com.ah.studio.blueapp.ui.screens.home
 
+import android.os.Bundle
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -25,21 +22,26 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.ah.studio.blueapp.R
+import com.ah.studio.blueapp.navigation.ScreenController
+import com.ah.studio.blueapp.ui.component.LocationComponent
 import com.ah.studio.blueapp.ui.component.VehicleCategoryCard
 import com.ah.studio.blueapp.ui.theme.*
+import com.ah.studio.blueapp.util.Graph
 
 
 @Composable
 fun HomeScreen(navHostController: NavHostController) {
+
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) {
-        HomeScreenComponents(it)
+        MainContainer(it, navHostController)
     }
+
 }
 
 @Composable
-fun HomeScreenComponents(paddingValues: PaddingValues) {
+fun MainContainer(paddingValues: PaddingValues, navHostController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -55,45 +57,12 @@ fun HomeScreenComponents(paddingValues: PaddingValues) {
             PaddingLarge,
             PaddingDouble
         )
-        CategoryComponent()
+        CategoryComponent(navHostController)
     }
 }
 
 @Composable
-fun LocationComponent(
-    painter: Painter,
-    locationText: String,
-    locationStartPadding: Dp,
-    rowTopPadding: Dp,
-    iconPaddingStart: Dp,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(top = rowTopPadding),
-        horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Image(
-            painter = painter,
-            contentDescription = "",
-            modifier = modifier
-                .padding(start = iconPaddingStart)
-        )
-        Text(
-            text = locationText,
-            fontSize = 17.sp,
-            fontWeight = FontWeight(600),
-            fontFamily = fontFamily,
-            color = Color.Black,
-            modifier = modifier.padding(start = locationStartPadding)
-        )
-    }
-}
-
-@Composable
-fun CategoryComponent(modifier: Modifier = Modifier) {
+fun CategoryComponent(navHostController: NavHostController, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -120,12 +89,14 @@ fun CategoryComponent(modifier: Modifier = Modifier) {
             color = Color.Black,
             modifier = modifier.padding(bottom = PaddingDouble)
         )
-        CategoryCards()
+        CategoryCards() { categoryName ->
+            navHostController.navigate(ScreenController.CategoryDetails.withArgs(categoryName))
+        }
     }
 }
 
 @Composable
-fun CategoryCards(modifier: Modifier = Modifier) {
+fun CategoryCards(modifier: Modifier = Modifier, onClick: (String) -> Unit) {
     VehicleCategoryCard(
         modifier = modifier
             .fillMaxWidth()
@@ -143,7 +114,9 @@ fun CategoryCards(modifier: Modifier = Modifier) {
         nameStartPadding = PaddingLarge,
         nameTopPadding = 20.dp,
         imageTopPadding = 40.dp
-    )
+    ) { name ->
+        onClick(name)
+    }
 
     VehicleCategoryCard(
         modifier = modifier
@@ -162,7 +135,9 @@ fun CategoryCards(modifier: Modifier = Modifier) {
         nameStartPadding = PaddingLarge,
         nameTopPadding = 20.dp,
         imageTopPadding = 40.dp
-    )
+    ) { name ->
+        onClick(name)
+    }
 }
 
 

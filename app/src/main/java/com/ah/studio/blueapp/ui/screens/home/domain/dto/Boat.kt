@@ -6,5 +6,6 @@ data class Boat(
     val boatImage: Painter,
     val  boatName: String,
     val location: String,
-    val price: String
+    val price: String,
+    val parkingStatus: Boolean = false
 )

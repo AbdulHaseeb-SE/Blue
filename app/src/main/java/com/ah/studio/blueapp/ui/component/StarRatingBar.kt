@@ -15,7 +15,6 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.imageResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ah.studio.blueapp.R
@@ -24,18 +23,17 @@ import com.ah.studio.blueapp.R
 fun StarRatingBar(
     modifier: Modifier = Modifier,
     rating: Float,
+    totalStarCount: Int = 5,
     spaceBetween: Dp = 0.dp
 ) {
 
     val image = ImageBitmap.imageResource(id = R.drawable.ic_star_outlined)
     val imageFull = ImageBitmap.imageResource(id = R.drawable.ic_star_filled)
 
-    val totalCount = 5
-
     val height = LocalDensity.current.run { image.height.toDp() }
     val width = LocalDensity.current.run { image.width.toDp() }
     val space = LocalDensity.current.run { spaceBetween.toPx() }
-    val totalWidth = width * totalCount + spaceBetween * (totalCount - 1)
+    val totalWidth = width * totalStarCount + spaceBetween * (totalStarCount - 1)
 
 
     Box(

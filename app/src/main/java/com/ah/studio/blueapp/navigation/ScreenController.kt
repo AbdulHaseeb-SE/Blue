@@ -1,6 +1,7 @@
 package com.ah.studio.blueapp.navigation
 
 import com.ah.studio.blueapp.util.Constants.ACCOUNT_ROUTE
+import com.ah.studio.blueapp.util.Constants.CATEGORY_DETAILS_ROUTE
 import com.ah.studio.blueapp.util.Constants.HOME_ROUTE
 import com.ah.studio.blueapp.util.Constants.MAIN_SCREEN_ROUTE
 import com.ah.studio.blueapp.util.Constants.MY_PARKING_ROUTE
@@ -18,4 +19,14 @@ sealed class ScreenController(val route: String) {
     object MyParking : ScreenController(MY_PARKING_ROUTE)
     object Seafarer : ScreenController(SEAFARER_ROUTE)
     object Account : ScreenController(ACCOUNT_ROUTE)
+    object CategoryDetails : ScreenController(CATEGORY_DETAILS_ROUTE)
+
+    fun withArgs(vararg args: String): String {
+        return buildString {
+            append(route)
+            args.forEach { arg ->
+                append("/$arg")
+            }
+        }
+    }
 }

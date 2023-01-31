@@ -1,6 +1,7 @@
 package com.ah.studio.blueapp.ui.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,9 +40,11 @@ fun VehicleCategoryCard(
     nameBottomPadding: Dp = 0.dp,
     nameStartPadding: Dp = 0.dp,
     nameEndPadding: Dp = 0.dp,
+    onCardClick: (String) -> Unit
 ) {
     Card(
-        modifier = modifier,
+        modifier = modifier
+            .clickable { onCardClick(vehicleName) },
         backgroundColor = backgroundColor,
         shape = shape,
         elevation = elevation

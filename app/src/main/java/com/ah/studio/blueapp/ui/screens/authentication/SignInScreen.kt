@@ -20,7 +20,6 @@ import androidx.navigation.NavHostController
 import com.ah.studio.blueapp.R
 import com.ah.studio.blueapp.navigation.ScreenController
 import com.ah.studio.blueapp.ui.component.*
-import com.ah.studio.blueapp.ui.screens.main.domain.dto.BottomNavItemResponse
 import com.ah.studio.blueapp.ui.theme.*
 import com.ah.studio.blueapp.util.Graph
 
@@ -126,7 +125,7 @@ fun Sign_In(
                 shape = Shapes.medium,
                 modifier = modifier.padding(top = PaddingLarge)
             ) {
-                navHostController.navigate(Graph.Home)
+                navHostController.navigate(Graph.Main)
             }
 
             Row(
