@@ -111,7 +111,7 @@ fun DoneScreen() {
                     fontSize = 17.sp,
                     fontFamily = fontFamily,
                     fontWeight = FontWeight.Light,
-                    textAlign = TextAlign.Start,
+                    textAlign = TextAlign.Justify,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(
@@ -135,7 +135,6 @@ fun DoneScreen() {
                 )
 
             }
-
 
             Button(
                 width = 0.dp,

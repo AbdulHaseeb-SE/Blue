@@ -32,7 +32,8 @@ fun Button(
             onButtonClick()
         },
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = backgroundColor
+            backgroundColor = backgroundColor,
+            disabledBackgroundColor = backgroundColor
         ),
         shape = shape,
         modifier = modifier
