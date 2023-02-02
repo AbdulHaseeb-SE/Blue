@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -18,13 +20,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ah.studio.blueapp.R
+import com.ah.studio.blueapp.ui.component.Button
 import com.ah.studio.blueapp.ui.component.CustomCalendar
 import com.ah.studio.blueapp.ui.component.CustomDropDown
 import com.ah.studio.blueapp.ui.component.TopAppBar
-import com.ah.studio.blueapp.ui.theme.PaddingDouble
-import com.ah.studio.blueapp.ui.theme.PaddingHalf
-import com.ah.studio.blueapp.ui.theme.PaddingLarge
-import com.ah.studio.blueapp.ui.theme.fontFamily
+import com.ah.studio.blueapp.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -96,8 +96,45 @@ fun BoatBookingScreen() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
+            ) {}
+
+            Text(
+                text = stringResource(R.string.slots_available),
+                fontWeight = FontWeight.Bold,
+                fontSize = 17.sp,
+                fontFamily = fontFamily,
+                color = Color.Black,
+                textAlign = TextAlign.Start,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 27.dp)
             )
 
+            Card(
+                modifier = Modifier
+                    .height(300.dp)
+                    .fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.Transparent
+                ),
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = 0.dp
+                )
+            ) {
+
+            }
+
+            Button(
+                width = 0.dp,
+                height = 50.dp,
+                text = stringResource(id = R.string.next),
+                backgroundColor = SeaBlue400,
+                shape = Shapes.medium,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(46.dp)
+            ) {}
         }
     }
 }
