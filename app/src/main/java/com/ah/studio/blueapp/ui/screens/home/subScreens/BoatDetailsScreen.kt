@@ -314,7 +314,7 @@ fun BoatNameDetailsSection() {
                     color = Color.Black
                 )
 
-                StarRatingBar(rating = 4f)
+                StarRatingBar(rating = 4.0)
             }
             Column(
                 modifier = Modifier.wrapContentWidth(),

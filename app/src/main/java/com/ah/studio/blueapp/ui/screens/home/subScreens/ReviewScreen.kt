@@ -177,7 +177,7 @@ fun ReviewOnItemSection() {
                 modifier = Modifier.padding(vertical = 6.dp)
             )
             StarRatingBar(
-                rating = 4f,
+                rating = 4.0,
                 modifier = Modifier.background(Color.Transparent)
             )
         }

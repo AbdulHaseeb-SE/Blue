@@ -1,8 +1,7 @@
 package com.ah.studio.blueapp.ui.component
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -15,89 +14,52 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ah.studio.blueapp.R
+import com.ah.studio.blueapp.ui.theme.StarColor
+import kotlin.math.ceil
+import kotlin.math.floor
 
 @Composable
 fun StarRatingBar(
     modifier: Modifier = Modifier,
-    rating: Float,
+    rating: Double = 0.0,
     totalStarCount: Int = 5,
-    spaceBetween: Dp = 0.dp
+    starsColor: Color = StarColor,
 ) {
 
-    val image = ImageBitmap.imageResource(id = R.drawable.ic_star_outlined)
-    val imageFull = ImageBitmap.imageResource(id = R.drawable.ic_star_filled)
+    val filledStars = floor(rating).toInt()
+    val unfilledStars = (totalStarCount - ceil(rating)).toInt()
+    val halfStar = !(rating.rem(1).equals(0.0))
 
-    val height = LocalDensity.current.run { image.height.toDp() }
-    val width = LocalDensity.current.run { image.width.toDp() }
-    val space = LocalDensity.current.run { spaceBetween.toPx() }
-    val totalWidth = width * totalStarCount + spaceBetween * (totalStarCount - 1)
+    Row(modifier = modifier) {
 
-
-    Box(
-        modifier
-            .width(totalWidth)
-            .height(height)
-            .drawBehind {
-                drawRating(rating, image, imageFull, space)
-            })
-}
-
-private fun DrawScope.drawRating(
-    rating: Float,
-    image: ImageBitmap,
-    imageFull: ImageBitmap,
-    space: Float
-) {
-
-    val totalCount = 5
-
-    val imageWidth = image.width.toFloat()
-    val imageHeight = size.height
-
-    val reminder = rating - rating.toInt()
-    val ratingInt = (rating - reminder).toInt()
-
-    for (i in 0 until totalCount) {
-
-        val start = imageWidth * i + space * i
-
-        drawImage(
-            image = image,
-            topLeft = Offset(start, 0f)
-        )
-    }
-
-    drawWithLayer {
-        for (i in 0 until totalCount) {
-            val start = imageWidth * i + space * i
-            // Destination
-            drawImage(
-                image = imageFull,
-                topLeft = Offset(start, 0f)
+        repeat(filledStars) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_star_filled),
+                contentDescription = null,
+                tint = starsColor,
+                modifier = Modifier.size(24.dp)
             )
         }
 
-        val end = imageWidth * totalCount + space * (totalCount - 1)
-        val start = rating * imageWidth + ratingInt * space
-        val size = end - start
+        if (halfStar) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_star_filled),
+                contentDescription = null,
+                tint = starsColor,
+                modifier = Modifier.size(24.dp)
+            )
+        }
 
-        // Source
-        drawRect(
-            Color.Transparent,
-            topLeft = Offset(start, 0f),
-            size = Size(size, height = imageHeight),
-            blendMode = BlendMode.SrcIn
-        )
-    }
-}
-
-private fun DrawScope.drawWithLayer(block: DrawScope.() -> Unit) {
-    with(drawContext.canvas.nativeCanvas) {
-        val checkPoint = saveLayer(null, null)
-        block()
-        restoreToCount(checkPoint)
+        repeat(unfilledStars) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_star_outlined),
+                contentDescription = null,
+                modifier = Modifier.size(24.dp)
+            )
+        }
     }
 }
