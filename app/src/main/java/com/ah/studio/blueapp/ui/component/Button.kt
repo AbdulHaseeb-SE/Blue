@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import com.ah.studio.blueapp.ui.theme.SeaBlue400
@@ -23,6 +24,7 @@ fun Button(
     backgroundColor: Color,
     shape: Shape,
     modifier: Modifier = Modifier,
+    fontWeight: FontWeight = FontWeight.Normal,
     onButtonClick: () -> Unit
 ) {
     Button(
@@ -30,7 +32,8 @@ fun Button(
             onButtonClick()
         },
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = SeaBlue400
+            backgroundColor = backgroundColor,
+            disabledBackgroundColor = backgroundColor
         ),
         shape = shape,
         modifier = modifier
@@ -41,7 +44,8 @@ fun Button(
             text = text,
             fontSize = 17.sp,
             color = Color.Black,
-            fontFamily = fontFamily
+            fontFamily = fontFamily,
+            fontWeight = fontWeight
         )
     }
 }

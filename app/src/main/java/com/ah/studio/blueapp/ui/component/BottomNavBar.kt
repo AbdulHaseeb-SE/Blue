@@ -19,6 +19,8 @@ import com.ah.studio.blueapp.ui.screens.main.domain.dto.BottomNavItemResponse
 import com.ah.studio.blueapp.ui.theme.SeaBlue400
 import com.ah.studio.blueapp.ui.theme.SeaBlue50
 import com.ah.studio.blueapp.ui.theme.fontFamily
+import com.ah.studio.blueapp.ui.theme.Shapes
+
 
 @Composable
 fun BottomNavBar(
@@ -72,7 +74,8 @@ fun BottomNavBar(
                                 width = 12.dp,
                                 height = 4.dp,
                                 color = SeaBlue400,
-                                cornerRadius = 4.dp
+                                shape = Shapes.small,
+                                elevation = 0.dp
                             )
                         }
                     }

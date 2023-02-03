@@ -1,22 +1,29 @@
 package com.ah.studio.blueapp.navigation.navHost
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
+import androidx.navigation.navArgument
 import com.ah.studio.blueapp.navigation.ScreenController
 import com.ah.studio.blueapp.navigation.destination.*
 import com.ah.studio.blueapp.util.Graph
 
+
 @Composable
-fun HomeNavGraph(navHostController: NavHostController) {
+fun HomeNavGraph(
+    navHostController: NavHostController
+) {
     NavHost(
         navController = navHostController,
-        route = Graph.Home,
-        startDestination = ScreenController.Home.route
+        route = Graph.HomeGraph + "/{CategoryName}",
+        startDestination = ScreenController.CategoryDetails.route,
     ) {
-        homeComposable(navHostController)
-        myParkingComposable(navHostController)
-        seafarerComposable(navHostController)
-        accountComposable(navHostController)
+        this.argument("CategoryName") {
+            type = NavType.StringType
+            nullable = false
+        }
+        categoryDetailsComposable(navHostController)
     }
 }

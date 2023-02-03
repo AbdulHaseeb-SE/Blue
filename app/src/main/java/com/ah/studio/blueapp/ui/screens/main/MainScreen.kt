@@ -3,7 +3,6 @@ package com.ah.studio.blueapp.ui.screens.main
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -11,11 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.ah.studio.blueapp.navigation.navHost.HomeNavGraph
+import com.ah.studio.blueapp.navigation.navHost.MainNavGraph
 import com.ah.studio.blueapp.ui.component.BottomNavBar
 import com.ah.studio.blueapp.ui.screens.main.domain.dto.BottomNavItemResponse
 import com.ah.studio.blueapp.ui.theme.SeaBlue50
-import com.ah.studio.blueapp.util.Graph
 
 @Composable
 fun MainScreen(
@@ -38,7 +36,7 @@ fun MainScreen(
                     bottom = paddingValues.calculateBottomPadding()
                 )
         ) {
-            HomeNavGraph(navHostController = navHostController)
+            MainNavGraph(navHostController = navHostController)
         }
     }
 }
