@@ -164,7 +164,7 @@ fun AddressSection() {
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = stringResource(R.string.captian),
+                    text = stringResource(R.string.captain),
                     fontSize = 17.sp,
                     fontFamily = fontFamily,
                     color = Color.Black,

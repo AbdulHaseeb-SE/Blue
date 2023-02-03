@@ -1,4 +1,4 @@
-package com.ah.studio.blueapp.ui.screens.myParking.subScreens
+package com.ah.studio.blueapp.ui.screens.home.subScreens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -7,6 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -28,7 +29,7 @@ import com.ah.studio.blueapp.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PaymentScreen() {
+fun RestaurantPaymentScreen() {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -57,11 +58,9 @@ fun PaymentScreen() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Bottom
         ) {
-
             LocationSection()
-            BoatNameSection()
+            CaptainBoatNameSection()
             TimeDateSection()
-
             SummarySection()
             CouponSection()
             PaymentMethodSection()
@@ -87,39 +86,98 @@ fun PaymentScreen() {
 }
 
 @Composable
-fun BoatNameSection() {
+fun CaptainBoatNameSection() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 15.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start
+            .wrapContentHeight(),
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        BlueRoundedCornerShape(
+
+        Row(
             modifier = Modifier
-                .width(40.dp)
-                .height(40.dp),
-            shape = CircleShape,
-            containerColor = Color.Transparent,
-            borderColor = Color.Transparent
+                .fillMaxWidth(0.5f)
+                .padding(vertical = 15.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_boat),
-                contentDescription = stringResource(R.string.clock_icon),
-                contentScale = ContentScale.Crop
-            )
+            BlueRoundedCornerShape(
+                modifier = Modifier
+                    .width(40.dp)
+                    .height(40.dp),
+                shape = CircleShape,
+                containerColor = SeaBlue08Percent,
+                borderColor = SeaBlue400
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_captian_cap),
+                        contentDescription = stringResource(R.string.clock_icon),
+                        modifier = Modifier.padding(4.dp)
+                    )
+                }
+            }
+
+            Column(
+                modifier = Modifier.padding(horizontal = 9.dp),
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = stringResource(R.string.captain),
+                    fontSize = 16.sp,
+                    fontFamily = fontFamily,
+                    color = Color.Black,
+                    fontWeight = FontWeight(600),
+                    textAlign = TextAlign.Start
+                )
+                Text(
+                    text = "Salim Alsafi",
+                    fontSize = 13.sp,
+                    fontFamily = fontFamily,
+                    color = Grey700,
+                    textAlign = TextAlign.Start
+                )
+            }
         }
 
-        Text(
-            text = "Catamaran Boats",
-            fontSize = 14.sp,
-            fontFamily = fontFamily,
-            color = Color.Black,
-            textAlign = TextAlign.Start,
-            fontWeight = FontWeight.Bold,
+        Row(
             modifier = Modifier
-                .padding(horizontal = 9.dp)
-        )
+                .fillMaxWidth(1f)
+                .padding(vertical = 15.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ) {
+            BlueRoundedCornerShape(
+                modifier = Modifier
+                    .width(40.dp)
+                    .height(40.dp),
+                shape = CircleShape,
+                containerColor = Color.Transparent,
+                borderColor = Color.Transparent
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_boat),
+                    contentDescription = stringResource(R.string.clock_icon),
+                    contentScale = ContentScale.Crop
+                )
+            }
+
+            Text(
+                text = "Catamaran Boats",
+                fontSize = 16.sp,
+                fontFamily = fontFamily,
+                color = Color.Black,
+                textAlign = TextAlign.Start,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .padding(start = 9.dp)
+            )
+        }
     }
 }
 
@@ -128,15 +186,18 @@ fun TimeDateSection() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .wrapContentHeight()
             .padding(bottom = 15.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row(
             modifier = Modifier
+                .fillMaxWidth(0.5f)
                 .wrapContentWidth()
                 .padding(vertical = 15.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_clock),
@@ -146,20 +207,22 @@ fun TimeDateSection() {
                 text = "9 AM to 1 PM",
                 fontSize = 14.sp,
                 fontFamily = fontFamily,
-                color = Black25Percent,
+                fontWeight = FontWeight.SemiBold,
+                color = Grey700,
                 textAlign = TextAlign.Start,
                 modifier = Modifier
-                    .padding(horizontal = 9.dp)
+                    .padding(start = 9.dp)
+                    .fillMaxWidth()
             )
         }
-
         Row(
             modifier = Modifier
+                .fillMaxWidth(1f)
                 .wrapContentWidth()
                 .padding(vertical = 15.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
         ) {
-
             BlueRoundedCornerShape(
                 modifier = Modifier
                     .width(40.dp)
@@ -169,7 +232,7 @@ fun TimeDateSection() {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .fillMaxSize(),
+                        .fillMaxHeight(),
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
@@ -181,16 +244,15 @@ fun TimeDateSection() {
                     )
                 }
             }
-
-
             Text(
                 text = "24 Sep 2022",
                 fontSize = 14.sp,
                 fontFamily = fontFamily,
-                color = Black25Percent,
-                textAlign = TextAlign.Start,
+                fontWeight = FontWeight.SemiBold,
+                color = Grey700,
                 modifier = Modifier
-                    .padding(horizontal = 9.dp)
+                    .padding(start = 9.dp)
+                    .fillMaxWidth()
             )
         }
     }
@@ -227,7 +289,7 @@ fun LocationSection() {
                 text = "Marina Mall, Salmiya",
                 fontSize = 14.sp,
                 fontFamily = fontFamily,
-                color = Black25Percent,
+                color = Grey700,
                 textAlign = TextAlign.Start,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -251,16 +313,16 @@ fun SummarySection() {
             fontFamily = fontFamily,
             color = Color.Black,
             modifier = Modifier.padding(
-                vertical = 12.dp,
-                horizontal = 12.dp
+                top = 26.dp,
+                start = 10.dp,
+                end = 10.dp,
+                bottom = 12.dp
             )
         )
-
         Row(
             modifier = Modifier
                 .padding(
                     start = 10.dp,
-                    bottom = 17.dp,
                     end = 10.dp
                 )
                 .fillMaxWidth(),
@@ -268,16 +330,132 @@ fun SummarySection() {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "4 Days",
+                text = "Catamaran Boats",
                 fontSize = 17.sp,
                 fontWeight = FontWeight.Normal,
                 fontFamily = fontFamily,
                 color = Grey700
             )
             Text(
-                text = "50.000",
+                text = "50.000 KWD",
                 fontSize = 17.sp,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.SemiBold,
+                fontFamily = fontFamily,
+                color = Grey700
+            )
+        }
+        Divider(
+            thickness = 1.dp,
+            color = Black19Percent,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp, bottom = 8.dp)
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "Chicken Burger",
+                fontSize = 17.sp,
+                fontWeight = FontWeight.Normal,
+                fontFamily = fontFamily,
+                color = Grey700
+            )
+            Text(
+                text = "3.500 KWD",
+                fontSize = 17.sp,
+                fontWeight = FontWeight.SemiBold,
+                fontFamily = fontFamily,
+                color = Grey700
+            )
+        }
+        Divider(
+            thickness = 1.dp,
+            color = Black19Percent,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp, bottom = 8.dp)
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "Mix Kabab",
+                fontSize = 17.sp,
+                fontWeight = FontWeight.Normal,
+                fontFamily = fontFamily,
+                color = Grey700
+            )
+            Text(
+                text = "7.500 KWD",
+                fontSize = 17.sp,
+                fontWeight = FontWeight.SemiBold,
+                fontFamily = fontFamily,
+                color = Grey700
+            )
+        }
+        Divider(
+            thickness = 1.dp,
+            color = Black19Percent,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp, bottom = 8.dp)
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "Pan Cakes",
+                fontSize = 17.sp,
+                fontWeight = FontWeight.Normal,
+                fontFamily = fontFamily,
+                color = Grey700
+            )
+            Text(
+                text = "4.800 KWD",
+                fontSize = 17.sp,
+                fontWeight = FontWeight.SemiBold,
+                fontFamily = fontFamily,
+                color = Grey700
+            )
+        }
+        Divider(
+            thickness = 1.dp,
+            color = Black19Percent,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp, bottom = 8.dp)
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "Chicken Pizza",
+                fontSize = 17.sp,
+                fontWeight = FontWeight.Normal,
+                fontFamily = fontFamily,
+                color = Grey700
+            )
+            Text(
+                text = "5.000 KWD",
+                fontSize = 17.sp,
+                fontWeight = FontWeight.SemiBold,
                 fontFamily = fontFamily,
                 color = Grey700
             )
@@ -286,7 +464,9 @@ fun SummarySection() {
         DashedDivider(
             thickness = 1.dp,
             color = Black19Percent,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 12.dp)
         )
 
         Row(
@@ -303,16 +483,16 @@ fun SummarySection() {
             Text(
                 text = stringResource(R.string.total_amount),
                 fontSize = 17.sp,
-                fontWeight = FontWeight.Normal,
+                fontWeight = FontWeight.Bold,
                 fontFamily = fontFamily,
                 color = OxfordBlue900
             )
             Text(
-                text = "50.000",
+                text = "50.000 KWD",
                 fontSize = 17.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = fontFamily,
-                color = Grey700
+                color = OxfordBlue900
             )
         }
     }
@@ -386,6 +566,6 @@ fun PaymentMethodSection() {
 
 @Preview
 @Composable
-fun PreviewPaymentScreen() {
-    PaymentScreen()
+fun PreviewRestaurantPaymentScreen() {
+    RestaurantPaymentScreen()
 }

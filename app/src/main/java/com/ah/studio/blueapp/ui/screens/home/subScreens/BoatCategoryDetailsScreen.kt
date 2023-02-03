@@ -1,6 +1,5 @@
 package com.ah.studio.blueapp.ui.screens.home.subScreens
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -28,7 +27,7 @@ import com.ah.studio.blueapp.ui.theme.PaddingLarge
 import com.ah.studio.blueapp.ui.theme.SeaBlue400
 
 @Composable
-fun CategoryDetailsScreen(
+fun BoatCategoryDetailsScreen(
     navHostController: NavHostController = rememberNavController(),
     categoryName : String
 ) {
@@ -162,5 +161,5 @@ fun BoatListSection(
 @Preview
 @Composable
 fun PreviewDetails() {
-    CategoryDetailsScreen(navHostController = rememberNavController(), "Yatch")
+    BoatCategoryDetailsScreen(navHostController = rememberNavController(), "Yatch")
 }

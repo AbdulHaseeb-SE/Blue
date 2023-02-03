@@ -35,7 +35,7 @@
     <string name="dummy_description">\"In rhoncus, mauris rhoncus luctus tincidunt, lacus augue auctor ipsum, id sagittis ipsum ipsum nec libero. Mauris tristique varius In rhoncus, mauris rhoncus luctus tincidunt, lacus augue auctor ipsum, id sagittis ipsum ipsum nec libero. Mauris tristique varius In rhoncus, mauris rhoncus luctus tincidunt, lacus augue auctor ipsum, id sagittis ipsum ipsum nec libero. Mauris tristique varius In rhoncus, mauris rhoncus luctus tincidunt, lacus augue auctor ipsum, id sagittis ipsum ipsum nec libero. Mauris tristique varius In rhoncus, mauris rhoncus luctus tincidunt, lacus augue auctor ipsum, id sagittis ipsum ipsum nec libero. Mauris tristique varius In rhoncus, mauris rhoncus luctus tincidunt, lacus augue auctor ipsum, id sagittis ipsum ipsum nec libero. Mauris tristique varius \"</string>
     <string name="location_icon">Location icon</string>
     <string name="pick_up_address">Pick Up Address</string>
-    <string name="captian">Captian</string>
+    <string name="captain">Captain</string>
     <string name="book_now">Book Now</string>
     <string name="boat_Image">Boat Image</string>
     <string name="no_boat_message">You Currently don\'t have any boats</string>
@@ -88,4 +88,16 @@
     <string name="next">Next</string>
     <string name="description">Description</string>
     <string name="add_to_cart">Add To Cart</string>
+    <string name="cart">Cart</string>
+    <string name="edit_item">Edit Item</string>
+    <string name="timer">Icon Timer</string>
+    <string name="queries">Queries</string>
+    <string name="option_to_write">Option to Write</string>
+    <string name="proceed_to_checkout">Proceed To Checkout</string>
+    <string name="thank_you_for_booking">Thank you for booking</string>
+    <string name="order_id">Order Id</string>
+    <string name="transaction_type">Transaction Type</string>
+    <string name="transaction_id">Transaction ID</string>
+    <string name="payment_status">Payment status</string>
+    <string name="customer_reviews">Customer Reviews</string>
 </resources>

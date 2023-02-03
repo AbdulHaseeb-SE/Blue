@@ -24,10 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ah.studio.blueapp.R
-import com.ah.studio.blueapp.ui.component.BlueRoundedCornerShape
-import com.ah.studio.blueapp.ui.component.Button
-import com.ah.studio.blueapp.ui.component.RoundedCornerImageView
-import com.ah.studio.blueapp.ui.component.TopAppBar
+import com.ah.studio.blueapp.ui.component.*
 import com.ah.studio.blueapp.ui.theme.*
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -86,9 +83,6 @@ fun AddToCartItemScreen() {
             verticalArrangement = Arrangement.Top
         ) {
 
-            var itemCount by remember {
-                mutableStateOf(0)
-            }
             RoundedCornerImageView(
                 painter = painterResource(id = R.drawable.ic_chicken_burger),
                 shape = RoundedCornerShape(
@@ -120,7 +114,9 @@ fun AddToCartItemScreen() {
                     modifier = Modifier.fillMaxWidth()
                 )
 
+
                 Row(
+
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 10.dp)
@@ -137,74 +133,7 @@ fun AddToCartItemScreen() {
                         modifier = Modifier.padding(start = 4.dp)
                     )
 
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth(0.5f)
-                            .wrapContentHeight(),
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        BlueRoundedCornerShape(
-                            modifier = Modifier
-                                .width(34.dp)
-                                .height(34.dp)
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .fillMaxHeight(),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Text(
-                                    text = "+",
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    fontFamily = fontFamily,
-                                    color = Color.Black,
-                                    modifier = Modifier.clickable {
-                                        itemCount += 1
-                                    }
-                                )
-                            }
-                        }
-
-                        Text(
-                            text = itemCount.toString(),
-                            fontSize = 17.sp,
-                            fontWeight = FontWeight.Bold,
-                            fontFamily = fontFamily,
-                            color = Color.Black,
-                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 1.dp)
-                        )
-
-                        BlueRoundedCornerShape(
-                            modifier = Modifier
-                                .width(34.dp)
-                                .height(34.dp)
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .fillMaxHeight(),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Text(
-                                    text = "-",
-                                    fontSize = 24.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    fontFamily = fontFamily,
-                                    color = Color.Black,
-                                    modifier = Modifier.clickable {
-                                        if (itemCount > 0) itemCount -= 1
-                                    }
-                                )
-                            }
-                        }
-                    }
-
-
+                    AddSubtractItem()
                 }
 
                 Text(

@@ -6,10 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.ah.studio.blueapp.navigation.ScreenController
-import com.ah.studio.blueapp.ui.screens.home.subScreens.CategoryDetailsScreen
-import com.ah.studio.blueapp.ui.screens.main.MainScreen
-import com.ah.studio.blueapp.ui.screens.main.domain.dto.BottomNavItemResponse
-import com.ah.studio.blueapp.util.Graph
+import com.ah.studio.blueapp.ui.screens.home.subScreens.BoatCategoryDetailsScreen
 
 fun NavGraphBuilder.categoryDetailsComposable(navHostController: NavHostController){
     composable(
@@ -22,6 +19,6 @@ fun NavGraphBuilder.categoryDetailsComposable(navHostController: NavHostControll
         )
     ){entry->
         entry.arguments?.getString("CategoryName")
-            ?.let { CategoryDetailsScreen(categoryName = it) }
+            ?.let { BoatCategoryDetailsScreen(categoryName = it) }
     }
 }

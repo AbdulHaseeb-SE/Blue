@@ -42,7 +42,6 @@ fun TopAppBar(
         navigationIcon = {
             if (navigationIcon != null) {
                 IconButton(onClick = { onNavigationIconClick() }) {
-
                     Icon(
                         modifier = modifier.size(24.dp),
                         painter = navigationIcon,
