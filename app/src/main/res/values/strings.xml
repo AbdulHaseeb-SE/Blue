@@ -100,4 +100,27 @@
     <string name="transaction_id">Transaction ID</string>
     <string name="payment_status">Payment status</string>
     <string name="customer_reviews">Customer Reviews</string>
+    <string name="account">Account</string>
+    <string name="my_bookings">My Bookings</string>
+    <string name="my_parking">My Parking</string>
+    <string name="terms_and_condition"><![CDATA[Terms & Condition]]></string>
+    <string name="contact_us">Contact Us</string>
+    <string name="refund_policy">Refund Policy</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="change_password">Change Password</string>
+    <string name="logout">Logout</string>
+    <string name="push_notification">Push Notification</string>
+    <string name="tick">Icon Tick</string>
+    <string name="booked">Booked</string>
+    <string name="term_and_services"><![CDATA[Term & Services]]></string>
+    <string name="aliquam_ornare">Aliquam ornare tellus eu orci iaculis, vitae mattis sem congue. Cras porta velit semper pharetra ultricies. Aenean tristique volutpat nisi id porttitor. Aenean at elementum tortor. Ut euismod malesuada nulla in vehicula. Donec accumsan</string>
+    <string name="terms_and_conditions">TERMS AND CONDITIONS</string>
+    <string name="policies">POLICIES</string>
+    <string name="services">SERVICES</string>
+    <string name="name">Name</string>
+    <string name="your_reviews">Your Reviews</string>
+    <string name="submit">Submit</string>
+    <string name="follow_us">Follow us</string>
+    <string name="current_password">Current Password</string>
+    <string name="new_password">New Password</string>
 </resources>
