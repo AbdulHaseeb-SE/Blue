@@ -123,4 +123,6 @@
     <string name="follow_us">Follow us</string>
     <string name="current_password">Current Password</string>
     <string name="new_password">New Password</string>
+    <string name="rate_now">Rate Now</string>
+    <string name="my_parkings">My Parkings</string>
 </resources>
