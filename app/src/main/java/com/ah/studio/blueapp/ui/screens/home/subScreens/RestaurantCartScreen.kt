@@ -4,9 +4,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -33,7 +31,6 @@ import com.ah.studio.blueapp.ui.component.RestaurantCartItem
 import com.ah.studio.blueapp.ui.component.TopAppBar
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.RestaurantMenuItem
 import com.ah.studio.blueapp.ui.theme.*
-import kotlin.math.min
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -149,10 +146,6 @@ fun RestaurantCartScreen() {
                         ),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(
-                                horizontal = 13.dp,
-                                vertical = 9.dp,
-                            )
                             .heightIn(min = 100.dp)
                     )
                 }
