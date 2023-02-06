@@ -43,8 +43,7 @@ fun RestaurantCartScreen() {
                 navigationIcon = painterResource(id = R.drawable.ic_back),
                 navigationIconContentDescription = "",
                 text = stringResource(id = R.string.cart),
-                elevation = 0.dp,
-                actionIcons = { },
+                actionIcons = {},
                 onNavigationIconClick = {}
             )
         },

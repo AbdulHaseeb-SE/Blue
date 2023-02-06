@@ -44,7 +44,6 @@ fun RestaurantScreen() {
                 navigationIcon = painterResource(id = R.drawable.ic_back),
                 navigationIconContentDescription = stringResource(id = R.string.back_button),
                 text = stringResource(id = R.string.restaurants),
-                elevation = 0.dp,
                 actionIcons = {
                     Image(
                         painter = painterResource(id = R.drawable.ic_notification),

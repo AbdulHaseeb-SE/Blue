@@ -34,7 +34,6 @@ fun BookingScreen() {
                 contentColor = Color.Black,
                 navigationIcon = painterResource(id = R.drawable.ic_back),
                 text = stringResource(R.string.bookings),
-                elevation = 0.dp,
                 navigationIconContentDescription = "",
                 actionIcons = {
                     Image(

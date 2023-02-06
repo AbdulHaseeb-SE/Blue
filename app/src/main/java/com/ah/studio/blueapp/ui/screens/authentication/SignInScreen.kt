@@ -16,17 +16,17 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.ah.studio.blueapp.R
-import com.ah.studio.blueapp.navigation.ScreenController
 import com.ah.studio.blueapp.ui.component.*
 import com.ah.studio.blueapp.ui.theme.*
-import com.ah.studio.blueapp.util.Graph
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun SignInScreen(
-    navHostController: NavHostController
+    onLoginClick: () -> Unit,
+    onForgotClick: () -> Unit,
+    onSignUpClick: () -> Unit,
+    onOwnsBoatClick: () -> Unit
 ) {
     Scaffold(
         modifier = Modifier
@@ -44,14 +44,19 @@ fun SignInScreen(
                 painter = painterResource(id = R.drawable.bg_bottom_gradient),
                 contentDescription = ""
             )
-            Sign_In(navHostController)
+            Sign_In(
+                onLoginClick, onForgotClick, onSignUpClick, onOwnsBoatClick
+            )
         }
     }
 }
 
 @Composable
 fun Sign_In(
-    navHostController: NavHostController,
+    onLoginClick: () -> Unit,
+    onForgotClick: () -> Unit,
+    onSignUpClick: () -> Unit,
+    onOwnsBoatClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -115,6 +120,9 @@ fun Sign_In(
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(end = 2.dp)
+                    .clickable {
+                        onForgotClick()
+                    }
             )
 
             Button(
@@ -125,7 +133,7 @@ fun Sign_In(
                 shape = Shapes.medium,
                 modifier = modifier.padding(top = PaddingLarge)
             ) {
-                navHostController.navigate(Graph.Main)
+                onLoginClick()
             }
 
             Row(
@@ -196,6 +204,7 @@ fun Sign_In(
                 shape = Shapes.medium,
                 modifier = modifier.padding(top = 32.dp)
             ) {
+                onOwnsBoatClick()
             }
 
             Row(
@@ -221,7 +230,7 @@ fun Sign_In(
                     fontFamily = fontFamily,
                     fontWeight = FontWeight.Bold,
                     modifier = modifier.clickable {
-                        navHostController.navigate(ScreenController.SignUp.route)
+                        onSignUpClick()
                     }
                 )
             }

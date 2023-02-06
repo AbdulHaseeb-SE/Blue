@@ -29,7 +29,6 @@ fun MyParkingScreen() {
                 navigationIcon = painterResource(id = R.drawable.ic_back),
                 navigationIconContentDescription = "",
                 text = stringResource(id = R.string.my_parking),
-                elevation = 0.dp,
                 actionIcons = { },
                 onNavigationIconClick = {}
             )

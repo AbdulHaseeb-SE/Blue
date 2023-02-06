@@ -89,7 +89,6 @@ fun DestinationScreen() {
                 contentColor = Color.Black,
                 navigationIcon = painterResource(id = R.drawable.ic_back),
                 text = stringResource(R.string.destination),
-                elevation = 0.dp,
                 navigationIconContentDescription = "",
                 actionIcons = {},
                 onNavigationIconClick = {}

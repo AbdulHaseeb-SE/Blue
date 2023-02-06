@@ -37,7 +37,6 @@ fun AccountScreen(navHostController: NavHostController) {
                 navigationIcon = painterResource(id = R.drawable.ic_back),
                 navigationIconContentDescription = "",
                 text = stringResource(R.string.account),
-                elevation = 0.dp,
                 actionIcons = {},
                 onNavigationIconClick = {}
             )

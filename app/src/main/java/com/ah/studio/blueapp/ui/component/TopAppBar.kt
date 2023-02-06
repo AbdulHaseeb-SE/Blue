@@ -1,6 +1,5 @@
 package com.ah.studio.blueapp.ui.component
 
-import android.widget.GridLayout.Alignment
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -13,8 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ah.studio.blueapp.ui.theme.fontFamily
@@ -26,9 +23,8 @@ fun TopAppBar(
     contentColor: Color,
     navigationIcon: Painter?,
     text: String,
-    elevation: Dp,
     navigationIconContentDescription: String,
-    actionIcons: @Composable() (RowScope.() -> Unit),
+    actionIcons: @Composable (RowScope.() -> Unit),
     onNavigationIconClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -56,6 +52,7 @@ fun TopAppBar(
                 fontSize = 17.sp,
                 fontWeight = FontWeight.SemiBold,
                 fontFamily = fontFamily,
+                color = contentColor
             )
         },
         actions = actionIcons

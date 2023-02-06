@@ -39,7 +39,6 @@ fun AddToCartItemScreen() {
                 navigationIcon = null,
                 navigationIconContentDescription = "",
                 text = "",
-                elevation = 0.dp,
                 actionIcons = {
                     BlueRoundedCornerShape(
                         modifier = Modifier

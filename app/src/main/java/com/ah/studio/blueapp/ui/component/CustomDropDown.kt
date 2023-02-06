@@ -1,15 +1,12 @@
 package com.ah.studio.blueapp.ui.component
 
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.ah.studio.blueapp.R
@@ -20,6 +17,7 @@ import com.ah.studio.blueapp.ui.theme.SeaBlue400
 @Composable
 fun CustomDropDown(
     listItems: Array<String>,
+    labelText: String = "",
     labelFontSize: TextUnit,
     textFontSize: TextUnit,
     modifier: Modifier = Modifier,
@@ -42,7 +40,7 @@ fun CustomDropDown(
         }
     ) {
         CustomTextField(
-            label = listItems[0],
+            label = labelText.ifEmpty { listItems[0] },
             placeholder = selectedItem,
             textInput = "",
             readOnly = true,

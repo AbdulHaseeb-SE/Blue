@@ -92,5 +92,4 @@ dependencies {
     implementation "io.github.boguszpawlowski.composecalendar:composecalendar:1.0.2"
     implementation "io.github.boguszpawlowski.composecalendar:kotlinx-datetime:1.0.2"
 
-
 }

@@ -2,6 +2,7 @@ package com.ah.studio.blueapp.ui.screens.home.subScreens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -20,11 +21,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.ah.studio.blueapp.R
 import com.ah.studio.blueapp.ui.component.Button
 import com.ah.studio.blueapp.ui.component.RoundedCornerImageView
@@ -35,7 +33,7 @@ import com.ah.studio.blueapp.ui.theme.*
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BoatDetailsScreen(navHostController: NavHostController) {
+fun BoatDetailsScreen() {
 
     Scaffold(
         topBar = {
@@ -44,7 +42,6 @@ fun BoatDetailsScreen(navHostController: NavHostController) {
                 contentColor = Color.Black,
                 navigationIcon = painterResource(id = R.drawable.ic_back),
                 text = "",
-                elevation = 0.dp,
                 navigationIconContentDescription = stringResource(id = R.string.back_button),
                 actionIcons = {},
                 onNavigationIconClick = {})
@@ -90,7 +87,7 @@ fun BottomSection() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 20.dp, bottom = 40.dp, start = PaddingDouble,  end = PaddingDouble),
+            .padding(top = 20.dp, bottom = 40.dp, start = PaddingDouble, end = PaddingDouble),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -314,7 +311,10 @@ fun BoatNameDetailsSection() {
                     color = Color.Black
                 )
 
-                StarRatingBar(rating = 4.0)
+                StarRatingBar(
+                    rating = 4.0,
+                    modifier = Modifier.background(Color.Transparent)
+                )
             }
             Column(
                 modifier = Modifier.wrapContentWidth(),
@@ -331,9 +331,10 @@ fun BoatNameDetailsSection() {
     }
 }
 
+/*
 
 @Preview
 @Composable
 fun Preview() {
-    BoatDetailsScreen(navHostController = rememberNavController())
-}
+    BoatDetailsScreen()
+}*/

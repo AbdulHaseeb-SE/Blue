@@ -26,7 +26,6 @@ fun StarRatingBar(
     val halfStar = !(rating.rem(1).equals(0.0))
 
     Row(modifier = modifier) {
-
         repeat(filledStars) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_star_filled),
@@ -49,7 +48,8 @@ fun StarRatingBar(
             Icon(
                 painter = painterResource(id = R.drawable.ic_star_outlined),
                 contentDescription = null,
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(24.dp),
+                tint = Color.Black
             )
         }
     }
