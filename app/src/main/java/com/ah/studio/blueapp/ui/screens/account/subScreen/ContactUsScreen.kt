@@ -44,7 +44,6 @@ fun ContactUsScreen() {
                 navigationIcon = painterResource(id = R.drawable.ic_back),
                 navigationIconContentDescription = "",
                 text = stringResource(id = R.string.contact_us),
-                elevation = 0.dp,
                 actionIcons = { },
                 onNavigationIconClick = {}
             )

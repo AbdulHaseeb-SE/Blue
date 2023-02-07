@@ -35,7 +35,6 @@ fun TermAndConditionScreen() {
                 navigationIcon = painterResource(id = R.drawable.ic_back),
                 navigationIconContentDescription = "",
                 text = stringResource(id = R.string.terms_and_condition),
-                elevation = 0.dp,
                 actionIcons = {},
                 onNavigationIconClick = {}
             )

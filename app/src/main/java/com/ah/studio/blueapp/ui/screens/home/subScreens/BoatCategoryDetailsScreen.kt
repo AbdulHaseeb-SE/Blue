@@ -1,6 +1,7 @@
 package com.ah.studio.blueapp.ui.screens.home.subScreens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -13,8 +14,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.ah.studio.blueapp.R
 import com.ah.studio.blueapp.ui.component.BoatListCard
 import com.ah.studio.blueapp.ui.component.HorizontalTabs
@@ -28,8 +27,8 @@ import com.ah.studio.blueapp.ui.theme.SeaBlue400
 
 @Composable
 fun BoatCategoryDetailsScreen(
-    navHostController: NavHostController = rememberNavController(),
-    categoryName : String
+    categoryName: String,
+    onBoatCardClick: () -> Unit
 ) {
     val boatList: MutableList<Boat> = mutableListOf(
         Boat(
@@ -71,7 +70,6 @@ fun BoatCategoryDetailsScreen(
                 contentColor = Color.Black,
                 navigationIcon = painterResource(id = R.drawable.ic_back),
                 text = categoryName,
-                elevation = 0.dp,
                 navigationIconContentDescription = stringResource(R.string.back_button),
                 actionIcons = {
                     Image(
@@ -100,7 +98,12 @@ fun BoatCategoryDetailsScreen(
                 categoryList = categoryList,
                 modifier = Modifier.fillMaxWidth()
             )
-            BoatListSection(boatList)
+            BoatListSection(
+                boatList,
+                onBoatCardClick = {
+                    onBoatCardClick()
+                }
+            )
         }
     }
 }
@@ -124,6 +127,7 @@ fun CategoryTabs(
 @Composable
 fun BoatListSection(
     boatList: MutableList<Boat>,
+    onBoatCardClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var text by remember {
@@ -153,6 +157,9 @@ fun BoatListSection(
                     .fillMaxWidth()
                     .height(135.dp)
                     .padding(top = 21.dp)
+                    .clickable {
+                        onBoatCardClick()
+                    }
             )
         }
     }
@@ -161,5 +168,5 @@ fun BoatListSection(
 @Preview
 @Composable
 fun PreviewDetails() {
-    BoatCategoryDetailsScreen(navHostController = rememberNavController(), "Yatch")
+    BoatCategoryDetailsScreen(""){}
 }

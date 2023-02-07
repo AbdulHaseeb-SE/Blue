@@ -33,7 +33,6 @@ fun ChangePasswordScreen() {
                 navigationIcon = painterResource(id = R.drawable.ic_back),
                 navigationIconContentDescription = "",
                 text = stringResource(id = R.string.change_password),
-                elevation = 0.dp,
                 actionIcons = { },
                 onNavigationIconClick = {}
             )

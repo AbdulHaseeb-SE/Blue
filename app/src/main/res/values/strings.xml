@@ -25,7 +25,7 @@
     <string name="al_jahra_kuwait">Al Jahra, Kuwait</string>
     <string name="select_category">Select Your Category</string>
     <string name="lorem_ipsum">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard</string>
-    <string name="yatch">Yatch</string>
+    <string name="yacht">Yacht</string>
     <string name="boat">Boats</string>
     <string name="back_button">Back Button</string>
     <string name="button_notification">Button Notification</string>
@@ -125,4 +125,19 @@
     <string name="new_password">New Password</string>
     <string name="rate_now">Rate Now</string>
     <string name="my_parkings">My Parkings</string>
+    <string name="add_new">Add New</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="age">Age</string>
+    <string name="experience">Experience</string>
+    <string name="license_number">License Number</string>
+    <string name="add_license_images">Add License images</string>
+    <string name="spoken_languages">Spoken Languages</string>
+    <string name="nationality">Nationality</string>
+    <string name="button_add">Button Add</string>
+    <string name="experience_text">Experience : </string>
+    <string name="age_text">"Age : "</string>
+    <string name="nationality_text">"Nationality : "</string>
+    <string name="boat_experience">"Boat Experience : "</string>
+    <string name="spoken_languages_text">"Spoken Languages : "</string>
+    <string name="pay_to_unlock">Pay to Unlock</string>
 </resources>

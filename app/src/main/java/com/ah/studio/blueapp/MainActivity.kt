@@ -11,7 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.ah.studio.blueapp.navigation.navHost.RootNavGraph
+import com.ah.studio.blueapp.navigation.graphs.RootNavGraph
 import com.ah.studio.blueapp.ui.screens.main.domain.dto.BottomNavItemResponse
 import com.ah.studio.blueapp.ui.screens.main.viewModel.BottomNavViewModel
 import com.ah.studio.blueapp.ui.theme.BlueAppTheme

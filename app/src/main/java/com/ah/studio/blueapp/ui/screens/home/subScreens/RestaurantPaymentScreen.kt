@@ -37,7 +37,6 @@ fun RestaurantPaymentScreen() {
                 contentColor = Color.Black,
                 navigationIcon = painterResource(id = R.drawable.ic_back),
                 text = stringResource(R.string.payment),
-                elevation = 0.dp,
                 navigationIconContentDescription = "",
                 actionIcons = {},
                 onNavigationIconClick = {}

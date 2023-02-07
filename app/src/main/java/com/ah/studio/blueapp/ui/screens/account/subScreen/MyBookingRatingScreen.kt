@@ -36,7 +36,6 @@ fun MyBookingRatingScreen() {
                 contentColor = Color.Black,
                 navigationIcon = painterResource(id = R.drawable.ic_back),
                 text = stringResource(R.string.my_bookings),
-                elevation = 0.dp,
                 navigationIconContentDescription = "",
                 actionIcons = {},
                 onNavigationIconClick = {}

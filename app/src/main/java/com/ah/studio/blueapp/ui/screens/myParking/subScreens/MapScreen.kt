@@ -40,7 +40,6 @@ fun MapScreen() {
                 contentColor = Color.Black,
                 navigationIcon = null,
                 text = "",
-                elevation = 0.dp,
                 navigationIconContentDescription = "",
                 actionIcons = {
                     Image(

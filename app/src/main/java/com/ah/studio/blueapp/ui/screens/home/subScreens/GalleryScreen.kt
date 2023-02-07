@@ -28,7 +28,6 @@ fun GalleyScreen() {
                 contentColor = Color.Black,
                 navigationIcon = painterResource(id = R.drawable.ic_back),
                 text = stringResource(R.string.gallery),
-                elevation = 0.dp,
                 navigationIconContentDescription = "",
                 actionIcons = {
                     Image(

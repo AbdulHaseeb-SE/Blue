@@ -14,16 +14,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.ah.studio.blueapp.R
-import com.ah.studio.blueapp.navigation.ScreenController
 import com.ah.studio.blueapp.ui.component.Button
 import com.ah.studio.blueapp.ui.component.CustomTextField
 import com.ah.studio.blueapp.ui.theme.*
 
 
 @Composable
-fun SignUpScreen(navHostController: NavHostController) {
+fun SignUpScreen(
+    onRegisterClick: () -> Unit,
+    onSignInClick: () -> Unit
+) {
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -39,7 +40,10 @@ fun SignUpScreen(navHostController: NavHostController) {
                 contentDescription = "",
                 modifier = Modifier.padding(start = PaddingTripleLarge)
             )
-            RegistrationForm(navHostController)
+            RegistrationForm(
+                onSignInClick = { onSignInClick() },
+                onRegisterClick = { onRegisterClick() }
+            )
         }
 
     }
@@ -47,7 +51,8 @@ fun SignUpScreen(navHostController: NavHostController) {
 
 @Composable
 fun RegistrationForm(
-    navHostController: NavHostController,
+    onSignInClick: () -> Unit,
+    onRegisterClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -105,7 +110,9 @@ fun RegistrationForm(
             backgroundColor = SeaBlue400,
             shape = Shapes.medium,
             modifier = modifier.padding(top = PaddingDouble)
-        ) {}
+        ) {
+            onRegisterClick()
+        }
 
         Row(
             modifier = modifier
@@ -130,7 +137,7 @@ fun RegistrationForm(
                 fontWeight = FontWeight.Bold,
                 fontFamily = fontFamily,
                 modifier = modifier.clickable {
-                    navHostController.navigate(ScreenController.SignIn.route)
+                    onSignInClick()
                 }
             )
         }

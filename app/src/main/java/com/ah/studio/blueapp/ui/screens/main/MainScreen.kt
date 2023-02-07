@@ -8,9 +8,10 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.ah.studio.blueapp.navigation.navHost.MainNavGraph
+import com.ah.studio.blueapp.navigation.graphs.MainNavGraph
 import com.ah.studio.blueapp.ui.component.BottomNavBar
 import com.ah.studio.blueapp.ui.screens.main.domain.dto.BottomNavItemResponse
 import com.ah.studio.blueapp.ui.theme.SeaBlue50
@@ -54,6 +55,7 @@ fun BottomNavigationBar(
             items = bottomNavItemList, navController = navHostController
         ) { currentItem ->
             navHostController.navigate(currentItem.route) {
+                popUpTo(navHostController.graph.findStartDestination().id)
                 launchSingleTop = true
             }
         }

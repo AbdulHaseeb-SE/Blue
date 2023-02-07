@@ -36,7 +36,6 @@ fun DoneScreen() {
                 contentColor = Color.Black,
                 navigationIcon = painterResource(id = R.drawable.ic_back),
                 text = "",
-                elevation = 0.dp,
                 navigationIconContentDescription = "",
                 actionIcons = {
                     Image(

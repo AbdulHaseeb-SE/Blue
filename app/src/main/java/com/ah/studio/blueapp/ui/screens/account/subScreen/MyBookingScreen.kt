@@ -29,7 +29,6 @@ fun MyBookingScreen() {
                 navigationIcon = painterResource(id = R.drawable.ic_back),
                 navigationIconContentDescription = "",
                 text = stringResource(id = R.string.my_bookings),
-                elevation = 0.dp,
                 actionIcons = { },
                 onNavigationIconClick = {}
             )

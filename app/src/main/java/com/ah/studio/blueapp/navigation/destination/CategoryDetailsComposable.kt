@@ -8,17 +8,22 @@ import androidx.navigation.navArgument
 import com.ah.studio.blueapp.navigation.ScreenController
 import com.ah.studio.blueapp.ui.screens.home.subScreens.BoatCategoryDetailsScreen
 
-fun NavGraphBuilder.categoryDetailsComposable(navHostController: NavHostController){
+fun NavGraphBuilder.categoryDetailsComposable(
+    navHostController: NavHostController
+) {
     composable(
-        route = ScreenController.CategoryDetails.route + "/{CategoryName}",
+        route = ScreenController.CategoryDetails.route,
         arguments = listOf(
-            navArgument(name = "CategoryName"){
+            navArgument(name = "categoryName") {
                 type = NavType.StringType
                 nullable = false
             }
         )
-    ){entry->
-        entry.arguments?.getString("CategoryName")
-            ?.let { BoatCategoryDetailsScreen(categoryName = it) }
+    ) { entry ->
+        entry.arguments?.getString("categoryName")?.let {
+            BoatCategoryDetailsScreen(categoryName = it){
+                navHostController.navigate(ScreenController.BoatDetails.route)
+            }
+        }
     }
 }

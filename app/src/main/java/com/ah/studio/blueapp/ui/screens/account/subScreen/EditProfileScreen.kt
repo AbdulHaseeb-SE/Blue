@@ -35,7 +35,6 @@ fun EditProfileScreen() {
                 navigationIcon = painterResource(id = R.drawable.ic_back),
                 navigationIconContentDescription = "",
                 text = stringResource(id = R.string.edit_profile),
-                elevation = 0.dp,
                 actionIcons = { },
                 onNavigationIconClick = {}
             )

@@ -1,47 +1,44 @@
 package com.ah.studio.blueapp.ui.screens.home
 
-import android.os.Bundle
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.ah.studio.blueapp.R
-import com.ah.studio.blueapp.navigation.ScreenController
 import com.ah.studio.blueapp.ui.component.LocationComponent
 import com.ah.studio.blueapp.ui.component.VehicleCategoryCard
 import com.ah.studio.blueapp.ui.theme.*
-import com.ah.studio.blueapp.util.Graph
 
 
 @Composable
-fun HomeScreen(navHostController: NavHostController) {
+fun HomeScreen(onClick: (String) -> Unit) {
 
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) {
-        MainContainer(it, navHostController)
+        MainContainer(it, onClick= {categoryName ->
+            onClick(categoryName)
+        })
     }
 
 }
 
 @Composable
-fun MainContainer(paddingValues: PaddingValues, navHostController: NavHostController) {
+fun MainContainer(
+    paddingValues: PaddingValues,
+    onClick: (String) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -57,12 +54,16 @@ fun MainContainer(paddingValues: PaddingValues, navHostController: NavHostContro
             PaddingLarge,
             PaddingDouble
         )
-        CategoryComponent(navHostController)
+        CategoryComponent(
+            onClick = {
+                onClick(it)
+            }
+        )
     }
 }
 
 @Composable
-fun CategoryComponent(navHostController: NavHostController, modifier: Modifier = Modifier) {
+fun CategoryComponent(onClick: (String) -> Unit, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -90,7 +91,7 @@ fun CategoryComponent(navHostController: NavHostController, modifier: Modifier =
             modifier = modifier.padding(bottom = PaddingDouble)
         )
         CategoryCards() { categoryName ->
-            navHostController.navigate(ScreenController.CategoryDetails.withArgs(categoryName))
+            onClick(categoryName)
         }
     }
 }
@@ -106,7 +107,7 @@ fun CategoryCards(modifier: Modifier = Modifier, onClick: (String) -> Unit) {
         shape = Shapes.medium,
         elevation = 0.dp,
         vehicleImage = painterResource(id = R.drawable.yacht),
-        vehicleName = stringResource(R.string.yatch),
+        vehicleName = stringResource(R.string.yacht),
         textColor = Azure400,
         textSize = 32.sp,
         fontWeight = FontWeight.Bold,
@@ -144,5 +145,5 @@ fun CategoryCards(modifier: Modifier = Modifier, onClick: (String) -> Unit) {
 @Preview
 @Composable
 fun PreviewHome() {
-    HomeScreen(navHostController = rememberNavController())
+    HomeScreen(){}
 }
