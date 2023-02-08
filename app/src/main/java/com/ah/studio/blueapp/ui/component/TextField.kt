@@ -31,6 +31,7 @@ fun CustomTextField(
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
+    imeAction: ImeAction = ImeAction.Next,
     value: (String) -> Unit
 ) {
     var text by remember {
@@ -70,7 +71,7 @@ fun CustomTextField(
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 keyboardType = keyboardType,
-                imeAction = ImeAction.Next
+                imeAction = imeAction
             ),
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Color.Transparent,
