@@ -12,24 +12,51 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ah.studio.blueapp.R
 import com.ah.studio.blueapp.ui.component.LocationComponent
 import com.ah.studio.blueapp.ui.component.VehicleCategoryCard
 import com.ah.studio.blueapp.ui.theme.*
+import org.koin.androidx.compose.getKoin
 
 
 @Composable
-fun HomeScreen(onClick: (String) -> Unit) {
+fun HomeScreen(
+    onClick: (String) -> Unit,
+    viewModel: HomeViewModel = getKoin().get()
+) {
 
     Scaffold(
         modifier = Modifier.fillMaxSize()
-    ) {
-        MainContainer(it, onClick= {categoryName ->
-            onClick(categoryName)
-        })
+    ) { paddingValues ->
+        viewModel.getBoatCategoryResponse()
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.Start
+        ) {
+
+            LocationComponent(
+                painterResource(id = R.drawable.ic_location),
+                stringResource(R.string.fetch_location),
+                PaddingHalf,
+                PaddingLarge,
+                PaddingDouble
+            )
+
+
+            CategoryComponent(
+                onClick = {
+                    onClick(it)
+                }
+            )
+        }
+
     }
 
 }
@@ -39,27 +66,7 @@ fun MainContainer(
     paddingValues: PaddingValues,
     onClick: (String) -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues)
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.Start
-    ) {
-        LocationComponent(
-            painterResource(id = R.drawable.ic_location),
-            stringResource(R.string.al_jahra_kuwait),
-            PaddingHalf,
-            PaddingLarge,
-            PaddingDouble
-        )
-        CategoryComponent(
-            onClick = {
-                onClick(it)
-            }
-        )
-    }
+
 }
 
 @Composable
@@ -139,11 +146,4 @@ fun CategoryCards(modifier: Modifier = Modifier, onClick: (String) -> Unit) {
     ) { name ->
         onClick(name)
     }
-}
-
-
-@Preview
-@Composable
-fun PreviewHome() {
-    HomeScreen(){}
 }

@@ -1,8 +1,8 @@
 package com.ah.studio.blueapp.ui.screens.home.domain.repository
 
-import com.ah.studio.blueapp.ui.screens.home.domain.dto.boatCategory.BoatCategoryResponse
-import kotlinx.coroutines.flow.StateFlow
+import okhttp3.ResponseBody
+import retrofit2.Response
 
 interface IHomeRepository {
-    fun getBoatCategory() : StateFlow<BoatCategoryResponse>
+    suspend fun getBoatCategory(): Response<ResponseBody>
 }

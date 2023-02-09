@@ -140,4 +140,5 @@
     <string name="boat_experience">"Boat Experience : "</string>
     <string name="spoken_languages_text">"Spoken Languages : "</string>
     <string name="pay_to_unlock">Pay to Unlock</string>
+    <string name="fetch_location">Fetch Location</string>
 </resources>

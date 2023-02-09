@@ -1,8 +1,8 @@
 package com.ah.studio.blueapp.ui.screens.home.domain.dto.boatCategory
 
 data class BoatCategoryResponse(
-    val data: Data,
-    val message: String,
     val status: Int,
-    val type: String
+    val message: String,
+    val type: String,
+    val data: Data
 )

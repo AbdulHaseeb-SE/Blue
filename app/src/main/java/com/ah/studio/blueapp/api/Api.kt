@@ -4,7 +4,7 @@ import com.ah.studio.blueapp.ui.screens.authentication.domain.dto.login.LoginCre
 import com.ah.studio.blueapp.ui.screens.authentication.domain.dto.login.UserLoginResponse
 import com.ah.studio.blueapp.ui.screens.authentication.domain.dto.register.User
 import com.ah.studio.blueapp.ui.screens.authentication.domain.dto.register.UserRegistrationResponse
-import com.ah.studio.blueapp.ui.screens.home.domain.dto.boatCategory.BoatCategoryResponse
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -23,6 +23,6 @@ interface Api {
     ): Response<UserLoginResponse>
 
     @GET("category-subcategory")
-    suspend fun getBoatCategories(): BoatCategoryResponse
+    suspend fun getBoatCategories(): Response<ResponseBody>
 
 }

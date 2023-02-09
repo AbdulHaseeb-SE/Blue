@@ -10,7 +10,7 @@ import org.koin.dsl.module
 
 val authenticationModule: Module = module {
     factory<IUserRepository> {
-        UserRepository()
+        UserRepository(androidContext())
     }
 
     factory {

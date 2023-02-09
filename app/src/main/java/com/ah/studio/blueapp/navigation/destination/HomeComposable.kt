@@ -15,7 +15,6 @@ fun NavGraphBuilder.homeComposable(
     ) {
         HomeScreen(
             onClick = { categoryName ->
-                navHostController.popBackStack()
                 navHostController.navigate(Graph.HomeGraph + "/$categoryName")
             }
         )
