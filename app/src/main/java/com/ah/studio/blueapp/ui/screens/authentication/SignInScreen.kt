@@ -13,6 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -87,25 +88,30 @@ fun SignInScreen(
                     isLoading = true
                     try {
                         CoroutineScope(Dispatchers.Main).launch {
-                            viewModel.loginUserResponse(
+                            val response = viewModel.loginUserResponse(
                                 LoginCredentials(
                                     email = email,
                                     password = password,
                                     fcm_token = token
                                 )
                             )
-                            viewModel.validateUserResponse.collectLatest { response ->
-                                if (response != null) {
-                                    when {
-                                        response.isSuccessful -> {
-                                            snackbar = "Logged In Successfully!"
+                            response.collectLatest { _response ->
+                                if (_response != null) {
+                                    when (_response) {
+                                        "true" -> {
                                             showSnackBar = true
+                                            snackbar = "Logged In Successfully!"
                                             onLoginClick()
                                             isLoading = false
                                         }
+                                        "false" -> {
+                                            snackbar = "The entered Email or Password is Incorrect!"
+                                            showSnackBar = true
+                                            isLoading = false
+                                        }
                                         else -> {
-                                            snackbar = response.message()
-                                                .ifEmpty { "The entered Email or Password is Incorrect!" }
+                                            snackbar = _response
+                                                .ifEmpty { "An Error Occurred, try again later!" }
                                             showSnackBar = true
                                             isLoading = false
                                         }
@@ -115,7 +121,7 @@ fun SignInScreen(
                         }
                     } catch (e: Exception) {
                         viewModel.handleError(e)
-                        snackbar = "Error registering user, try again!"
+                        snackbar = "Error Logging user, try again!"
                         showSnackBar = true
                         isLoading = false
                     }
@@ -224,7 +230,8 @@ fun Sign_In(
             PasswordTextField(
                 label = stringResource(id = R.string.password),
                 placeholder = stringResource(id = R.string.password),
-                keyboardType = KeyboardType.Password
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done
             ) {
                 password = it
             }

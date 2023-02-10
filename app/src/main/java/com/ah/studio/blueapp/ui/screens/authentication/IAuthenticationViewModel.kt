@@ -5,19 +5,14 @@ import com.ah.studio.blueapp.ui.screens.authentication.domain.dto.login.UserLogi
 import com.ah.studio.blueapp.ui.screens.authentication.domain.dto.register.User
 import com.ah.studio.blueapp.ui.screens.authentication.domain.dto.register.UserRegistrationResponse
 import kotlinx.coroutines.flow.Flow
-import retrofit2.Response
 
 interface IAuthenticationViewModel {
 
-    val registerResponse: Flow<Response<UserRegistrationResponse>?>
-    fun registerUserResponse(
-        registerUserResponse: User
-    )
-    val validateUserResponse: Flow<Response<UserLoginResponse>?>
-    fun loginUserResponse(
-        loginCredentials: LoginCredentials
-    )
+    val registerResponse: Flow<UserRegistrationResponse?>
+    fun registerUserResponse(userDetails: User): Flow<String?>
 
+    val validateUserResponse: Flow<UserLoginResponse?>
+    fun loginUserResponse(loginCredentials: LoginCredentials): Flow<String?>
 
 
     abstract fun handleError(throwable: Throwable)

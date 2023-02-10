@@ -88,7 +88,7 @@ fun SignUpScreen(
                     isLoading = true
                     try {
                         CoroutineScope(Dispatchers.Main).launch {
-                            viewModel.registerUserResponse(
+                            val response = viewModel.registerUserResponse(
                                 User(
                                     civil_id = civilId,
                                     email = email,
@@ -99,18 +99,23 @@ fun SignUpScreen(
                                     fcm_token = token
                                 )
                             )
-                            viewModel.registerResponse.collectLatest { response ->
-                                if (response != null) {
-                                    when {
-                                        response.isSuccessful -> {
+                            response.collectLatest { _response ->
+                                if (_response != null) {
+                                    when (_response) {
+                                        "true" -> {
                                             snackbar = "User registered successfully"
+                                            showSnackBar = true
                                             onRegisterClick()
+                                            isLoading = false
+                                        }
+                                        "false" -> {
+                                            snackbar = "The Email is already Registered!"
                                             showSnackBar = true
                                             isLoading = false
                                         }
                                         else -> {
-                                            snackbar = response.message()
-                                                .ifEmpty { "The email has already registered" }
+                                            snackbar = _response
+                                                .ifEmpty { "An Error Occurred, try again later!" }
                                             showSnackBar = true
                                             isLoading = false
                                         }

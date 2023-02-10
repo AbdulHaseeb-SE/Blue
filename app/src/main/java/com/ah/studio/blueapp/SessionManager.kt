@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import com.ah.studio.blueapp.util.ApiConstants.FCM_TOKEN
 
 class SessionManager(context: Context) {
     val Context.userSessionDataStore: DataStore<Preferences> by preferencesDataStore(name = "token")
@@ -15,7 +16,7 @@ class SessionManager(context: Context) {
     }
 
     fun getToken(): String? {
-        return sharedPreferences.getString("token", "")
+        return sharedPreferences.getString("token", FCM_TOKEN)
     }
 
 }

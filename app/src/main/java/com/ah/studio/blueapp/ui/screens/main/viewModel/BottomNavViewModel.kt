@@ -1,10 +1,10 @@
 package com.ah.studio.blueapp.ui.screens.main.viewModel
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ah.studio.blueapp.ui.screens.main.domain.dto.BottomNavItemResponse
 import com.ah.studio.blueapp.ui.screens.main.domain.repository.IBottomNavItemRepository
-import com.ah.studio.blueapp.ui.screens.main.viewModel.IBottomNavViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,4 +32,20 @@ class BottomNavViewModel(
     override fun bottomNavItems(): Flow<MutableList<BottomNavItemResponse>> = bottomNavItems
 
     override fun handleError(throwable: Throwable) {}
+
+
+    override val visiblePermissionDialogQueue = mutableStateListOf<String>()
+
+    override fun dismissDialog() {
+        visiblePermissionDialogQueue.removeFirst()
+    }
+
+    override fun onPermissionResult(
+        permission: String,
+        isGranted: Boolean
+    ) {
+        if (!isGranted && !visiblePermissionDialogQueue.contains(permission)) {
+            visiblePermissionDialogQueue.add(permission)
+        }
+    }
 }

@@ -12,48 +12,59 @@ import com.ah.studio.blueapp.ui.screens.authentication.domain.repository.IUserRe
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import retrofit2.Response
 
 class AuthenticationViewModel(
     private val repository: IUserRepository,
     private val sessionManager: SessionManager
 ) : ViewModel(), IAuthenticationViewModel {
 
+    /********************************** User Registration Section *********************************************************/
 
-    private val _registerResponse = MutableStateFlow<Response<UserRegistrationResponse>?>(null)
-    override val registerResponse: MutableStateFlow<Response<UserRegistrationResponse>?>
+    private val _registerResponse = MutableStateFlow<UserRegistrationResponse?>(null)
+    override val registerResponse: MutableStateFlow<UserRegistrationResponse?>
         get() = _registerResponse
 
-    override fun registerUserResponse(registerUserResponse: User) {
+    override fun registerUserResponse(userDetails: User): MutableStateFlow<String?> {
+        var response = MutableStateFlow<String?>(null)
         viewModelScope.launch {
             try {
-                val response = repository.registerUser(registerUserResponse)
-                if (response.isSuccessful) {
-                    sessionManager.saveToken(response.body()?.data?.token ?: "")
-                }
-                _registerResponse.value = response
+                response = repository.registerUser(
+                    userDetails = userDetails,
+                    userRegistrationResponse = { userRegistrationResponse ->
+                        _registerResponse.value = userRegistrationResponse
+                    }
+                )
             } catch (e: Exception) {
+                response.value = e.localizedMessage
                 handleError(e)
             }
         }
+        return response
     }
 
-    private val _validationResponse = MutableStateFlow<Response<UserLoginResponse>?>(null)
-    override val validateUserResponse: Flow<Response<UserLoginResponse>?>
+    /*************************************  User Login Validation **********************************************************/
+
+    private val _validationResponse = MutableStateFlow<UserLoginResponse?>(null)
+    override val validateUserResponse: Flow<UserLoginResponse?>
         get() = _validationResponse
 
-    override fun loginUserResponse(loginCredentials: LoginCredentials) {
+    override fun loginUserResponse(loginCredentials: LoginCredentials): MutableStateFlow<String?> {
+        var response = MutableStateFlow<String?>(null)
         viewModelScope.launch {
             try {
-                val response = repository.validateUser(loginCredentials)
-                if (response.isSuccessful) {
-                    sessionManager.saveToken(response.body()?.data?.token ?: "")
-                }
-                _validationResponse.value = response
+                response = repository.validateUserRequest(
+                    loginCredentials,
+                    userLoginResponseBody = { userLoginResponse ->
+                        _validationResponse.value = userLoginResponse
+                        sessionManager.saveToken(userLoginResponse.data.token)
+                    }
+                )
             } catch (e: Exception) {
+                response.value = e.localizedMessage
                 handleError(e)
             }
         }
+        return response
     }
 
     override fun handleError(throwable: Throwable) {

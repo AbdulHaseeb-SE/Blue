@@ -4,10 +4,16 @@ import com.ah.studio.blueapp.ui.screens.authentication.domain.dto.login.LoginCre
 import com.ah.studio.blueapp.ui.screens.authentication.domain.dto.login.UserLoginResponse
 import com.ah.studio.blueapp.ui.screens.authentication.domain.dto.register.User
 import com.ah.studio.blueapp.ui.screens.authentication.domain.dto.register.UserRegistrationResponse
-import retrofit2.Response
+import kotlinx.coroutines.flow.MutableStateFlow
 
 interface IUserRepository {
-   suspend fun registerUser(registerUserResponse: User): Response<UserRegistrationResponse>
+    suspend fun registerUser(
+        userDetails: User,
+        userRegistrationResponse: (UserRegistrationResponse) -> Unit
+    ): MutableStateFlow<String?>
 
-   suspend fun validateUser(loginCredentials: LoginCredentials) : Response<UserLoginResponse>
+    suspend fun validateUserRequest(
+        loginCredentials: LoginCredentials,
+        userLoginResponseBody: (UserLoginResponse) -> Unit
+    ): MutableStateFlow<String?>
 }
