@@ -17,12 +17,21 @@ fun NavGraphBuilder.categoryDetailsComposable(
             navArgument(name = "categoryName") {
                 type = NavType.StringType
                 nullable = false
+            },
+            navArgument(name = "id") {
+                type = NavType.StringType
+                nullable = false
             }
         )
     ) { entry ->
-        entry.arguments?.getString("categoryName")?.let {
-            BoatCategoryDetailsScreen(categoryName = it){
-                navHostController.navigate(ScreenController.BoatDetails.route)
+        entry.arguments?.getString("categoryName")?.let { categoryName ->
+            entry.arguments?.getString("id")?.let { id ->
+                BoatCategoryDetailsScreen(
+                    categoryName = categoryName,
+                    categoryId = id.toInt()
+                ) {boatId->
+                    navHostController.navigate(ScreenController.BoatDetails.route+"/$boatId")
+                }
             }
         }
     }

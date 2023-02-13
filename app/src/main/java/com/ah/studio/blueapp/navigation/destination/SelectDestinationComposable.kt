@@ -6,13 +6,13 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.ah.studio.blueapp.navigation.ScreenController
-import com.ah.studio.blueapp.ui.screens.home.subScreens.BoatDetailsScreen
+import com.ah.studio.blueapp.ui.screens.home.subScreens.DestinationScreen
 
-fun NavGraphBuilder.boatDetailsComposable(
+fun NavGraphBuilder.selectDestinationComposable(
     navHostController: NavHostController
 ) {
     composable(
-        route = ScreenController.BoatDetails.route + "/{boatId}",
+        route = ScreenController.SelectDestination.route + "/{boatId}",
         arguments = listOf(
             navArgument(name = "boatId") {
                 type = NavType.StringType
@@ -21,15 +21,12 @@ fun NavGraphBuilder.boatDetailsComposable(
         )
     ) { entry ->
         entry.arguments?.getString("boatId")?.let { boatId ->
-            BoatDetailsScreen(
+            DestinationScreen(
                 boatId.toInt(),
-                onViewAllClick = {
-                    navHostController.navigate(ScreenController.Galley.route + "/$boatId")
-                },
-                onBookNowClick = {
-                    navHostController.navigate(ScreenController.BoatBooking.route + "/$boatId/${null}")
-                },
-                onReviewsClick = {}
+                selectedDestinationId = {destinationID->
+                    navHostController.popBackStack()
+                    navHostController.navigate(ScreenController.BoatBooking.route + "/$boatId/$destinationID")
+                }
             )
         }
     }

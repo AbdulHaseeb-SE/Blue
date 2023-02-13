@@ -40,6 +40,7 @@ import com.ah.studio.blueapp.ui.screens.home.domain.dto.boatCategory.Category
 import com.ah.studio.blueapp.ui.screens.main.viewModel.BottomNavViewModel
 import com.ah.studio.blueapp.ui.theme.*
 import com.ah.studio.blueapp.util.ApiConstants.STORAGE_URL
+import com.ah.studio.blueapp.util.locationName
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -50,7 +51,7 @@ import org.koin.androidx.compose.getKoin
 
 @Composable
 fun HomeScreen(
-    onClick: (String) -> Unit,
+    onClick: (name: String, id: Int) -> Unit,
     viewModel: HomeViewModel = getKoin().get(),
     mainViewModel: BottomNavViewModel = getKoin().get()
 ) {
@@ -77,9 +78,17 @@ fun HomeScreen(
     var categoryList: List<Category>? by remember {
         mutableStateOf(listOf())
     }
+
     var location by remember {
         mutableStateOf("Fetch Location")
     }
+    var longitude by remember {
+        mutableStateOf(0.0)
+    }
+    var latitude by remember {
+        mutableStateOf(0.0)
+    }
+
 
     SideEffect {
         CoroutineScope(Dispatchers.IO).launch {
@@ -97,6 +106,10 @@ fun HomeScreen(
         }
     }
 
+    var hasLocationPermission by remember {
+        mutableStateOf(true)
+    }
+
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { paddingValues ->
@@ -108,9 +121,25 @@ fun HomeScreen(
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.Start
             ) {
+                if (hasLocationPermission) {
+                    if (checkPermission(context)) {
+                        fusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
+                            val result = task.result
+                            if (result != null) {
+                                longitude = result.longitude
+                                latitude = result.latitude
+                            }
+                        }
+                    }
+                }
+                location = if (longitude != 0.0 && latitude != 0.0) locationName(
+                    longitude = longitude,
+                    latitude = latitude,
+                    context = context
+                ).ifEmpty { "Fetch Location" } else "Fetch Location"
                 LocationComponent(
                     painterResource(id = R.drawable.ic_location),
-                    location,
+                    if (hasLocationPermission) location else "Fetch Location",
                     4.dp,
                     PaddingLarge,
                     PaddingDouble,
@@ -118,23 +147,16 @@ fun HomeScreen(
                     modifier = Modifier.clickable {
                         if (checkPermission(context)) {
                             fusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
+                                hasLocationPermission = false
                                 val result = task.result
-                                location = if (result != null)
-                                    result.longitude.toString() + result.latitude.toString()
-                                else
-                                    "Unable to Fetch Your Location!"
+                                if (result != null) {
+                                    longitude = result.longitude
+                                    latitude = result.latitude
+                                }
+                                hasLocationPermission = true
                             }
                         } else {
                             locationPermissionResultLauncher.launch(permissionsToRequest)
-                            if (checkPermission(context)) {
-                                fusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
-                                    val result = task.result
-                                    location = if (result != null)
-                                        result.longitude.toString() + result.latitude.toString()
-                                    else
-                                        "Unable to Fetch Your Location!"
-                                }
-                            }
                         }
                     }
                 )
@@ -158,8 +180,8 @@ fun HomeScreen(
                     isLoading = false
                     CategoryComponent(
                         categoryList = categoryList!!,
-                        onClick = {
-                            onClick(it)
+                        onClick = { name, id ->
+                            onClick(name, id)
                         }
                     )
                 }
@@ -213,7 +235,7 @@ fun HomeScreen(
 @Composable
 fun CategoryComponent(
     categoryList: List<Category>,
-    onClick: (String) -> Unit,
+    onClick: (name: String, id: Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -247,7 +269,7 @@ fun CategoryComponent(
                 nameTopPadding = 20.dp,
                 imageTopPadding = 0.dp
             ) { name ->
-                onClick(name)
+                onClick(name, item.id)
             }
         }
     }
@@ -258,11 +280,11 @@ private fun checkPermission(
 ): Boolean {
     return ActivityCompat.checkSelfPermission(
         context,
-        android.Manifest.permission.ACCESS_COARSE_LOCATION
+        Manifest.permission.ACCESS_COARSE_LOCATION
     ) == PackageManager.PERMISSION_GRANTED &&
             ActivityCompat.checkSelfPermission(
                 context,
-                android.Manifest.permission.ACCESS_FINE_LOCATION
+                Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
 }
 

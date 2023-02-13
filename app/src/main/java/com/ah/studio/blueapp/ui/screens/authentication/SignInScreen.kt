@@ -36,14 +36,13 @@ fun SignInScreen(
     onLoginClick: () -> Unit,
     onForgotClick: () -> Unit,
     onSignUpClick: () -> Unit,
-    onOwnsBoatClick: () -> Unit,
     viewModel: AuthenticationViewModel = getKoin().get()
 ) {
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
-    var isLoading by remember { mutableStateOf(false) }
     var snackbar by remember { mutableStateOf("") }
     var showSnackBar by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(false) }
     val sessionManager = SessionManager(LocalContext.current)
     var token by remember {
         mutableStateOf("")
@@ -128,7 +127,6 @@ fun SignInScreen(
                 },
                 onForgotClick,
                 onSignUpClick,
-                onOwnsBoatClick,
                 textFieldsEmpty = {
                     snackbar = "Email or Password is Empty!"
                     showSnackBar = true
@@ -169,7 +167,6 @@ fun Sign_In(
     onLoginClick: (email: String, password: String) -> Unit,
     onForgotClick: () -> Unit,
     onSignUpClick: () -> Unit,
-    onOwnsBoatClick: () -> Unit,
     textFieldsEmpty: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -328,22 +325,11 @@ fun Sign_In(
                 ) {}
             }
 
-            Button(
-                width = 220.dp,
-                height = 50.dp,
-                text = stringResource(R.string.owns_a_boat_yacht),
-                backgroundColor = SeaBlue400,
-                shape = Shapes.medium,
-                modifier = modifier.padding(top = 32.dp)
-            ) {
-                onOwnsBoatClick()
-            }
-
             Row(
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(
-                        top = 28.dp,
+                        top = 32.dp,
                         bottom = PaddingDouble
                     ),
                 horizontalArrangement = Arrangement.Center,

@@ -1,7 +1,6 @@
 package com.ah.studio.blueapp.ui.screens.myParking.subScreens
 
 import android.annotation.SuppressLint
-import android.graphics.Paint.Align
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -25,7 +24,7 @@ import com.ah.studio.blueapp.ui.component.BoatListCard
 import com.ah.studio.blueapp.ui.component.Button
 import com.ah.studio.blueapp.ui.component.LocationComponent
 import com.ah.studio.blueapp.ui.component.RoundedCornerImageView
-import com.ah.studio.blueapp.ui.screens.home.domain.dto.Boat
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.BoatDetailsParking
 import com.ah.studio.blueapp.ui.theme.*
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -33,15 +32,15 @@ import com.ah.studio.blueapp.ui.theme.*
 @Composable
 fun BoatListScreen() {
 
-    val boatList: MutableList<Boat> = mutableListOf(
-        Boat(
+    val boatDetailsParkingLists: MutableList<BoatDetailsParking> = mutableListOf(
+        BoatDetailsParking(
             boatImage = painterResource(id = R.drawable.ic_boat),
             boatName = "Catamaran Boats",
             location = stringResource(id = R.string.al_jahra_kuwait),
             price = "Starting from 100.000 KWD",
             parkingStatus = true
         ),
-        Boat(
+        BoatDetailsParking(
             boatImage = painterResource(id = R.drawable.boat),
             boatName = "Catamaran Boats",
             location = stringResource(id = R.string.al_jahra_kuwait),
@@ -73,7 +72,7 @@ fun BoatListScreen() {
 
             FirsImageRowSection()
 
-            AvailableCareersSection(boatList)
+            AvailableCareersSection(boatDetailsParkingLists)
 
             Column(
                 modifier = Modifier
@@ -174,7 +173,7 @@ fun FirsImageRowSection() {
 }
 
 @Composable
-fun AvailableCareersSection(boatList: MutableList<Boat>) {
+fun AvailableCareersSection(boatDetailsParkingList: MutableList<BoatDetailsParking>) {
     Text(
         text = stringResource(R.string.your_available_careers),
         fontSize = 17.sp,
@@ -186,7 +185,7 @@ fun AvailableCareersSection(boatList: MutableList<Boat>) {
             .padding(vertical = 14.dp)
             .fillMaxWidth()
     )
-    boatList.forEach { boat ->
+    boatDetailsParkingList.forEach { boat ->
         BoatListCard(
             boatImage = boat.boatImage,
             boatName = boat.boatName,

@@ -10,4 +10,7 @@ object Constants {
     const val ACCOUNT_ROUTE = "account_route"
     const val CATEGORY_DETAILS_ROUTE = "category_details_route"
     const val BOAT_DETAILS_ROUTE = "boat_details_route"
+    const val GALLERY_ROUTE = "gallery_route"
+    const val BOAT_BOOKING_ROUTE = "boat_booking_route"
+    const val SELECT_DESTINATION_ROUTE = "select_destination_route"
 }

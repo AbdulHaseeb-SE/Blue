@@ -73,7 +73,7 @@ fun TimeSlotTable(
     LazyColumn(
         modifier = modifier.background(Color.White)
             .fillMaxWidth()
-            .height(200.dp)
+            .height(195.dp)
     ) {
         itemsIndexed(
             slots
@@ -186,7 +186,6 @@ fun TimeSlotTable(
                                             vertical = 8.dp
                                         )
                                         .clickable {
-
                                             if (isFirstSelect) {
                                                 if (
                                                     currentIndex in rangeStartIndex..rangeEndIndex &&
@@ -254,6 +253,16 @@ fun TimeSlotTable(
         }
     }
 }
+
+/*if (currentIndex == rangeStartIndex) {
+    startingSelectedSlot = text
+    startingTime(text)
+    rangeEndIndex = rangeStartIndex + duration
+    val endIndex = rangeEndIndex % 6
+    val endRowIndex = rangeEndIndex / 6
+    endingSelectedSlot = slots[endRowIndex][endIndex]
+    endingTime(endingSelectedSlot)
+}*/
 
 @Preview
 @Composable

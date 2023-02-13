@@ -22,9 +22,6 @@ fun NavGraphBuilder.signInComposable(
             },
             onForgotClick = {
 
-            },
-            onOwnsBoatClick = {
-
             }
         )
     }

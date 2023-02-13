@@ -2,7 +2,7 @@ package com.ah.studio.blueapp.ui.screens.home.domain.dto
 
 import androidx.compose.ui.graphics.painter.Painter
 
-data class Boat(
+data class BoatDetailsParking(
     val boatImage: Painter,
     val  boatName: String,
     val location: String,

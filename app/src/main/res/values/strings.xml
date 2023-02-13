@@ -141,4 +141,9 @@
     <string name="spoken_languages_text">"Spoken Languages : "</string>
     <string name="pay_to_unlock">Pay to Unlock</string>
     <string name="fetch_location">Fetch Location</string>
+    <string name="kwd">KWD</string>
+    <string name="starting_from">Starting from</string>
+    <string name="seafarer">Seafarer List</string>
+    <string name="no_seafarer_hired_yet">No Seafarer Hired Yet !!</string>
+    <string name="reviews">Reviews</string>
 </resources>

@@ -19,11 +19,9 @@ fun MainNavGraph(navHostController: NavHostController) {
     ) {
 
         homeComposable(navHostController)
-
         myParkingComposable(navHostController)
         seafarerComposable(navHostController)
         accountComposable(navHostController)
-
         homeNavGraph(navHostController)
 
     }

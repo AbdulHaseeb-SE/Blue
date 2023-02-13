@@ -19,7 +19,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ah.studio.blueapp.R
-import com.ah.studio.blueapp.ui.theme.*
+import com.ah.studio.blueapp.ui.theme.OxfordBlue900
+import com.ah.studio.blueapp.ui.theme.SeaBlue08Percent
+import com.ah.studio.blueapp.ui.theme.SeaBlue400
+import com.ah.studio.blueapp.ui.theme.fontFamily
 import io.github.boguszpawlowski.composecalendar.SelectableCalendar
 import io.github.boguszpawlowski.composecalendar.day.DayState
 import io.github.boguszpawlowski.composecalendar.header.MonthState
@@ -148,18 +151,19 @@ private fun DayContent(dayState: DayState<DynamicSelectionState>, onClick: (Loca
     selectedDateColor = if (dayState.isCurrentDay) {
         Color.White
     } else {
-        SeaBlue400
+        Color.White
     }
 
     if (dayState.isCurrentDay) {
+        backgroundColor = SeaBlue400
+        borderColor = SeaBlue400
+    } else if (dayState.selectionState.isDateSelected(selectedDate)) {
         backgroundColor = OxfordBlue900
         borderColor = SeaBlue400
     } else {
         backgroundColor = Color.Transparent
         borderColor = Color.Transparent
     }
-
-
 
 
     BlueRoundedCornerShape(
@@ -175,7 +179,7 @@ private fun DayContent(dayState: DayState<DynamicSelectionState>, onClick: (Loca
 
                 backgroundColor = if (
                     dayState.selectionState.isDateSelected(selectedDate)
-                ) SeaBlue08Percent else Color.Transparent
+                ) OxfordBlue900 else Color.Transparent
                 borderColor = if (
                     dayState.selectionState.isDateSelected(selectedDate)
                 ) SeaBlue400 else Color.Transparent
@@ -184,18 +188,19 @@ private fun DayContent(dayState: DayState<DynamicSelectionState>, onClick: (Loca
         containerColor = backgroundColor,
         shape = CircleShape
     ) {
-        Text(
-            text = dayState.date.dayOfMonth.toString(),
-            textAlign = TextAlign.Center,
-            fontFamily = fontFamily,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = if (
-                dayState.selectionState.isDateSelected(selectedDate)
-            ) selectedDateColor else currentDateColor,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 6.dp)
-        )
+            Text(
+                text = dayState.date.dayOfMonth.toString(),
+                textAlign = TextAlign.Center,
+                fontFamily = fontFamily,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = if (
+                    dayState.selectionState.isDateSelected(selectedDate)
+                ) selectedDateColor else currentDateColor,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .padding(top = 4.dp)
+            )
     }
 }

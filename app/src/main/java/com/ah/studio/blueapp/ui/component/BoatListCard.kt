@@ -1,5 +1,6 @@
 package com.ah.studio.blueapp.ui.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -41,6 +42,7 @@ fun BoatListCard(
             shape = Shapes.medium,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxWidth(0.35f)
+                .background(White50Percent)
         )
         Column(
             modifier = Modifier
