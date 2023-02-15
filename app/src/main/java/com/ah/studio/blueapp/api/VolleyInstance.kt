@@ -2,7 +2,6 @@ package com.ah.studio.blueapp.api
 
 import android.content.Context
 import com.ah.studio.blueapp.SessionManager
-import com.ah.studio.blueapp.util.ApiConstants
 import com.ah.studio.blueapp.util.ApiConstants.BASE_URL
 import com.ah.studio.blueapp.util.ApiConstants.FCM_TOKEN
 import com.ah.studio.blueapp.util.ApiConstants.TOKEN_TYPE
@@ -56,7 +55,7 @@ class VolleyInstance(context: Context) {
     ) {
         val jsonObjectRequest = object : JsonObjectRequest(
             Method.POST,
-            ApiConstants.BASE_URL + endPoint,
+            BASE_URL + endPoint,
             jsonObject,
             listener,
             errorListener

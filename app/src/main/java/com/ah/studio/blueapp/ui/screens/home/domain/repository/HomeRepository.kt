@@ -8,6 +8,10 @@ import com.ah.studio.blueapp.ui.screens.home.domain.dto.boatDetails.BoatDetailsR
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.boats.BoatBody
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.boats.BoatResponse
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.gallery.GalleryImageResponse
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.product.ProductCategoryResponse
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.product.ProductDetailsResponse
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.product.ProductListResponse
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.product.ProductSubCategoryResponse
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.timeSlot.AvailableTimeSlotResponse
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.timeSlot.TimeSlotBody
 import com.ah.studio.blueapp.util.ApiConstants.AVAILABLE_TIMESLOTS_ENDPOINT
@@ -15,6 +19,10 @@ import com.ah.studio.blueapp.util.ApiConstants.BOAT_DETAILS_ENDPOINT
 import com.ah.studio.blueapp.util.ApiConstants.BOAT_LIST_ENDPOINT
 import com.ah.studio.blueapp.util.ApiConstants.CATEGORY_SUBCATEGORY_ENDPOINT
 import com.ah.studio.blueapp.util.ApiConstants.GALLEY_IMAGES_ENDPOINT
+import com.ah.studio.blueapp.util.ApiConstants.PRODUCT_CATEGORY_ENDPOINT
+import com.ah.studio.blueapp.util.ApiConstants.PRODUCT_DETAILS_ENDPOINT
+import com.ah.studio.blueapp.util.ApiConstants.PRODUCT_LIST_ENDPOINT
+import com.ah.studio.blueapp.util.ApiConstants.PRODUCT_SUB_CATEGORY_ENDPOINT
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.json.JSONObject
@@ -197,10 +205,176 @@ class HomeRepository(private val context: Context) : IHomeRepository {
                 jsonObject = jsonObject,
                 listener = { response ->
                     if (response.getString("status") == "200") {
-                            availableTimeSlotResponse(
+                        availableTimeSlotResponse(
                             Gson().fromJson(
                                 response.toString(),
                                 AvailableTimeSlotResponse::class.java
+                            )
+                        )
+                        state.value = response.getString("status")
+                    } else {
+                        state.value = response.getString("status")
+                    }
+                },
+                errorListener = { error ->
+                    state.value = error.message?.ifEmpty { "false" }
+                    Log.d(
+                        "CheckResponse", "error status = $error"
+                    )
+                }
+            )
+        } catch (e: Exception) {
+            state.value = e.message?.ifEmpty { "false" }
+            Log.e(
+                "CheckResponse", "error status = ${e.message + e.localizedMessage + e.cause}"
+            )
+        }
+        return state
+    }
+
+    override suspend fun getProductCategoryResponse(
+        type: String,
+        productCategoryResponse: (ProductCategoryResponse) -> Unit
+    ): MutableStateFlow<String?> {
+        val state = MutableStateFlow<String?>(null)
+        val jsonObject = JSONObject()
+        jsonObject.put("type", type)
+
+        try {
+            VolleyInstance(context).jsonObjectPostRequest(
+                endPoint = PRODUCT_CATEGORY_ENDPOINT,
+                jsonObject = jsonObject,
+                listener = { response ->
+                    if (response.getString("status") == "200") {
+                        productCategoryResponse(
+                            Gson().fromJson(
+                                response.toString(),
+                                ProductCategoryResponse::class.java
+                            )
+                        )
+                        state.value = response.getString("status")
+                    } else {
+                        state.value = response.getString("status")
+                    }
+                },
+                errorListener = { error ->
+                    state.value = error.message?.ifEmpty { "false" }
+                    Log.d(
+                        "CheckResponse", "error status = $error"
+                    )
+                }
+            )
+        } catch (e: Exception) {
+            state.value = e.message?.ifEmpty { "false" }
+            Log.e(
+                "CheckResponse", "error status = ${e.message + e.localizedMessage + e.cause}"
+            )
+        }
+        return state
+    }
+
+    override suspend fun getProductSubCategoryResponse(
+        categoryId: String,
+        productSubCategoryResponse: (ProductSubCategoryResponse) -> Unit
+    ): MutableStateFlow<String?> {
+        val state = MutableStateFlow<String?>(null)
+        val jsonObject = JSONObject()
+        jsonObject.put("category_id", categoryId)
+
+        try {
+            VolleyInstance(context).jsonObjectPostRequest(
+                endPoint = PRODUCT_SUB_CATEGORY_ENDPOINT,
+                jsonObject = jsonObject,
+                listener = { response ->
+                    if (response.getString("status") == "200") {
+                        productSubCategoryResponse(
+                            Gson().fromJson(
+                                response.toString(),
+                                ProductSubCategoryResponse::class.java
+                            )
+                        )
+                        state.value = response.getString("status")
+                    } else {
+                        state.value = response.getString("status")
+                    }
+                },
+                errorListener = { error ->
+                    state.value = error.message?.ifEmpty { "false" }
+                    Log.d(
+                        "CheckResponse", "error status = $error"
+                    )
+                }
+            )
+        } catch (e: Exception) {
+            state.value = e.message?.ifEmpty { "false" }
+            Log.e(
+                "CheckResponse", "error status = ${e.message + e.localizedMessage + e.cause}"
+            )
+        }
+        return state
+    }
+
+    override suspend fun getProductListResponse(
+        page: Int,
+        subCategoryId: String,
+        productListResponse: (ProductListResponse) -> Unit
+    ): MutableStateFlow<String?> {
+        val state = MutableStateFlow<String?>(null)
+        val jsonObject = JSONObject()
+        jsonObject.put("page", page)
+        jsonObject.put("sub_category_id", subCategoryId)
+
+        try {
+            VolleyInstance(context).jsonObjectPostRequest(
+                endPoint = PRODUCT_LIST_ENDPOINT,
+                jsonObject = jsonObject,
+                listener = { response ->
+                    if (response.getString("status") == "200") {
+                        productListResponse(
+                            Gson().fromJson(
+                                response.toString(),
+                                ProductListResponse::class.java
+                            )
+                        )
+                        state.value = response.getString("status")
+                    } else {
+                        state.value = response.getString("status")
+                    }
+                },
+                errorListener = { error ->
+                    state.value = error.message?.ifEmpty { "false" }
+                    Log.d(
+                        "CheckResponse", "error status = $error"
+                    )
+                }
+            )
+        } catch (e: Exception) {
+            state.value = e.message?.ifEmpty { "false" }
+            Log.e(
+                "CheckResponse", "error status = ${e.message + e.localizedMessage + e.cause}"
+            )
+        }
+        return state
+    }
+
+    override suspend fun getProductDetailsResponse(
+        productId: Int,
+        productDetailsResponse: (ProductDetailsResponse)->Unit
+    ): MutableStateFlow<String?> {
+        val state = MutableStateFlow<String?>(null)
+        val jsonObject = JSONObject()
+        jsonObject.put("id", productId)
+
+        try {
+            VolleyInstance(context).jsonObjectPostRequest(
+                endPoint = PRODUCT_DETAILS_ENDPOINT,
+                jsonObject = jsonObject,
+                listener = { response ->
+                    if (response.getString("status") == "200") {
+                        productDetailsResponse(
+                            Gson().fromJson(
+                                response.toString(),
+                                ProductDetailsResponse::class.java
                             )
                         )
                         state.value = response.getString("status")

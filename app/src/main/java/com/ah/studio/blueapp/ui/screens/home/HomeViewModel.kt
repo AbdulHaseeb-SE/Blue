@@ -10,6 +10,10 @@ import com.ah.studio.blueapp.ui.screens.home.domain.dto.boatDetails.BoatDetailsR
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.boats.BoatBody
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.boats.BoatResponse
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.gallery.GalleryImageResponse
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.product.ProductCategoryResponse
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.product.ProductDetailsResponse
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.product.ProductListResponse
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.product.ProductSubCategoryResponse
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.timeSlot.AvailableTimeSlotResponse
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.timeSlot.TimeSlotBody
 import com.ah.studio.blueapp.ui.screens.home.domain.repository.IHomeRepository
@@ -56,6 +60,25 @@ class HomeViewModel(
     private val _availableTimeSlotResponse = MutableStateFlow<AvailableTimeSlotResponse?>(null)
     override val availableTimeSlotResponse: MutableStateFlow<AvailableTimeSlotResponse?>
         get() = _availableTimeSlotResponse
+
+
+    private val _productCategoryResponse = MutableStateFlow<ProductCategoryResponse?>(null)
+    override val productCategoryResponse: MutableStateFlow<ProductCategoryResponse?>
+        get() = _productCategoryResponse
+
+
+    private val _productSubCategoryResponse = MutableStateFlow<ProductSubCategoryResponse?>(null)
+    override val productSubCategoryResponse: MutableStateFlow<ProductSubCategoryResponse?>
+        get() = _productSubCategoryResponse
+
+
+    private val _productListResponse = MutableStateFlow<ProductListResponse?>(null)
+    override val productListResponse: MutableStateFlow<ProductListResponse?>
+        get() = _productListResponse
+
+    private val _productDetailsResponse = MutableStateFlow<ProductDetailsResponse?>(null)
+    override val productDetailsResponse: MutableStateFlow<ProductDetailsResponse?>
+        get() = _productDetailsResponse
 
 
     override fun getBoatCategoryResponse(): MutableStateFlow<String?> {
@@ -221,12 +244,8 @@ class HomeViewModel(
             try {
                 response = homeRepository.getAvailableTimeSlotResponse(
                     timeSlotBody = timeSlotBody
-                ) { availableIimeSlotResponse ->
-                    _availableTimeSlotResponse.value = availableIimeSlotResponse
-                    Log.d(
-                        "CheckBoatResponse",
-                        "gallery response = $availableIimeSlotResponse"
-                    )
+                ) { availableTimeSlotResponse ->
+                    _availableTimeSlotResponse.value = availableTimeSlotResponse
                 }
             } catch (e: IOException) {
                 response.value = e.message.toString()
@@ -246,6 +265,163 @@ class HomeViewModel(
                 response.value = e.message.toString()
                 Log.d(
                     "CheckCategoryResponse",
+                    "JsonSyntaxException: ${e.message.toString()}"
+                )
+                return@launch
+            }
+        }
+        return response
+    }
+
+    override fun getProductCategoryResponse(type: String): Flow<String?> {
+        var response = MutableStateFlow<String?>(null)
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                response = homeRepository.getProductCategoryResponse(
+                    type = type
+                ) { productResponse ->
+                    _productCategoryResponse.value = productResponse
+                }
+            } catch (e: IOException) {
+                response.value = e.message.toString()
+                Log.d(
+                    "CheckProductResponse",
+                    "IOException, ${e.message.toString()}"
+                )
+                return@launch
+            } catch (e: HttpException) {
+                response.value = e.message.toString()
+                Log.d(
+                    "CheckProductResponse",
+                    "HttpException, unexpected response"
+                )
+                return@launch
+            } catch (e: JsonSyntaxException) {
+                response.value = e.message.toString()
+                Log.d(
+                    "CheckProductResponse",
+                    "JsonSyntaxException: ${e.message.toString()}"
+                )
+                return@launch
+            }
+        }
+        return response
+    }
+
+    override fun getProductSubCategoryResponse(productCategoryId: String): Flow<String?> {
+        var response = MutableStateFlow<String?>(null)
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                response = homeRepository.getProductSubCategoryResponse(
+                    categoryId = productCategoryId
+                ) { productSubCategoryResponse ->
+                    _productSubCategoryResponse.value = productSubCategoryResponse
+                    Log.d(
+                        "CheckProductResponse",
+                        "gallery response = $productSubCategoryResponse"
+                    )
+                }
+            } catch (e: IOException) {
+                response.value = e.message.toString()
+                Log.d(
+                    "CheckProductResponse",
+                    "IOException, ${e.message.toString()}"
+                )
+                return@launch
+            } catch (e: HttpException) {
+                response.value = e.message.toString()
+                Log.d(
+                    "CheckProductResponse",
+                    "HttpException, unexpected response"
+                )
+                return@launch
+            } catch (e: JsonSyntaxException) {
+                response.value = e.message.toString()
+                Log.d(
+                    "CheckProductResponse",
+                    "JsonSyntaxException: ${e.message.toString()}"
+                )
+                return@launch
+            }
+        }
+        return response
+    }
+
+    override fun getProductListResponse(page: Int, subCategoryId: String): Flow<String?> {
+        var response = MutableStateFlow<String?>(null)
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                response = homeRepository.getProductListResponse(
+                    page = page,
+                    subCategoryId = subCategoryId
+                ) { productListResponse ->
+                    _productListResponse.value = productListResponse
+                    Log.d(
+                        "CheckProductListResponse",
+                        "gallery response = $productListResponse"
+                    )
+                }
+            } catch (e: IOException) {
+                response.value = e.message.toString()
+                Log.d(
+                    "CheckProductResponse",
+                    "IOException, ${e.message.toString()}"
+                )
+                return@launch
+            } catch (e: HttpException) {
+                response.value = e.message.toString()
+                Log.d(
+                    "CheckProductResponse",
+                    "HttpException, unexpected response"
+                )
+                return@launch
+            } catch (e: JsonSyntaxException) {
+                response.value = e.message.toString()
+                Log.d(
+                    "CheckProductResponse",
+                    "JsonSyntaxException: ${e.message.toString()}"
+                )
+                return@launch
+            }
+        }
+        return response
+    }
+
+    override fun getProductDetailsResponse(productId: Int): Flow<String?> {
+        var response = MutableStateFlow<String?>(null)
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                response = homeRepository.getProductDetailsResponse(
+                    productId = productId
+                ) { productDetailsResponse ->
+                    _productDetailsResponse.value = productDetailsResponse
+                    Log.d(
+                        "CheckProductListResponse",
+                        "gallery response = $productListResponse"
+                    )
+                }
+            } catch (e: IOException) {
+                response.value = e.message.toString()
+                Log.d(
+                    "CheckProductResponse",
+                    "IOException, ${e.message.toString()}"
+                )
+                return@launch
+            } catch (e: HttpException) {
+                response.value = e.message.toString()
+                Log.d(
+                    "CheckProductResponse",
+                    "HttpException, unexpected response"
+                )
+                return@launch
+            } catch (e: JsonSyntaxException) {
+                response.value = e.message.toString()
+                Log.d(
+                    "CheckProductResponse",
                     "JsonSyntaxException: ${e.message.toString()}"
                 )
                 return@launch

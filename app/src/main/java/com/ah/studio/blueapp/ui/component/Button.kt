@@ -1,6 +1,5 @@
 package com.ah.studio.blueapp.ui.component
 
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
@@ -13,7 +12,6 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
-import com.ah.studio.blueapp.ui.theme.SeaBlue400
 import com.ah.studio.blueapp.ui.theme.fontFamily
 
 @Composable

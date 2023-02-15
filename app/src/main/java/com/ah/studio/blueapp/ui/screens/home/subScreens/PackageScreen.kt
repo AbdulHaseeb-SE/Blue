@@ -1,5 +1,6 @@
 package com.ah.studio.blueapp.ui.screens.home.subScreens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -17,52 +18,46 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ah.studio.blueapp.R
 import com.ah.studio.blueapp.ui.component.BlueRoundedCornerShape
 import com.ah.studio.blueapp.ui.component.Button
+import com.ah.studio.blueapp.ui.component.CircularProgressBar
 import com.ah.studio.blueapp.ui.component.TopAppBar
+import com.ah.studio.blueapp.ui.screens.home.HomeViewModel
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.boatDetails.BoatDetails
 import com.ah.studio.blueapp.ui.theme.*
-import com.ah.studio.blueapp.ui.screens.home.domain.dto.Package
-import kotlin.math.cos
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import org.koin.androidx.compose.getKoin
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PackageScreen() {
+fun PackageScreen(
+    boatId: Int,
+    onNextClick: () -> Unit,
+    onSkipClick: () -> Unit,
+    viewModel: HomeViewModel = getKoin().get()
+) {
+    var isLoading by remember { mutableStateOf(true) }
+    var boatDetails: BoatDetails? by remember { mutableStateOf(null) }
 
-    val packageList = listOf(
-        Package(
-            "Birthday Package",
-            stringResource(id = R.string.lorem_ipsum),
-            cost = "200.000 KWD"
-        ),
-        Package(
-            "Summer Package",
-            stringResource(id = R.string.lorem_ipsum),
-            cost = "50.000 KWD"
-        ),
-        Package(
-            "Winter Package",
-            stringResource(id = R.string.lorem_ipsum),
-            cost = "300.000 KWD"
-        ),
-        Package(
-            "Birthday Package",
-            stringResource(id = R.string.lorem_ipsum),
-            cost = "500.000 KWD"
-        )
-    )
-
-    var packageName by remember {
-        mutableStateOf("Destination Name")
-    }
-    var featuresDescription by remember {
-        mutableStateOf("Min 4 Hrs")
-    }
-    var cost by remember {
-        mutableStateOf("100.000 KWD")
+    SideEffect {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                viewModel.getBoatDetailsResponse(boatId = boatId)
+                viewModel.boatDetailsResponse.collectLatest { response ->
+                    response?.data?.forEach {
+                        boatDetails = it
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("Exception", "${e.message.toString()} ${e.cause} ${e.localizedMessage}")
+            }
+        }
     }
 
     var selectedIndex by remember {
@@ -94,7 +89,7 @@ fun PackageScreen() {
         modifier = Modifier.fillMaxSize(),
         containerColor = Color.White
     ) {
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
@@ -102,23 +97,82 @@ fun PackageScreen() {
                     end = PaddingDouble,
                     top = it.calculateTopPadding()
                 ),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
+            contentAlignment = Alignment.BottomCenter
         ) {
-
-            LazyColumn {
-                itemsIndexed(
-                    packageList
-                ) { index, item ->
-                    PackageComponent(
-                        packageName = item.packageName,
-                        featuresDescription = item.featureDescription,
-                        cost = item.cost,
-                        buttonText = if (index == selectedIndex)
-                            stringResource(id = R.string.added) else stringResource(R.string.add),
-                        buttonBackgroundColor = if (index == selectedIndex) SeaBlue08Percent else SeaBlue400
-                    ) { selectedIndex = index }
+            if (!boatDetails?.packages.isNullOrEmpty()) {
+                isLoading = false
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(
+                            bottom = it.calculateTopPadding()
+                        ),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Top
+                ) {
+                    itemsIndexed(
+                        boatDetails?.packages!!
+                    ) { index, item ->
+                        PackageComponent(
+                            packageName = item.name,
+                            featuresDescription = item.features,
+                            cost = item.price + " KWD",
+                            buttonText = if (index == selectedIndex)
+                                stringResource(id = R.string.added) else stringResource(R.string.add),
+                            buttonBackgroundColor = if (index == selectedIndex) SeaBlue08Percent else SeaBlue400
+                        ) {
+                            selectedIndex = index
+                        }
+                    }
                 }
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = PaddingHalf),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Button(
+                    width = 0.dp,
+                    height = 50.dp,
+                    text = stringResource(id = R.string.next),
+                    backgroundColor = SeaBlue400,
+                    shape = Shapes.medium,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .fillMaxWidth(0.5f)
+                        .padding(end = PaddingHalf)
+                ) {
+                    onNextClick()
+                }
+
+                BlueRoundedCornerShape(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp)
+                        .clickable { onSkipClick() }
+                ) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = stringResource(R.string.skip),
+                            fontSize = 17.sp,
+                            color = OxfordBlue900,
+                            fontFamily = fontFamily,
+                            fontWeight = FontWeight.SemiBold,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = PaddingHalf)
+                        )
+                    }
+                }
+            }
+            if (isLoading) {
+                CircularProgressBar()
             }
         }
     }
@@ -230,16 +284,10 @@ fun PackageComponent(
                 fontFamily = fontFamily,
                 fontSize = 17.sp,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(vertical = 14.dp)
             )
         }
     }
-}
-
-
-@Preview
-@Composable
-fun PreviewPackageScreen() {
-    PackageScreen()
 }

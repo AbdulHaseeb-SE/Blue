@@ -143,19 +143,23 @@ private fun DayContent(dayState: DayState<DynamicSelectionState>, onClick: (Loca
         mutableStateOf(LocalDate.ofYearDay(dayState.date.year, dayState.date.dayOfYear))
     }
     currentDateColor = if (dayState.isCurrentDay) {
-        Color.White
-    } else {
+        OxfordBlue900
+    }else if (LocalDate.ofYearDay(dayState.date.year, dayState.date.dayOfYear) < LocalDate.now()){
+        Color.Gray
+    }
+    else{
         Color.Black
     }
 
+
     selectedDateColor = if (dayState.isCurrentDay) {
-        Color.White
+        SeaBlue400
     } else {
         Color.White
     }
 
     if (dayState.isCurrentDay) {
-        backgroundColor = SeaBlue400
+        backgroundColor = Color.Transparent
         borderColor = SeaBlue400
     } else if (dayState.selectionState.isDateSelected(selectedDate)) {
         backgroundColor = OxfordBlue900
@@ -172,17 +176,17 @@ private fun DayContent(dayState: DayState<DynamicSelectionState>, onClick: (Loca
             .height(40.dp)
             .padding(6.dp)
             .clickable {
-                selectedDate = LocalDate.ofYearDay(dayState.date.year, dayState.date.dayOfYear)
-                dayState.selectionState.onDateSelected(selectedDate)
-
-                onClick(selectedDate)
-
-                backgroundColor = if (
-                    dayState.selectionState.isDateSelected(selectedDate)
-                ) OxfordBlue900 else Color.Transparent
-                borderColor = if (
-                    dayState.selectionState.isDateSelected(selectedDate)
-                ) SeaBlue400 else Color.Transparent
+                if (LocalDate.ofYearDay(dayState.date.year, dayState.date.dayOfYear) >= LocalDate.now()){
+                    selectedDate = LocalDate.ofYearDay(dayState.date.year, dayState.date.dayOfYear)
+                    dayState.selectionState.onDateSelected(selectedDate)
+                    onClick(selectedDate)
+                    backgroundColor = if (
+                        dayState.selectionState.isDateSelected(selectedDate)
+                    ) OxfordBlue900 else Color.Transparent
+                    borderColor = if (
+                        dayState.selectionState.isDateSelected(selectedDate)
+                    ) SeaBlue400 else Color.Transparent
+                }
             },
         borderColor = borderColor,
         containerColor = backgroundColor,

@@ -7,6 +7,10 @@ import com.ah.studio.blueapp.util.Constants.CATEGORY_DETAILS_ROUTE
 import com.ah.studio.blueapp.util.Constants.GALLERY_ROUTE
 import com.ah.studio.blueapp.util.Constants.HOME_ROUTE
 import com.ah.studio.blueapp.util.Constants.MY_PARKING_ROUTE
+import com.ah.studio.blueapp.util.Constants.PACKAGE_ROUTE
+import com.ah.studio.blueapp.util.Constants.PRODUCT_DETAILS_ROUTE
+import com.ah.studio.blueapp.util.Constants.PRODUCT_LIST_ROUTE
+import com.ah.studio.blueapp.util.Constants.PRODUCT_ROUTE
 import com.ah.studio.blueapp.util.Constants.SEAFARER_ROUTE
 import com.ah.studio.blueapp.util.Constants.SELECT_DESTINATION_ROUTE
 import com.ah.studio.blueapp.util.Constants.SIGN_IN_ROUTE
@@ -26,6 +30,10 @@ sealed class ScreenController(val route: String) {
     object Galley : ScreenController(GALLERY_ROUTE)
     object BoatBooking : ScreenController(BOAT_BOOKING_ROUTE)
     object SelectDestination : ScreenController(SELECT_DESTINATION_ROUTE)
+    object Package : ScreenController(PACKAGE_ROUTE)
+    object Product : ScreenController(PRODUCT_ROUTE)
+    object ProductList : ScreenController(PRODUCT_LIST_ROUTE)
+    object ProductDetails : ScreenController(PRODUCT_DETAILS_ROUTE)
 
     fun withArgs(vararg args: String): String {
         return buildString {

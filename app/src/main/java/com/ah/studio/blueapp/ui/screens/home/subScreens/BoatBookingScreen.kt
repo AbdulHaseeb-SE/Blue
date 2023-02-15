@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,6 +38,7 @@ fun BoatBookingScreen(
     boatId: Int,
     destinationID: Int? = null,
     selectDestinationClick: () -> Unit,
+    onNextClick: () -> Unit,
     viewModel: HomeViewModel = getKoin().get()
 ) {
     var isLoading by remember { mutableStateOf(true) }
@@ -176,10 +176,11 @@ fun BoatBookingScreen(
                             .fillMaxWidth()
                             .wrapContentHeight()
                     ) { selectedDate ->
-                        if (destinationID != null){
-                            isFetchingTime = true
-                            try {
-                                CoroutineScope(Dispatchers.IO).launch {
+                        timeSlotResponse = listOf()
+                        isFetchingTime = true
+                        if (destinationID != null) {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                try {
                                     viewModel.getAvailableTimeSlotResponse(
                                         TimeSlotBody(
                                             boat_id = boatId.toString(),
@@ -190,14 +191,18 @@ fun BoatBookingScreen(
                                             end = "$selectedDate 24:00"
                                         )
                                     )
+                                    isFetchingTime = true
                                     viewModel.availableTimeSlotResponse.collectLatest { response ->
-                                        timeSlotResponse = response?.data?.get(selectedDate.toString())
+                                        timeSlotResponse =
+                                            response?.data?.get(selectedDate.toString())
+                                        Log.d("CheckTimeSlot", timeSlotResponse.toString())
                                     }
+                                } catch (e: Exception) {
+                                    Log.d("CheckDateTime", "in exception ${e.message}")
                                 }
-                            } catch (e: Exception) {
-                                Log.d("CheckDateTime", "in exception ${e.message}")
                             }
-                        }else {
+                        } else {
+                            isFetchingTime = false
                             snackbar = "Please select the destination first !!"
                             showSnackBar = true
                         }
@@ -206,6 +211,7 @@ fun BoatBookingScreen(
                 item {
                     Box {
                         if (!timeSlotResponse.isNullOrEmpty()) {
+                            isFetchingTime = false
                             Text(
                                 text = stringResource(R.string.slots_available),
                                 fontWeight = FontWeight.Bold,
@@ -217,34 +223,27 @@ fun BoatBookingScreen(
                                     .fillMaxWidth()
                                     .padding(top = 27.dp)
                             )
-                            TimeSlotTable(
-                                startingSlot = trimTimeToHrMin(timeSlotResponse!!.first().date)+":00",
-                                endingSlot = trimTimeToHrMin(timeSlotResponse!!.last().date)+":00",
-                                startingTime = {},
-                                endingTime = {},
-                                modifier = Modifier
-                                    .padding(
-                                        top = 21.dp,
-                                    )
-                                    .fillMaxWidth()
-                            )
-                            isFetchingTime = false
-                        }
-                        if (isFetchingTime) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(300.dp)
-                                    .background(Color.White)
-                            ) {
-                                CircularProgressIndicator(
+                            boatDetails?.destination_address?.forEach { destination ->
+                                TimeSlotTable(
+                                    startingSlot = trimTimeToHrMin(timeSlotResponse!!.first().date) + ":00",
+                                    endingSlot = trimTimeToHrMin(timeSlotResponse!!.last().date) + ":00",
+                                    startingTime = {},
+                                    endingTime = {},
+                                    duration = if ((destinationID != null && destination.id == destinationID)) {
+                                        destination.destination_hrs
+                                    } else {
+                                        0
+                                    },
                                     modifier = Modifier
-                                        .size(40.dp)
-                                        .align(Alignment.Center),
-                                    color = SeaBlue400,
-                                    strokeWidth = 4.dp
+                                        .padding(
+                                            top = 21.dp,
+                                        )
+                                        .fillMaxWidth()
                                 )
                             }
+                        }
+                        if (isFetchingTime) {
+                            CircularProgressBar()
                         }
                     }
 
@@ -260,23 +259,13 @@ fun BoatBookingScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(46.dp)
-                    ) {}
+                    ) {
+                        onNextClick()
+                    }
                 }
             }
             if (isLoading) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.White)
-                ) {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .size(40.dp)
-                            .align(Alignment.Center),
-                        color = SeaBlue400,
-                        strokeWidth = 4.dp
-                    )
-                }
+                CircularProgressBar()
             }
         }
     }

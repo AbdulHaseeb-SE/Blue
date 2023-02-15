@@ -146,4 +146,5 @@
     <string name="seafarer">Seafarer List</string>
     <string name="no_seafarer_hired_yet">No Seafarer Hired Yet !!</string>
     <string name="reviews">Reviews</string>
+    <string name="skip">SKIP</string>
 </resources>

@@ -31,6 +31,9 @@ fun NavGraphBuilder.boatBookingComposable(
                     destinationID = if (destinationId != "null") destinationId.toInt() else null,
                     selectDestinationClick = {
                         navHostController.navigate(ScreenController.SelectDestination.route + "/$boatId")
+                    },
+                    onNextClick = {
+                        navHostController.navigate(ScreenController.Package.route + "/$boatId")
                     }
                 )
             }
