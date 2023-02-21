@@ -1,12 +1,14 @@
 package com.ah.studio.blueapp.ui.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -15,16 +17,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ah.studio.blueapp.R
-import com.ah.studio.blueapp.ui.theme.*
+import com.ah.studio.blueapp.ui.theme.OxfordBlue900
+import com.ah.studio.blueapp.ui.theme.Shapes
+import com.ah.studio.blueapp.ui.theme.fontFamily
 
 @Composable
-fun RestaurantCartItem(
+fun CartItem(
     itemName: String,
-    itemDescription: String,
+    qty: Int,
     itemImage: Painter,
     price: String,
     timeRequired: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onDeleteClick: () -> Unit
 ) {
     Row(
         modifier = modifier
@@ -61,14 +66,16 @@ fun RestaurantCartItem(
                     maxLines = 1
                 )
                 Image(
-                    painter = painterResource(id = R.drawable.ic_edit),
+                    painter = painterResource(id = R.drawable.ic_delete),
                     contentDescription = stringResource(
-                        R.string.edit_item
+                        R.string.delete_item
                     ),
+                    colorFilter = ColorFilter.tint(Color.Red),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .padding(end = 2.dp)
-                        .size(30.dp)
+                        .size(26.dp)
+                        .clickable { onDeleteClick() }
                 )
             }
 
@@ -119,8 +126,9 @@ fun RestaurantCartItem(
                 AddSubtractItem(
                     buttonTextSize = 26.sp,
                     paddingAroundItemText = 6.dp,
+                    qty = qty,
                     horizontalArrangement = Arrangement.End
-                )
+                ) {}
             }
         }
     }

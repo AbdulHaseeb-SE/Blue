@@ -24,7 +24,7 @@ fun NavGraphBuilder.packageScreenComposable(
             PackageScreen(
                 boatId.toInt(),
                 onNextClick = { navHostController.navigate(ScreenController.Product.route) },
-                onSkipClick = { navHostController.navigate(ScreenController.Product.route) }
+                onSkipClick = { navHostController.navigate(ScreenController.Payment.route) }
             )
         }
     }

@@ -21,5 +21,8 @@ fun NavGraphBuilder.homeNavGraph(navHostController: NavHostController) {
         productScreenComposable(navHostController)
         productListComposable(navHostController)
         productDetailsComposable(navHostController)
+        cartScreenComposable(navHostController)
+        paymentScreenComposable(navHostController)
+        thankYouScreenComposable(navHostController)
     }
 }

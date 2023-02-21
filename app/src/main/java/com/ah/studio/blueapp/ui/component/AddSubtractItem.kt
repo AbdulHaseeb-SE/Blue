@@ -8,12 +8,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ah.studio.blueapp.ui.theme.OxfordBlue900
 import com.ah.studio.blueapp.ui.theme.fontFamily
 
 @Composable
@@ -21,10 +19,12 @@ fun AddSubtractItem(
     buttonTextSize: TextUnit = 20.sp,
     paddingAroundItemText: Dp = 10.dp,
     buttonSize: Dp = 34.dp,
-    horizontalArrangement: Arrangement.Horizontal = Arrangement.SpaceEvenly
+    qty : Int = 1,
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.SpaceEvenly,
+    onItemCountChanged: (Int)->Unit
 ) {
     var itemCount by remember {
-        mutableStateOf(0)
+        mutableStateOf(qty)
     }
     Row(
         modifier = Modifier
@@ -53,6 +53,7 @@ fun AddSubtractItem(
                     color = Color.Black,
                     modifier = Modifier.clickable {
                         itemCount += 1
+                        onItemCountChanged(itemCount)
                     }
                 )
             }
@@ -90,6 +91,7 @@ fun AddSubtractItem(
                     modifier = Modifier
                         .clickable {
                             if (itemCount > 0) itemCount -= 1
+                            onItemCountChanged(itemCount)
                         }
                 )
             }

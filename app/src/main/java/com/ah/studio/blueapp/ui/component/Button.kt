@@ -23,6 +23,7 @@ fun Button(
     shape: Shape,
     modifier: Modifier = Modifier,
     fontWeight: FontWeight = FontWeight.Normal,
+    textColor: Color = Color.Black,
     onButtonClick: () -> Unit
 ) {
     Button(
@@ -41,7 +42,7 @@ fun Button(
         Text(
             text = text,
             fontSize = 17.sp,
-            color = Color.Black,
+            color = textColor,
             fontFamily = fontFamily,
             fontWeight = fontWeight
         )

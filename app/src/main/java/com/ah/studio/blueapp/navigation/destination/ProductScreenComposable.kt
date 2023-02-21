@@ -13,8 +13,11 @@ fun NavGraphBuilder.productScreenComposable(
         route = ScreenController.Product.route
     ) {
         ProductScreen(
-            onSubCategoryClick = { subCategoryId, subCategoryName->
+            onSubCategoryClick = { subCategoryId, subCategoryName ->
                 navHostController.navigate(ScreenController.ProductList.route + "/$subCategoryId/$subCategoryName")
+            },
+            onSkipButtonClick = {
+                navHostController.navigate(ScreenController.Payment.route)
             }
         )
     }

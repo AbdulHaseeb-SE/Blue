@@ -32,7 +32,7 @@ fun BottomNavBar(
 ) {
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    var currentDestination = navBackStackEntry?.destination
+    val currentDestination = navBackStackEntry?.destination
     val bottomBarDestination = items.any { it.route == currentDestination?.route }
 
     if (bottomBarDestination) {

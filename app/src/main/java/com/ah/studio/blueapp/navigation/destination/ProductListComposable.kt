@@ -32,6 +32,9 @@ fun NavGraphBuilder.productListComposable(
                         subCategoryName = subCategoryName,
                         onProductClick = { productId ->
                             navHostController.navigate(ScreenController.ProductDetails.route + "/$productId")
+                        },
+                        onSkipButtonClick = {
+                            navHostController.navigate(ScreenController.Payment.route)
                         }
                     )
                 }

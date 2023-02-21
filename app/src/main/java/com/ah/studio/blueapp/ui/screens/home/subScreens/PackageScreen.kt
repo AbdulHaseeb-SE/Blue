@@ -14,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -28,6 +29,7 @@ import com.ah.studio.blueapp.ui.component.TopAppBar
 import com.ah.studio.blueapp.ui.screens.home.HomeViewModel
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.boatDetails.BoatDetails
 import com.ah.studio.blueapp.ui.theme.*
+import com.ah.studio.blueapp.util.BookingDetailsManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -42,9 +44,12 @@ fun PackageScreen(
     onSkipClick: () -> Unit,
     viewModel: HomeViewModel = getKoin().get()
 ) {
+    val bookingDetailsManager = BookingDetailsManager(LocalContext.current)
     var isLoading by remember { mutableStateOf(true) }
     var boatDetails: BoatDetails? by remember { mutableStateOf(null) }
-
+    var packageId: Int? by remember {
+        mutableStateOf(null)
+    }
     SideEffect {
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -121,6 +126,7 @@ fun PackageScreen(
                                 stringResource(id = R.string.added) else stringResource(R.string.add),
                             buttonBackgroundColor = if (index == selectedIndex) SeaBlue08Percent else SeaBlue400
                         ) {
+                            packageId = item.id
                             selectedIndex = index
                         }
                     }
@@ -144,14 +150,23 @@ fun PackageScreen(
                         .fillMaxWidth(0.5f)
                         .padding(end = PaddingHalf)
                 ) {
-                    onNextClick()
+                    if (packageId != null) {
+                        bookingDetailsManager.saveSingleDetails("package_id", packageId.toString())
+                        onNextClick()
+                    }else {
+                        bookingDetailsManager.saveSingleDetails("package_id", "")
+                        onNextClick()
+                    }
                 }
 
                 BlueRoundedCornerShape(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp)
-                        .clickable { onSkipClick() }
+                        .clickable {
+                            bookingDetailsManager.saveSingleDetails("package_id", "")
+                            onSkipClick()
+                        }
                 ) {
                     Box(
                         modifier = Modifier.fillMaxSize(),

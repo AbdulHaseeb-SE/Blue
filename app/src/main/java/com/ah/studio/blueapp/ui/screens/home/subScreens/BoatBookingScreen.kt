@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -24,6 +25,7 @@ import com.ah.studio.blueapp.ui.screens.home.domain.dto.boatDetails.BoatDetails
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.timeSlot.Time
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.timeSlot.TimeSlotBody
 import com.ah.studio.blueapp.ui.theme.*
+import com.ah.studio.blueapp.util.BookingDetailsManager
 import com.ah.studio.blueapp.util.trimTimeToHrMin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -41,6 +43,7 @@ fun BoatBookingScreen(
     onNextClick: () -> Unit,
     viewModel: HomeViewModel = getKoin().get()
 ) {
+    val bookingDetailsManager = BookingDetailsManager(LocalContext.current)
     var isLoading by remember { mutableStateOf(true) }
     var boatDetails: BoatDetails? by remember { mutableStateOf(null) }
     var timeSlotResponse: List<Time>? by remember { mutableStateOf(null) }
@@ -51,6 +54,9 @@ fun BoatBookingScreen(
     var showSnackBar by remember { mutableStateOf(false) }
     var selectedDestinationAddress by remember { mutableStateOf("") }
     var isFetchingTime by remember { mutableStateOf(false) }
+    var dateSelected by remember { mutableStateOf("") }
+    var startTime by remember { mutableStateOf("") }
+    var endTime by remember { mutableStateOf("") }
 
     SideEffect {
         CoroutineScope(Dispatchers.IO).launch {
@@ -176,6 +182,7 @@ fun BoatBookingScreen(
                             .fillMaxWidth()
                             .wrapContentHeight()
                     ) { selectedDate ->
+                        dateSelected = selectedDate.toString()
                         timeSlotResponse = listOf()
                         isFetchingTime = true
                         if (destinationID != null) {
@@ -227,8 +234,8 @@ fun BoatBookingScreen(
                                 TimeSlotTable(
                                     startingSlot = trimTimeToHrMin(timeSlotResponse!!.first().date) + ":00",
                                     endingSlot = trimTimeToHrMin(timeSlotResponse!!.last().date) + ":00",
-                                    startingTime = {},
-                                    endingTime = {},
+                                    startingTime = { start -> startTime = start },
+                                    endingTime = { end -> endTime = end },
                                     duration = if ((destinationID != null && destination.id == destinationID)) {
                                         destination.destination_hrs
                                     } else {
@@ -260,7 +267,65 @@ fun BoatBookingScreen(
                             .fillMaxWidth()
                             .padding(46.dp)
                     ) {
-                        onNextClick()
+                        if (destinationID != null) {
+                            if (dateSelected != "" && selectedDestinationAddress != "") {
+                                if (startTime != "" && endTime != "") {
+                                    bookingDetailsManager.saveSingleDetails(
+                                        "boat_category",
+                                        boatDetails?.category.toString()
+                                    )
+                                    bookingDetailsManager.saveSingleDetails(
+                                        "boat_id",
+                                        boatId.toString()
+                                    )
+                                    bookingDetailsManager.saveSingleDetails(
+                                        "boat_total",
+                                        boatDetails?.starting_from.toString()
+                                    )
+                                    bookingDetailsManager.saveSingleDetails(
+                                        "destination_id",
+                                        destinationID.toString(),
+                                    )
+                                    bookingDetailsManager.saveSingleDetails(
+                                        "start",
+                                        startTime
+                                    )
+                                    bookingDetailsManager.saveSingleDetails(
+                                        "end",
+                                        endTime,
+                                    )
+                                    bookingDetailsManager.saveSingleDetails(
+                                        "dateSelected",
+                                        dateSelected,
+                                    )
+
+                                    Log.d(
+                                        "CheckPrefs",
+                                        "prefs = ${bookingDetailsManager.retrieveDetails("boat_category")} \n" +
+                                                "${bookingDetailsManager.retrieveDetails("boat_id")} \n" +
+                                                "${bookingDetailsManager.retrieveDetails("destination_id")} \n" +
+                                                "${bookingDetailsManager.retrieveDetails("start")} \n" +
+                                                "${bookingDetailsManager.retrieveDetails("end")} \n"
+                                    )
+
+                                    onNextClick()
+
+                                } else {
+                                    isFetchingTime = false
+                                    snackbar =
+                                        "Please select the time Slot from the Available slots !!"
+                                    showSnackBar = true
+                                }
+                            } else {
+                                isFetchingTime = false
+                                snackbar = "Please select a date on Calendar !!"
+                                showSnackBar = true
+                            }
+                        } else {
+                            isFetchingTime = false
+                            snackbar = "Please select the destination first !!"
+                            showSnackBar = true
+                        }
                     }
                 }
             }

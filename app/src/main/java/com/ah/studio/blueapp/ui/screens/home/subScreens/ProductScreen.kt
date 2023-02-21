@@ -9,10 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarDuration
-import androidx.compose.material.Text
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.*
 import androidx.compose.material3.Divider
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -45,9 +42,10 @@ import org.koin.androidx.compose.getKoin
 @Composable
 fun ProductScreen(
     onSubCategoryClick: (subCategoryId: Int, subCategoryName: String) -> Unit,
+    onSkipButtonClick: () -> Unit,
     viewModel: HomeViewModel = getKoin().get()
 ) {
-    var type by remember { mutableStateOf("restaurant") }
+    var type by remember { mutableStateOf("Restaurant") }
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
     val snackbar by remember { mutableStateOf("") }
@@ -77,9 +75,9 @@ fun ProductScreen(
     Scaffold(
         scaffoldState = scaffoldState,
         snackbarHost = {
-            androidx.compose.material.SnackbarHost(it) { data ->
+            SnackbarHost(it) { data ->
                 if (showSnackBar) {
-                    androidx.compose.material.Snackbar(
+                    Snackbar(
                         actionColor = SeaBlue400,
                         contentColor = Color.Black,
                         snackbarData = data,
@@ -96,7 +94,7 @@ fun ProductScreen(
                 contentColor = Color.Black,
                 navigationIcon = painterResource(id = R.drawable.ic_back),
                 navigationIconContentDescription = stringResource(id = R.string.back_button),
-                text = stringResource(id = R.string.restaurants),
+                text = type,
                 actionIcons = {
                     Image(
                         painter = painterResource(id = R.drawable.ic_notification),
@@ -115,7 +113,10 @@ fun ProductScreen(
             .fillMaxSize()
             .background(Color.White),
     ) {
-        Box {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.BottomEnd
+        ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -256,6 +257,38 @@ fun ProductScreen(
                     }
                     if (isSubCategoryLoading) {
                         CircularProgressBar()
+                    }
+                }
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = PaddingHalf, end = PaddingDouble),
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                BlueRoundedCornerShape(
+                    containerColor = Color.White,
+                    modifier = Modifier
+                        .fillMaxWidth(0.3f)
+                        .height(50.dp)
+                        .clickable { onSkipButtonClick()}
+                ) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = stringResource(R.string.skip),
+                            fontSize = 17.sp,
+                            color = OxfordBlue900,
+                            fontFamily = fontFamily,
+                            fontWeight = FontWeight.SemiBold,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = PaddingHalf)
+                        )
                     }
                 }
             }

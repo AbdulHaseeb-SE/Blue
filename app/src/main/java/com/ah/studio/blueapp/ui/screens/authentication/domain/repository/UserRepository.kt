@@ -34,17 +34,13 @@ class UserRepository(private val context: Context) : IUserRepository {
                 endPoint = REGISTER_ENDPOINT,
                 jsonObject = jsonObject,
                 listener = { response ->
-                    if (response.getBoolean("success")) {
-                        userRegistrationResponse(
-                            Gson().fromJson(
-                                response.toString(),
-                                UserRegistrationResponse::class.java
-                            )
+                    userRegistrationResponse(
+                        Gson().fromJson(
+                            response.toString(),
+                            UserRegistrationResponse::class.java
                         )
-                        state.value = response.getString("success")
-                    } else {
-                        state.value = response.getString("success")
-                    }
+                    )
+                    state.value = response.getString("success")
                 },
                 errorListener = { error ->
                     state.value = "false"

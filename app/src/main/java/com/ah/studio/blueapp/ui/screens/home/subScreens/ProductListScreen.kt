@@ -16,19 +16,14 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ah.studio.blueapp.R
-import com.ah.studio.blueapp.ui.component.CircularProgressBar
-import com.ah.studio.blueapp.ui.component.ProductItem
-import com.ah.studio.blueapp.ui.component.SearchBar
-import com.ah.studio.blueapp.ui.component.TopAppBar
+import com.ah.studio.blueapp.ui.component.*
 import com.ah.studio.blueapp.ui.screens.home.HomeViewModel
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.product.Product
-import com.ah.studio.blueapp.ui.theme.Grey600
-import com.ah.studio.blueapp.ui.theme.PaddingDouble
-import com.ah.studio.blueapp.ui.theme.PaddingHalf
-import com.ah.studio.blueapp.ui.theme.fontFamily
+import com.ah.studio.blueapp.ui.theme.*
 import com.ah.studio.blueapp.util.coilImageLoadingAsync
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -42,6 +37,7 @@ fun ProductListScreen(
     subCategoryId: String,
     subCategoryName: String,
     onProductClick: (productId: Int) -> Unit,
+    onSkipButtonClick: () -> Unit,
     viewModel: HomeViewModel = getKoin().get()
 ) {
     var isLoading by remember {
@@ -102,7 +98,10 @@ fun ProductListScreen(
             mutableStateOf(null)
         }
 
-        Box {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.BottomEnd
+        ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -169,6 +168,38 @@ fun ProductListScreen(
                             color = Grey600,
                             maxLines = 1,
                             modifier = Modifier.padding(bottom = 19.dp)
+                        )
+                    }
+                }
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = PaddingHalf, end = PaddingDouble),
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                BlueRoundedCornerShape(
+                    containerColor = SeaBlue50Percent,
+                    modifier = Modifier
+                        .fillMaxWidth(0.3f)
+                        .height(50.dp)
+                        .clickable {onSkipButtonClick()}
+                ) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = stringResource(R.string.skip),
+                            fontSize = 17.sp,
+                            color = OxfordBlue900,
+                            fontFamily = fontFamily,
+                            fontWeight = FontWeight.SemiBold,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = PaddingHalf)
                         )
                     }
                 }

@@ -2,6 +2,7 @@ package com.ah.studio.blueapp.ui.screens.seafarer
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,69 +18,152 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.ah.studio.blueapp.R
 import com.ah.studio.blueapp.ui.component.BlueRoundedCornerShape
+import com.ah.studio.blueapp.ui.component.CircularProgressBar
 import com.ah.studio.blueapp.ui.component.TopAppBar
+import com.ah.studio.blueapp.ui.screens.seafarer.domain.dto.seafarerCategory.SeafarerCategoryResponse
+import com.ah.studio.blueapp.ui.screens.seafarer.domain.dto.seafarerList.Seafarer
+import com.ah.studio.blueapp.ui.screens.seafarer.domain.dto.seafarerList.SeafarerListResponse
 import com.ah.studio.blueapp.ui.theme.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import org.koin.androidx.compose.getKoin
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SeafarerScreen(navHostController: NavHostController) {
+fun SeafarerScreen(
+    onAddSeafarerClick: () -> Unit,
+    onMessageClick: () -> Unit,
+    onCallClick: () -> Unit,
+    onPayToUnlockClick: () -> Unit,
+    viewModel: SeafarerViewModel = getKoin().get()
+) {
+    var isLoading by remember {
+        mutableStateOf(true)
+    }
+    var seafarerCategory by remember {
+        mutableStateOf("captains")
+    }
+    var seafarerCategoryListResponse: SeafarerCategoryResponse? by remember {
+        mutableStateOf(null)
+    }
+    var seafarerListResponse: SeafarerListResponse? by remember {
+        mutableStateOf(null)
+    }
+
+    SideEffect {
+        CoroutineScope(Dispatchers.IO).launch {
+            viewModel.getSeafarerCategoryResponse()
+            viewModel.seafarerCategoryResponse.collectLatest { response ->
+                seafarerCategoryListResponse = response
+            }
+        }
+    }
+
+    SideEffect {
+        CoroutineScope(Dispatchers.IO).launch {
+            viewModel.getSeafarerListResponse(
+                page = 1,
+                category = seafarerCategory
+            )
+            viewModel.seafarerListResponse.collectLatest { response ->
+                seafarerListResponse = response
+            }
+        }
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
                 backgroundColor = Color.Transparent,
                 contentColor = Color.Black,
                 navigationIcon = null,
-                text = "",
+                text = stringResource(id = R.string.seafarer_text),
                 navigationIconContentDescription = "",
-                actionIcons = {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_add),
-                        contentDescription = stringResource(
-                            R.string.button_add
-                        )
-                    )
-                },
+                actionIcons = {},
                 onNavigationIconClick = {}
             )
         },
         modifier = Modifier.fillMaxSize(),
         containerColor = Color.White
     ) {
-        var selectedTabIndex by remember {
-            mutableStateOf(0)
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(
-                    start = PaddingDouble,
-                    end = PaddingDouble,
-                    top = it.calculateTopPadding()
-                )
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        ) {
-            TabBarSection() { index ->
-                selectedTabIndex = index
+        Box {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(
+                        start = PaddingDouble,
+                        end = PaddingDouble,
+                        top = it.calculateTopPadding()
+                    ),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
+            ) {
+                if (seafarerCategoryListResponse != null) {
+                    TabBarSection(seafarerCategoryListResponse) { itemId ->
+                        seafarerCategory = itemId
+                        isLoading = true
+                        CoroutineScope(Dispatchers.IO).launch {
+                            viewModel.getSeafarerListResponse(
+                                page = 1,
+                                category = seafarerCategory
+                            )
+                            viewModel.seafarerListResponse.collectLatest { response ->
+                                seafarerListResponse = response
+                            }
+                        }
+                    }
+                    if (seafarerListResponse != null) {
+                        isLoading = false
+                        if (seafarerListResponse!!.data.isNotEmpty()) {
+                            LazyColumn {
+                                if (seafarerListResponse != null) {
+                                    itemsIndexed(
+                                        seafarerListResponse!!.data
+                                    ) { _, item ->
+                                        isLoading = false
+                                        CaptainDetailCard(
+                                            item,
+                                            onCallClick = {
+                                                onCallClick()
+                                            },
+                                            onMessageClick = {
+                                                onMessageClick()
+                                            },
+                                            onPayToUnlockClick = {
+                                                if (seafarerListResponse != null) {
+                                                    onPayToUnlockClick()
+                                                }
+                                            }
+                                        )
+                                    }
+                                }
+                            }
+                        } else if (seafarerListResponse?.data?.isEmpty() == true) {
+                            Text(
+                                text = "No Seafarer Found!!",
+                                fontWeight = FontWeight.SemiBold,
+                                fontFamily = fontFamily,
+                                color = Grey700,
+                                fontSize = 14.sp,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = PaddingLarge)
+                            )
+                        }
+                    }
+
+                }
             }
 
-            when (selectedTabIndex) {
-                0 -> {
-                    CaptainDetailCard(true)
-                    CaptainDetailCard(false)
-                    CaptainDetailCard(false)
-                }
-                1 -> {}
-                2 -> {}
-                3 -> {}
+            if (isLoading) {
+                CircularProgressBar()
             }
         }
     }
@@ -87,7 +171,10 @@ fun SeafarerScreen(navHostController: NavHostController) {
 
 @Composable
 fun CaptainDetailCard(
-    isPayed : Boolean,
+    seafarer: Seafarer,
+    onMessageClick: () -> Unit,
+    onCallClick: () -> Unit,
+    onPayToUnlockClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -114,20 +201,23 @@ fun CaptainDetailCard(
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Text(
-                    text = "Salim Alsafi",
+                    text = seafarer.name,
                     fontWeight = FontWeight.SemiBold,
                     fontFamily = fontFamily,
                     fontSize = 17.sp,
                     textAlign = TextAlign.Center,
+                    color = Color.Black,
                     modifier = Modifier.fillMaxWidth(0.55f)
                 )
                 Image(
                     painter = painterResource(id = R.drawable.ic_contact_us),
-                    contentDescription = ""
+                    contentDescription = "",
+                    modifier = Modifier.clickable { onCallClick() }
                 )
                 Image(
                     painter = painterResource(id = R.drawable.ic_chat),
-                    contentDescription = ""
+                    contentDescription = "",
+                    modifier = Modifier.clickable { onMessageClick() }
                 )
             }
 
@@ -170,7 +260,7 @@ fun CaptainDetailCard(
                             textAlign = TextAlign.Center
                         )
                         Text(
-                            text = "5 Years",
+                            text = seafarer.experince,
                             fontWeight = FontWeight.SemiBold,
                             fontFamily = fontFamily,
                             color = Color.Black,
@@ -191,7 +281,7 @@ fun CaptainDetailCard(
                             textAlign = TextAlign.Center
                         )
                         Text(
-                            text = "35 Years",
+                            text = seafarer.age.toString() + " Years",
                             fontWeight = FontWeight.SemiBold,
                             fontFamily = fontFamily,
                             color = Color.Black,
@@ -217,7 +307,7 @@ fun CaptainDetailCard(
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        text = "Indian",
+                        text = seafarer.nationality,
                         fontWeight = FontWeight.SemiBold,
                         fontFamily = fontFamily,
                         color = Color.Black,
@@ -241,14 +331,16 @@ fun CaptainDetailCard(
                         fontSize = 14.sp,
                         textAlign = TextAlign.Center
                     )
-                    Text(
-                        text = "Sailing Yacht, Motor Yacht",
-                        fontWeight = FontWeight.SemiBold,
-                        fontFamily = fontFamily,
-                        color = Color.Black,
-                        fontSize = 14.sp,
-                        textAlign = TextAlign.Center
-                    )
+                    seafarer.baot_experince.forEach { experience ->
+                        Text(
+                            text = experience + if (experience == seafarer.baot_experince.last()) "." else ", ",
+                            fontWeight = FontWeight.SemiBold,
+                            fontFamily = fontFamily,
+                            color = Color.Black,
+                            fontSize = 14.sp,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
 
                 Row(
@@ -266,24 +358,32 @@ fun CaptainDetailCard(
                         fontSize = 14.sp,
                         textAlign = TextAlign.Center
                     )
-                    Text(
-                        text = "English , Arabic, Hindi",
-                        fontWeight = FontWeight.SemiBold,
-                        fontFamily = fontFamily,
-                        color = Color.Black,
-                        fontSize = 14.sp,
-                        textAlign = TextAlign.Center
-                    )
+                    seafarer.language.forEach { language ->
+                        Text(
+                            text = language + if (language == seafarer.language.last()) "." else ",",
+                            fontWeight = FontWeight.SemiBold,
+                            fontFamily = fontFamily,
+                            color = Color.Black,
+                            fontSize = 14.sp,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
             }
         }
 
-        if (!isPayed) PayToUnlock()
+        if (!seafarer.unlock) {
+            PayToUnlock(
+                onPayToUnlockClick = {
+                    onPayToUnlockClick()
+                }
+            )
+        }
     }
 }
 
 @Composable
-fun PayToUnlock() {
+fun PayToUnlock(onPayToUnlockClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -319,7 +419,8 @@ fun PayToUnlock() {
                 fontWeight = FontWeight.SemiBold,
                 fontFamily = fontFamily,
                 color = Red700,
-                fontSize = 17.sp
+                fontSize = 17.sp,
+                modifier = Modifier.clickable { onPayToUnlockClick() }
             )
         }
     }
@@ -327,49 +428,42 @@ fun PayToUnlock() {
 
 @Composable
 fun TabBarSection(
-    onClick: (Int) -> Unit
+    seafarerCategoryListResponse: SeafarerCategoryResponse?,
+    onClick: (String) -> Unit
 ) {
     var selectedIndex by remember {
         mutableStateOf(0)
     }
-    LazyRow(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(
-                top = 9.dp,
-                bottom = 29.dp
-            ),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
-    ) {
-        itemsIndexed(
-            listOf(
-                "Captains",
-                "Helper",
-                "Technician",
-                "Mate"
-            )
-        ) { index, item ->
-            Text(
-                text = item,
-                fontFamily = fontFamily,
-                fontSize = 17.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = if (selectedIndex == index) Color.Black else Black50Percent,
-                modifier = Modifier
-                    .wrapContentWidth()
-                    .padding(end = 19.dp)
-                    .clickable {
-                        selectedIndex = index
-                        onClick(index)
-                    }
-            )
+    if (seafarerCategoryListResponse != null) {
+        LazyRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    top = 9.dp,
+                    bottom = 29.dp
+                ),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            itemsIndexed(
+                seafarerCategoryListResponse.data
+            ) { index, item ->
+                Text(
+                    text = item.name,
+                    fontFamily = fontFamily,
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = if (selectedIndex == index) Color.Black else Black50Percent,
+                    modifier = Modifier
+                        .wrapContentWidth()
+                        .padding(end = 19.dp)
+                        .clickable {
+                            selectedIndex = index
+                            onClick(item.id)
+                        }
+                )
+            }
         }
     }
-}
 
-@Preview
-@Composable
-fun PreviewSeafarer() {
-    SeafarerScreen(navHostController = rememberNavController())
 }

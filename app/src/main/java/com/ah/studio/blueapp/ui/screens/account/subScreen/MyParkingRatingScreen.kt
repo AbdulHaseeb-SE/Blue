@@ -16,6 +16,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ah.studio.blueapp.R
 import com.ah.studio.blueapp.ui.component.*
+import com.ah.studio.blueapp.ui.screens.myBooking.CaptainBoatNameSection
+import com.ah.studio.blueapp.ui.screens.myBooking.LocationSection
+import com.ah.studio.blueapp.ui.screens.myBooking.SummarySection
+import com.ah.studio.blueapp.ui.screens.myBooking.TimeDateSection
 import com.ah.studio.blueapp.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)

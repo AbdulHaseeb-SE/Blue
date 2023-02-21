@@ -9,6 +9,12 @@ import com.ah.studio.blueapp.ui.screens.home.domain.dto.boatCategory.SubCategory
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.boatDetails.BoatDetailsResponse
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.boats.BoatBody
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.boats.BoatResponse
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.booking.BoatBookingBody
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.booking.BoatBookingResponse
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.cart.CartCreateResponse
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.cart.CartListResponse
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.cart.CreateCartBody
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.delete.DeleteCartResponse
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.gallery.GalleryImageResponse
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.product.ProductCategoryResponse
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.product.ProductDetailsResponse
@@ -76,9 +82,30 @@ class HomeViewModel(
     override val productListResponse: MutableStateFlow<ProductListResponse?>
         get() = _productListResponse
 
+
     private val _productDetailsResponse = MutableStateFlow<ProductDetailsResponse?>(null)
     override val productDetailsResponse: MutableStateFlow<ProductDetailsResponse?>
         get() = _productDetailsResponse
+
+
+    private val _createCartResponse = MutableStateFlow<CartCreateResponse?>(null)
+    override val createCartResponse: MutableStateFlow<CartCreateResponse?>
+        get() = _createCartResponse
+
+
+    private val _cartListResponse = MutableStateFlow<CartListResponse?>(null)
+    override val cartListResponse: MutableStateFlow<CartListResponse?>
+        get() = _cartListResponse
+
+
+    private val _deleteCartItemResponse = MutableStateFlow<DeleteCartResponse?>(null)
+    override val deleteCartItemResponse: MutableStateFlow<DeleteCartResponse?>
+        get() = _deleteCartItemResponse
+
+
+    private val _bookingResponse = MutableStateFlow<BoatBookingResponse?>(null)
+    override val boatBookingResponse: MutableStateFlow<BoatBookingResponse?>
+        get() = _bookingResponse
 
 
     override fun getBoatCategoryResponse(): MutableStateFlow<String?> {
@@ -422,6 +449,160 @@ class HomeViewModel(
                 response.value = e.message.toString()
                 Log.d(
                     "CheckProductResponse",
+                    "JsonSyntaxException: ${e.message.toString()}"
+                )
+                return@launch
+            }
+        }
+        return response
+    }
+
+    override fun getCartCreateResponse(cartBody: CreateCartBody): Flow<String?> {
+        var response = MutableStateFlow<String?>(null)
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                response = homeRepository.getCreateCartResponse(
+                    createCartBody = cartBody
+                ) { cartResponse ->
+                    _createCartResponse.value = cartResponse
+                    Log.d(
+                        "CheckCreateCartResponse",
+                        "gallery response = $createCartResponse"
+                    )
+                }
+            } catch (e: IOException) {
+                response.value = e.message.toString()
+                Log.d(
+                    "CheckCreateCartResponse",
+                    "IOException, ${e.message.toString()}"
+                )
+                return@launch
+            } catch (e: HttpException) {
+                response.value = e.message.toString()
+                Log.d(
+                    "CheckCreateCartResponse",
+                    "HttpException, unexpected response"
+                )
+                return@launch
+            } catch (e: JsonSyntaxException) {
+                response.value = e.message.toString()
+                Log.d(
+                    "CheckCreateCartResponse",
+                    "JsonSyntaxException: ${e.message.toString()}"
+                )
+                return@launch
+            }
+        }
+        return response
+    }
+
+    override fun getCartListResponse(): Flow<String?> {
+        var response = MutableStateFlow<String?>(null)
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                response = homeRepository.getCartListResponse { cartListResponse ->
+                    _cartListResponse.value = cartListResponse
+                    Log.d(
+                        "CheckCreateCartResponse",
+                        "gallery response = $cartListResponse"
+                    )
+                }
+            } catch (e: IOException) {
+                response.value = e.message.toString()
+                Log.d(
+                    "CheckCreateCartResponse",
+                    "IOException, ${e.message.toString()}"
+                )
+                return@launch
+            } catch (e: HttpException) {
+                response.value = e.message.toString()
+                Log.d(
+                    "CheckCreateCartResponse",
+                    "HttpException, unexpected response"
+                )
+                return@launch
+            } catch (e: JsonSyntaxException) {
+                response.value = e.message.toString()
+                Log.d(
+                    "CheckCreateCartResponse",
+                    "JsonSyntaxException: ${e.message.toString()}"
+                )
+                return@launch
+            }
+        }
+        return response
+    }
+
+    override fun getDeleteCartResponse(cartId: Int): Flow<String?> {
+        var response = MutableStateFlow<String?>(null)
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                response = homeRepository.deleteCartItem(cartId = cartId) { deleteCartResponse ->
+                    _deleteCartItemResponse.value = deleteCartResponse
+                    Log.d(
+                        "CheckCreateCartResponse",
+                        "gallery response = $deleteCartResponse"
+                    )
+                }
+            } catch (e: IOException) {
+                response.value = e.message.toString()
+                Log.d(
+                    "CheckCreateCartResponse",
+                    "IOException, ${e.message.toString()}"
+                )
+                return@launch
+            } catch (e: HttpException) {
+                response.value = e.message.toString()
+                Log.d(
+                    "CheckCreateCartResponse",
+                    "HttpException, unexpected response"
+                )
+                return@launch
+            } catch (e: JsonSyntaxException) {
+                response.value = e.message.toString()
+                Log.d(
+                    "CheckCreateCartResponse",
+                    "JsonSyntaxException: ${e.message.toString()}"
+                )
+                return@launch
+            }
+        }
+        return response
+    }
+
+    override fun getBoatBookingResponse(bookingBody: BoatBookingBody): Flow<String?> {
+        var response = MutableStateFlow<String?>(null)
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                response = homeRepository.getBookingResponse(bookingBody = bookingBody) { boatBookingResponse ->
+                    _bookingResponse.value = boatBookingResponse
+                    Log.d(
+                        "CheckCreateCartResponse",
+                        "booking response = $boatBookingResponse"
+                    )
+                }
+            } catch (e: IOException) {
+                response.value = e.message.toString()
+                Log.d(
+                    "CheckCreateCartResponse",
+                    "IOException, ${e.message.toString()}"
+                )
+                return@launch
+            } catch (e: HttpException) {
+                response.value = e.message.toString()
+                Log.d(
+                    "CheckCreateCartResponse",
+                    "HttpException, unexpected response"
+                )
+                return@launch
+            } catch (e: JsonSyntaxException) {
+                response.value = e.message.toString()
+                Log.d(
+                    "CheckCreateCartResponse",
                     "JsonSyntaxException: ${e.message.toString()}"
                 )
                 return@launch

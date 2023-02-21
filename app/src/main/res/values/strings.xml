@@ -147,4 +147,8 @@
     <string name="no_seafarer_hired_yet">No Seafarer Hired Yet !!</string>
     <string name="reviews">Reviews</string>
     <string name="skip">SKIP</string>
+    <string name="button_cart">go to cart button</string>
+    <string name="delete_item">delete item</string>
+    <string name="view_cart">View Cart</string>
+    <string name="seafarer_text">Seafarer</string>
 </resources>

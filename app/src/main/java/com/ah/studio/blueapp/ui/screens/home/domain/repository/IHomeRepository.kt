@@ -4,6 +4,12 @@ import com.ah.studio.blueapp.ui.screens.home.domain.dto.boatCategory.BoatCategor
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.boatDetails.BoatDetailsResponse
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.boats.BoatBody
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.boats.BoatResponse
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.booking.BoatBookingBody
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.booking.BoatBookingResponse
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.cart.CartCreateResponse
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.cart.CartListResponse
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.cart.CreateCartBody
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.delete.DeleteCartResponse
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.gallery.GalleryImageResponse
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.product.ProductCategoryResponse
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.product.ProductDetailsResponse
@@ -32,25 +38,49 @@ interface IHomeRepository {
         boatId: Int,
         galleryImageResponse: (GalleryImageResponse) -> Unit
     ): MutableStateFlow<String?>
+
     suspend fun getAvailableTimeSlotResponse(
         timeSlotBody: TimeSlotBody,
         availableTimeSlotResponse: (AvailableTimeSlotResponse) -> Unit
     ): MutableStateFlow<String?>
+
     suspend fun getProductCategoryResponse(
         type: String,
         productCategoryResponse: (ProductCategoryResponse) -> Unit
     ): MutableStateFlow<String?>
+
     suspend fun getProductSubCategoryResponse(
         categoryId: String,
         productSubCategoryResponse: (ProductSubCategoryResponse) -> Unit
     ): MutableStateFlow<String?>
+
     suspend fun getProductListResponse(
         page: Int,
         subCategoryId: String,
         productListResponse: (ProductListResponse) -> Unit
     ): MutableStateFlow<String?>
+
     suspend fun getProductDetailsResponse(
         productId: Int,
-        productDetailsResponse: (ProductDetailsResponse)->Unit
+        productDetailsResponse: (ProductDetailsResponse) -> Unit
+    ): MutableStateFlow<String?>
+
+    suspend fun getCreateCartResponse(
+        createCartBody: CreateCartBody,
+        cartCreateResponse: (CartCreateResponse) -> Unit
+    ): MutableStateFlow<String?>
+
+    suspend fun getCartListResponse(
+        cartListResponse: (CartListResponse) -> Unit
+    ): MutableStateFlow<String?>
+
+    suspend fun deleteCartItem(
+        cartId: Int,
+        deleteCartResponse: (DeleteCartResponse) -> Unit
+    ): MutableStateFlow<String?>
+
+    suspend fun getBookingResponse(
+        bookingBody: BoatBookingBody,
+        boatBookingResponse: (BoatBookingResponse) -> Unit
     ): MutableStateFlow<String?>
 }

@@ -1,14 +1,11 @@
 package com.ah.studio.blueapp.ui.screens.home.subScreens
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
+import android.util.Log
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import com.ah.studio.blueapp.R
 import com.ah.studio.blueapp.ui.component.*
 import com.ah.studio.blueapp.ui.screens.home.HomeViewModel
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.cart.CreateCartBody
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.product.ProductDetails
 import com.ah.studio.blueapp.ui.theme.*
 import com.ah.studio.blueapp.util.coilImageLoadingAsync
@@ -33,19 +31,24 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getKoin
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ProductDetailsScreen(
     productId: String?,
+    onCartButtonClick: () -> Unit,
+    onViewCartClick: () -> Unit,
     viewModel: HomeViewModel = getKoin().get()
 ) {
-
     var isLoading by remember { mutableStateOf(true) }
     var responseStatus by remember { mutableStateOf(0) }
-    var productDetails: ProductDetails? by remember {
-        mutableStateOf(null)
-    }
+    var cartResponseStatus by remember { mutableStateOf(0) }
+    var productDetails: ProductDetails? by remember { mutableStateOf(null) }
+    var quantity by remember { mutableStateOf(1) }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    var snackbar by remember { mutableStateOf("") }
+    var showSnackBar by remember { mutableStateOf(false) }
 
     SideEffect {
         CoroutineScope(Dispatchers.IO).launch {
@@ -64,6 +67,19 @@ fun ProductDetailsScreen(
     }
 
     Scaffold(
+        snackbarHost = {
+            SnackbarHost(snackbarHostState) { data ->
+                if (showSnackBar) {
+                    Snackbar(
+                        actionColor = SeaBlue400,
+                        contentColor = Color.Black,
+                        snackbarData = data,
+                        containerColor = Color.White,
+                        shape = RoundedCornerShape(50.dp)
+                    )
+                }
+            }
+        },
         topBar = {
             TopAppBar(
                 backgroundColor = Color.Transparent,
@@ -76,8 +92,11 @@ fun ProductDetailsScreen(
                         modifier = Modifier
                             .width(48.dp)
                             .height(35.dp)
-                            .padding(end = PaddingDouble),
-                        containerColor = White50Percent,
+                            .padding(end = PaddingDouble)
+                            .clickable {
+                                onCartButtonClick()
+                            },
+                        containerColor = SeaBlue25Percent,
                         borderColor = Color.Transparent
                     ) {
                         Column(
@@ -90,7 +109,7 @@ fun ProductDetailsScreen(
                             Image(
                                 painter = painterResource(id = R.drawable.ic_cart),
                                 contentDescription = stringResource(
-                                    R.string.button_notification
+                                    R.string.button_cart
                                 ),
                                 modifier = Modifier
                                     .size(24.dp),
@@ -102,14 +121,14 @@ fun ProductDetailsScreen(
                 onNavigationIconClick = {}
             )
         },
-        modifier = Modifier.fillMaxSize(),
-        containerColor = Color.White,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
     ) {
         Box {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding()
                     .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
@@ -162,10 +181,13 @@ fun ProductDetailsScreen(
                                 fontWeight = FontWeight.Bold,
                                 fontFamily = fontFamily,
                                 color = OxfordBlue900,
-                                modifier = Modifier.padding(start = 4.dp)
+                                modifier = Modifier
+                                    .padding(start = 4.dp)
                                     .fillMaxWidth(0.6f)
                             )
-                            AddSubtractItem()
+                            AddSubtractItem() { qty ->
+                                quantity = qty
+                            }
                         }
 
                         Text(
@@ -202,11 +224,61 @@ fun ProductDetailsScreen(
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(46.dp)
-                        ) {}
+                                .padding(
+                                    start = 46.dp,
+                                    end = 46.dp,
+                                    top = 46.dp,
+                                    bottom = PaddingDouble
+                                )
+                        ) {
+                            if (quantity != 0) {
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    viewModel.getCartCreateResponse(
+                                        CreateCartBody(
+                                            id = 0,
+                                            product_id = productDetails!!.id,
+                                            qty = quantity,
+                                            total = productDetails!!.price.toDouble()
+                                                .toInt() * quantity
+                                        )
+                                    )
+                                    viewModel.createCartResponse.collectLatest { response ->
+                                        Log.d("CheckCartResponse", response.toString())
+                                        if (response != null) {
+                                            cartResponseStatus = response.status
+                                            if (responseStatus == 200) {
+                                                snackbar = "Item added to cart successfully!!"
+                                                showSnackBar = true
+                                            }
+                                        }
+                                    }
+                                }
+                            } else {
+                                snackbar = "Item Quantity must be greater than 0!!"
+                                showSnackBar = true
+                            }
+                        }
+
+                        Button(
+                            width = 0.dp,
+                            height = 50.dp,
+                            text = stringResource(id = R.string.view_cart),
+                            backgroundColor = SeaBlue400,
+                            shape = Shapes.medium,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    start = 46.dp,
+                                    end = 46.dp,
+                                    bottom = 46.dp
+                                )
+                        ) {
+                            onViewCartClick()
+                        }
                     }
-                } else{
-                    if (responseStatus == 200){
+                } else {
+                    if (responseStatus == 200) {
                         isLoading = false
                         Text(
                             text = "Details Not Found",
@@ -221,9 +293,18 @@ fun ProductDetailsScreen(
                         )
                     }
                 }
-
             }
             if (isLoading) CircularProgressBar()
+        }
+    }
+    if (showSnackBar) {
+        LaunchedEffect(key1 = true) {
+            scope.launch {
+                snackbarHostState.showSnackbar(
+                    snackbar, duration = SnackbarDuration.Short
+                )
+                showSnackBar = false
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
-package com.ah.studio.blueapp.ui.screens.home.subScreens
+package com.ah.studio.blueapp.ui.screens.myBooking
+
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -24,19 +24,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ah.studio.blueapp.R
 import com.ah.studio.blueapp.ui.component.*
-import com.ah.studio.blueapp.ui.screens.home.domain.dto.PaymentMethod
 import com.ah.studio.blueapp.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RestaurantPaymentScreen() {
+fun MyBookingRatingScreen() {
     Scaffold(
         topBar = {
             TopAppBar(
                 backgroundColor = Color.Transparent,
                 contentColor = Color.Black,
                 navigationIcon = painterResource(id = R.drawable.ic_back),
-                text = stringResource(R.string.payment),
+                text = stringResource(R.string.my_bookings),
                 navigationIconContentDescription = "",
                 actionIcons = {},
                 onNavigationIconClick = {}
@@ -61,13 +60,11 @@ fun RestaurantPaymentScreen() {
             CaptainBoatNameSection()
             TimeDateSection()
             SummarySection()
-            CouponSection()
-            PaymentMethodSection()
 
             Button(
                 width = 0.dp,
                 height = 50.dp,
-                text = stringResource(R.string.pay_and_confirm),
+                text = stringResource(R.string.rate_now),
                 backgroundColor = SeaBlue400,
                 shape = Shapes.medium,
                 modifier = Modifier
@@ -275,7 +272,7 @@ fun LocationSection() {
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = stringResource(R.string.parking_address),
+                text = stringResource(R.string.pick_up_address),
                 fontSize = 17.sp,
                 fontFamily = fontFamily,
                 color = Color.Black,
@@ -497,74 +494,8 @@ fun SummarySection() {
     }
 }
 
-@Composable
-fun CouponSection() {
-    Box(
-        modifier = Modifier
-            .padding(bottom = 45.dp),
-        contentAlignment = Alignment.CenterEnd
-    ) {
-        CustomTextField(
-            label = "Discount",
-            placeholder = "Coupon Code",
-            value = {}
-        )
-        Button(
-            width = 112.dp,
-            height = 50.dp,
-            text = "Apply",
-            backgroundColor = SeaBlue400,
-            shape = Shapes.medium,
-            fontWeight = FontWeight.Bold
-        ) {}
-    }
-}
-
-@Composable
-fun PaymentMethodSection() {
-    Column(
-        horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = stringResource(R.string.payment_method),
-            fontSize = 17.sp,
-            fontWeight = FontWeight.Bold,
-            fontFamily = fontFamily,
-            color = Color.Black,
-            modifier = Modifier.padding(bottom = 21.dp)
-        )
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            PaymentMethod(
-                methodList = listOf(
-                    PaymentMethod(
-                        name = "Visa Card",
-                        image = painterResource(id = R.drawable.ic_visacard)
-                    ),
-                    PaymentMethod(
-                        name = "Master Card",
-                        image = painterResource(id = R.drawable.ic_mastercard)
-                    ),
-                    PaymentMethod(
-                        name = "KNET Card",
-                        image = painterResource(id = R.drawable.ic_knet)
-                    )
-                )
-            )
-        }
-    }
-}
-
-
 @Preview
 @Composable
-fun PreviewRestaurantPaymentScreen() {
-    RestaurantPaymentScreen()
+fun PreviewMyBookingRatingScreen() {
+    MyBookingRatingScreen()
 }

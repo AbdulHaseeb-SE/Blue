@@ -1,6 +1,8 @@
 package com.ah.studio.blueapp.ui.screens.authentication
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -38,6 +40,10 @@ fun SignInScreen(
     onSignUpClick: () -> Unit,
     viewModel: AuthenticationViewModel = getKoin().get()
 ) {
+    val activity = (LocalContext.current as? Activity)
+    BackHandler {
+        activity?.finish()
+    }
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
     var snackbar by remember { mutableStateOf("") }
@@ -91,7 +97,7 @@ fun SignInScreen(
                                 LoginCredentials(
                                     email = email,
                                     password = password,
-                                    fcm_token = token
+                                    fcm_token = if (token == "") FCM_TOKEN else token
                                 )
                             )
                             response.collectLatest { _response ->
@@ -355,4 +361,3 @@ fun Sign_In(
         }
     }
 }
-

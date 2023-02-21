@@ -12,10 +12,15 @@ class BottomNavItemRepository : IBottomNavItemRepository {
             icon = R.drawable.ic_home
         ),
         BottomNavItemResponse(
+            name = "My Booking",
+            route = ScreenController.MyBooking.route,
+            icon = R.drawable.ic_ship
+        ),
+       /* BottomNavItemResponse(
             name = "My Parking",
             route = ScreenController.MyParking.route,
             icon = R.drawable.ic_ship
-        ),
+        ),*/
         BottomNavItemResponse(
             name = "Seafarer",
             route = ScreenController.Seafarer.route,

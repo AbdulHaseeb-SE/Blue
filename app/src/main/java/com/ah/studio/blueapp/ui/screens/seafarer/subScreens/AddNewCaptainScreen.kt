@@ -7,7 +7,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,7 +16,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ah.studio.blueapp.R
@@ -30,6 +29,30 @@ import com.ah.studio.blueapp.ui.theme.fontFamily
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddNewCaptainScreen() {
+    var captain by remember {
+        mutableStateOf("")
+    }
+    var mobileNumber by remember {
+        mutableStateOf("")
+    }
+    var age by remember {
+        mutableStateOf("")
+    }
+    var nationality by remember {
+        mutableStateOf("")
+    }
+    var spokenLanguages: List<String> by remember {
+        mutableStateOf(listOf())
+    }
+    var experience by remember {
+        mutableStateOf("")
+    }
+    var boatExperience: List<String> by remember {
+        mutableStateOf(listOf())
+    }
+    var licenseNumber by remember {
+        mutableStateOf("")
+    }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -163,10 +186,4 @@ fun AddNewCaptainScreen() {
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun PreviewAddNewCaptain() {
-    AddNewCaptainScreen()
 }

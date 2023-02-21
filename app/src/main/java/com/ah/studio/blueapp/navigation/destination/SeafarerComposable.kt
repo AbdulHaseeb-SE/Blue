@@ -6,10 +6,19 @@ import androidx.navigation.compose.composable
 import com.ah.studio.blueapp.navigation.ScreenController
 import com.ah.studio.blueapp.ui.screens.seafarer.SeafarerScreen
 
-fun NavGraphBuilder.seafarerComposable(navHostController: NavHostController){
+fun NavGraphBuilder.seafarerComposable(navHostController: NavHostController) {
     composable(
         route = ScreenController.Seafarer.route
-    ){
-        SeafarerScreen(navHostController = navHostController)
+    ) {
+        SeafarerScreen(
+            onAddSeafarerClick = {
+                navHostController.navigate(ScreenController.AddSeafarer.route)
+            },
+            onCallClick = {},
+            onMessageClick = {},
+            onPayToUnlockClick = {
+                navHostController.navigate(ScreenController.CaptainPayment.route)
+            }
+        )
     }
 }

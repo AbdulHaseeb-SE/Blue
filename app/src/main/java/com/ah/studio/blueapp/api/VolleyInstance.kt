@@ -45,16 +45,43 @@ class VolleyInstance(context: Context) {
         volleySingleton.addToRequestQueue(jsonObjectRequest)
     }
 
-
-
     fun jsonObjectPostRequest(
         endPoint: String,
-        jsonObject: JSONObject,
+        jsonObject: JSONObject?,
         listener: Response.Listener<JSONObject>,
         errorListener: Response.ErrorListener
     ) {
         val jsonObjectRequest = object : JsonObjectRequest(
             Method.POST,
+            BASE_URL + endPoint,
+            jsonObject,
+            listener,
+            errorListener
+        ) {
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                val params: MutableMap<String, String> = HashMap()
+                params["Authorization"] = "$TOKEN_TYPE $token"
+                return params
+            }
+        }
+        jsonObjectRequest.setShouldCache(false)
+        jsonObjectRequest.retryPolicy = DefaultRetryPolicy(
+            150000,
+            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        )
+        volleySingleton.addToRequestQueue(jsonObjectRequest)
+    }
+
+    fun deleteRequest(
+        endPoint: String,
+        jsonObject: JSONObject? = null,
+        listener: Response.Listener<JSONObject>,
+        errorListener: Response.ErrorListener
+    ) {
+        val jsonObjectRequest = object : JsonObjectRequest(
+            Method.DELETE,
             BASE_URL + endPoint,
             jsonObject,
             listener,

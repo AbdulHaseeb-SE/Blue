@@ -7,6 +7,12 @@ import com.ah.studio.blueapp.ui.screens.home.domain.dto.boatCategory.BoatCategor
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.boatDetails.BoatDetailsResponse
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.boats.BoatBody
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.boats.BoatResponse
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.booking.BoatBookingBody
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.booking.BoatBookingResponse
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.cart.CartCreateResponse
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.cart.CartListResponse
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.cart.CreateCartBody
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.delete.DeleteCartResponse
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.gallery.GalleryImageResponse
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.product.ProductCategoryResponse
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.product.ProductDetailsResponse
@@ -15,8 +21,10 @@ import com.ah.studio.blueapp.ui.screens.home.domain.dto.product.ProductSubCatego
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.timeSlot.AvailableTimeSlotResponse
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.timeSlot.TimeSlotBody
 import com.ah.studio.blueapp.util.ApiConstants.AVAILABLE_TIMESLOTS_ENDPOINT
+import com.ah.studio.blueapp.util.ApiConstants.BOAT_BOOKING_ENDPOINT
 import com.ah.studio.blueapp.util.ApiConstants.BOAT_DETAILS_ENDPOINT
 import com.ah.studio.blueapp.util.ApiConstants.BOAT_LIST_ENDPOINT
+import com.ah.studio.blueapp.util.ApiConstants.CART_ENDPOINT
 import com.ah.studio.blueapp.util.ApiConstants.CATEGORY_SUBCATEGORY_ENDPOINT
 import com.ah.studio.blueapp.util.ApiConstants.GALLEY_IMAGES_ENDPOINT
 import com.ah.studio.blueapp.util.ApiConstants.PRODUCT_CATEGORY_ENDPOINT
@@ -90,14 +98,13 @@ class HomeRepository(private val context: Context) : IHomeRepository {
                     } else {
                         state.value = response.getString("status")
                     }
-                },
-                errorListener = { error ->
-                    state.value = error.message?.ifEmpty { "false" }
-                    Log.d(
-                        "CheckResponse", "error status = $error"
-                    )
                 }
-            )
+            ) { error ->
+                state.value = error.message?.ifEmpty { "false" }
+                Log.d(
+                    "CheckResponse", "error status = $error"
+                )
+            }
         } catch (e: Exception) {
             state.value = e.message?.ifEmpty { "false" }
             Log.e(
@@ -131,14 +138,13 @@ class HomeRepository(private val context: Context) : IHomeRepository {
                     } else {
                         state.value = response.getString("status")
                     }
-                },
-                errorListener = { error ->
-                    state.value = error.message?.ifEmpty { "false" }
-                    Log.d(
-                        "CheckResponse", "error status = $error"
-                    )
                 }
-            )
+            ) { error ->
+                state.value = error.message?.ifEmpty { "false" }
+                Log.d(
+                    "CheckResponse", "error status = $error"
+                )
+            }
         } catch (e: Exception) {
             state.value = e.message?.ifEmpty { "false" }
             Log.e(
@@ -172,14 +178,13 @@ class HomeRepository(private val context: Context) : IHomeRepository {
                     } else {
                         state.value = response.getString("status")
                     }
-                },
-                errorListener = { error ->
-                    state.value = error.message?.ifEmpty { "false" }
-                    Log.d(
-                        "CheckResponse", "error status = $error"
-                    )
                 }
-            )
+            ) { error ->
+                state.value = error.message?.ifEmpty { "false" }
+                Log.d(
+                    "CheckResponse", "error status = $error"
+                )
+            }
         } catch (e: Exception) {
             state.value = e.message?.ifEmpty { "false" }
             Log.e(
@@ -215,14 +220,13 @@ class HomeRepository(private val context: Context) : IHomeRepository {
                     } else {
                         state.value = response.getString("status")
                     }
-                },
-                errorListener = { error ->
-                    state.value = error.message?.ifEmpty { "false" }
-                    Log.d(
-                        "CheckResponse", "error status = $error"
-                    )
                 }
-            )
+            ) { error ->
+                state.value = error.message?.ifEmpty { "false" }
+                Log.d(
+                    "CheckResponse", "error status = $error"
+                )
+            }
         } catch (e: Exception) {
             state.value = e.message?.ifEmpty { "false" }
             Log.e(
@@ -256,14 +260,13 @@ class HomeRepository(private val context: Context) : IHomeRepository {
                     } else {
                         state.value = response.getString("status")
                     }
-                },
-                errorListener = { error ->
-                    state.value = error.message?.ifEmpty { "false" }
-                    Log.d(
-                        "CheckResponse", "error status = $error"
-                    )
                 }
-            )
+            ) { error ->
+                state.value = error.message?.ifEmpty { "false" }
+                Log.d(
+                    "CheckResponse", "error status = $error"
+                )
+            }
         } catch (e: Exception) {
             state.value = e.message?.ifEmpty { "false" }
             Log.e(
@@ -297,14 +300,13 @@ class HomeRepository(private val context: Context) : IHomeRepository {
                     } else {
                         state.value = response.getString("status")
                     }
-                },
-                errorListener = { error ->
-                    state.value = error.message?.ifEmpty { "false" }
-                    Log.d(
-                        "CheckResponse", "error status = $error"
-                    )
                 }
-            )
+            ) { error ->
+                state.value = error.message?.ifEmpty { "false" }
+                Log.d(
+                    "CheckResponse", "error status = $error"
+                )
+            }
         } catch (e: Exception) {
             state.value = e.message?.ifEmpty { "false" }
             Log.e(
@@ -340,14 +342,13 @@ class HomeRepository(private val context: Context) : IHomeRepository {
                     } else {
                         state.value = response.getString("status")
                     }
-                },
-                errorListener = { error ->
-                    state.value = error.message?.ifEmpty { "false" }
-                    Log.d(
-                        "CheckResponse", "error status = $error"
-                    )
                 }
-            )
+            ) { error ->
+                state.value = error.message?.ifEmpty { "false" }
+                Log.d(
+                    "CheckResponse", "error status = $error"
+                )
+            }
         } catch (e: Exception) {
             state.value = e.message?.ifEmpty { "false" }
             Log.e(
@@ -359,7 +360,7 @@ class HomeRepository(private val context: Context) : IHomeRepository {
 
     override suspend fun getProductDetailsResponse(
         productId: Int,
-        productDetailsResponse: (ProductDetailsResponse)->Unit
+        productDetailsResponse: (ProductDetailsResponse) -> Unit
     ): MutableStateFlow<String?> {
         val state = MutableStateFlow<String?>(null)
         val jsonObject = JSONObject()
@@ -381,6 +382,84 @@ class HomeRepository(private val context: Context) : IHomeRepository {
                     } else {
                         state.value = response.getString("status")
                     }
+                }
+            ) { error ->
+                state.value = error.message?.ifEmpty { "false" }
+                Log.d(
+                    "CheckResponse", "error status = $error"
+                )
+            }
+        } catch (e: Exception) {
+            state.value = e.message?.ifEmpty { "false" }
+            Log.e(
+                "CheckResponse", "error status = ${e.message + e.localizedMessage + e.cause}"
+            )
+        }
+        return state
+    }
+
+    override suspend fun getCreateCartResponse(
+        createCartBody: CreateCartBody,
+        cartCreateResponse: (CartCreateResponse) -> Unit
+    ): MutableStateFlow<String?> {
+        val state = MutableStateFlow<String?>(null)
+        val jsonObject = JSONObject()
+        jsonObject.put("id", createCartBody.id)
+        jsonObject.put("product_id", createCartBody.product_id)
+        jsonObject.put("qty", createCartBody.qty)
+        jsonObject.put("total", createCartBody.total)
+
+        try {
+            VolleyInstance(context).jsonObjectPostRequest(
+                endPoint = CART_ENDPOINT,
+                jsonObject = jsonObject,
+                listener = { response ->
+                    if (response.getString("status") == "200") {
+                        cartCreateResponse(
+                            Gson().fromJson(
+                                response.toString(),
+                                CartCreateResponse::class.java
+                            )
+                        )
+                        state.value = response.getString("status")
+                    } else {
+                        state.value = response.getString("status")
+                    }
+                }
+            ) { error ->
+                state.value = error.message?.ifEmpty { "false" }
+                Log.d(
+                    "CheckResponse", "error status = $error"
+                )
+            }
+        } catch (e: Exception) {
+            state.value = e.message?.ifEmpty { "false" }
+            Log.e(
+                "CheckResponse", "error status = ${e.message + e.localizedMessage + e.cause}"
+            )
+        }
+        return state
+    }
+
+    override suspend fun getCartListResponse(cartListResponse: (CartListResponse) -> Unit): MutableStateFlow<String?> {
+        val state = MutableStateFlow<String?>(null)
+
+
+        try {
+            VolleyInstance(context).jsonObjectGetRequest(
+                endPoint = CART_ENDPOINT,
+                listener = { response ->
+                    if (response.getString("status") == "200") {
+                        cartListResponse(
+                            Gson().fromJson(
+                                response.toString(),
+                                CartListResponse::class.java
+                            )
+                        )
+                        state.value = response.getString("status")
+                    } else {
+                        state.value = response.getString("status")
+                    }
                 },
                 errorListener = { error ->
                     state.value = error.message?.ifEmpty { "false" }
@@ -389,6 +468,98 @@ class HomeRepository(private val context: Context) : IHomeRepository {
                     )
                 }
             )
+        } catch (e: Exception) {
+            state.value = e.message?.ifEmpty { "false" }
+            Log.e(
+                "CheckResponse", "error status = ${e.message + e.localizedMessage + e.cause}"
+            )
+        }
+        return state
+    }
+
+    override suspend fun deleteCartItem(
+        cartId: Int,
+        deleteCartResponse: (DeleteCartResponse) -> Unit
+    ): MutableStateFlow<String?> {
+        val state = MutableStateFlow<String?>(null)
+
+
+        try {
+            VolleyInstance(context).deleteRequest(
+                endPoint = "$CART_ENDPOINT/$cartId",
+                listener = { response ->
+                    if (response.getString("status") == "200") {
+                        deleteCartResponse(
+                            Gson().fromJson(
+                                response.toString(),
+                                DeleteCartResponse::class.java
+                            )
+                        )
+                        state.value = response.getString("status")
+                    } else {
+                        state.value = response.getString("status")
+                    }
+                },
+                errorListener = { error ->
+                    state.value = error.message?.ifEmpty { "false" }
+                    Log.d(
+                        "CheckResponse", "error status = $error"
+                    )
+                }
+            )
+        } catch (e: Exception) {
+            state.value = e.message?.ifEmpty { "false" }
+            Log.e(
+                "CheckResponse", "error status = ${e.message + e.localizedMessage + e.cause}"
+            )
+        }
+        return state
+    }
+
+    override suspend fun getBookingResponse(
+        bookingBody: BoatBookingBody,
+        boatBookingResponse: (BoatBookingResponse) -> Unit
+    ): MutableStateFlow<String?> {
+        val state = MutableStateFlow<String?>(null)
+        val jsonObject = JSONObject()
+        jsonObject.put("boat_category", bookingBody.boat_category)
+        jsonObject.put("destination_id", bookingBody.destination_id)
+        jsonObject.put("order_ref", bookingBody.order_ref)
+        jsonObject.put("end", bookingBody.end)
+        jsonObject.put("boat_grand_total", bookingBody.boat_grand_total)
+        jsonObject.put("grand_total", bookingBody.grand_total)
+        jsonObject.put("product", bookingBody.product)
+        jsonObject.put("start", bookingBody.start)
+        jsonObject.put("coupon_amount", bookingBody.coupon_amount)
+        jsonObject.put("coupon_id", bookingBody.coupon_id)
+        jsonObject.put("total", bookingBody.total)
+        jsonObject.put("package_id", bookingBody.package_id)
+        jsonObject.put("boat_total", bookingBody.boat_total)
+        jsonObject.put("boat_id", bookingBody.boat_id)
+
+        try {
+            VolleyInstance(context).jsonObjectPostRequest(
+                endPoint = BOAT_BOOKING_ENDPOINT,
+                jsonObject = jsonObject,
+                listener = { response ->
+                    if (response.getString("status") == "200") {
+                        boatBookingResponse(
+                            Gson().fromJson(
+                                response.toString(),
+                                BoatBookingResponse::class.java
+                            )
+                        )
+                        state.value = response.getString("status")
+                    } else {
+                        state.value = response.getString("status")
+                    }
+                }
+            ) { error ->
+                state.value = error.message?.ifEmpty { "false" }
+                Log.d(
+                    "CheckResponse", "error status = $error"
+                )
+            }
         } catch (e: Exception) {
             state.value = e.message?.ifEmpty { "false" }
             Log.e(
