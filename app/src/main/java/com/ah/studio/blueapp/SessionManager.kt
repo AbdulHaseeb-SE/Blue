@@ -14,4 +14,11 @@ class SessionManager(context: Context) {
         return sharedPreferences.getString("token", FCM_TOKEN)
     }
 
+    fun saveRole(role: String) {
+        sharedPreferences.edit().putString("role", role).apply()
+    }
+
+    fun getRole(): String? {
+        return sharedPreferences.getString("role", "")
+    }
 }

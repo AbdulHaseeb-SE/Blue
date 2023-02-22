@@ -57,6 +57,8 @@ class AuthenticationViewModel(
                     userLoginResponseBody = { userLoginResponse ->
                         _validationResponse.value = userLoginResponse
                         sessionManager.saveToken(userLoginResponse.data.token)
+                        sessionManager.saveRole(userLoginResponse.data.role)
+                        Log.d("CheckToken", "token = " + sessionManager.getToken().toString())
                     }
                 )
             } catch (e: Exception) {

@@ -30,4 +30,6 @@ object ApiConstants{
     const val UPDATE_USER_ENDPOINT = "update-user"
     const val CONTACT_US_ENDPOINT = "contact-us"
     const val REFUND_POLICY_ENDPOINT = "refund-policy"
+    const val MY_PARKING_BOOKING_ENDPOINT = "my-parking-booking"
+    const val PARKING_LIST_ENDPOINT = "parking-list"
 }

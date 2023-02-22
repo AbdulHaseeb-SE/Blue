@@ -274,7 +274,7 @@ fun BoatListSection(
                     .clickable {
                         onBoatCardClick(boat.id)
                     }
-            )
+            ){}
         }
     }
 }

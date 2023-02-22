@@ -1,217 +1,166 @@
 package com.ah.studio.blueapp.ui.screens.myParking.subScreens
 
-import android.annotation.SuppressLint
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ah.studio.blueapp.R
-import com.ah.studio.blueapp.ui.component.BoatListCard
-import com.ah.studio.blueapp.ui.component.Button
-import com.ah.studio.blueapp.ui.component.LocationComponent
-import com.ah.studio.blueapp.ui.component.RoundedCornerImageView
-import com.ah.studio.blueapp.ui.screens.home.domain.dto.BoatDetailsParking
+import com.ah.studio.blueapp.ui.component.*
+import com.ah.studio.blueapp.ui.screens.myParking.ParkingViewModel
+import com.ah.studio.blueapp.ui.screens.myParking.domain.dto.parkingList.Boat
 import com.ah.studio.blueapp.ui.theme.*
+import com.ah.studio.blueapp.util.coilImageLoadingAsync
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import org.koin.androidx.compose.getKoin
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BoatListScreen() {
-
-    val boatDetailsParkingLists: MutableList<BoatDetailsParking> = mutableListOf(
-        BoatDetailsParking(
-            boatImage = painterResource(id = R.drawable.ic_boat),
-            boatName = "Catamaran Boats",
-            location = stringResource(id = R.string.al_jahra_kuwait),
-            price = "Starting from 100.000 KWD",
-            parkingStatus = true
-        ),
-        BoatDetailsParking(
-            boatImage = painterResource(id = R.drawable.boat),
-            boatName = "Catamaran Boats",
-            location = stringResource(id = R.string.al_jahra_kuwait),
-            price = "4.5 KWD / Day",
-            parkingStatus = false
-        )
-    )
-
-
-    Scaffold(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 22.dp, start = PaddingDouble, end = PaddingDouble)
-                .verticalScroll(rememberScrollState())
-                .background(Color.White),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        ) {
-            LocationComponent(
-                painter = painterResource(id = R.drawable.ic_location),
-                locationText = stringResource(R.string.al_jahra_kuwait),
-                locationStartPadding = PaddingHalf,
-                rowTopPadding = 0.dp,
-                iconPaddingStart = 0.dp
-            )
-
-            FirsImageRowSection()
-
-            AvailableCareersSection(boatDetailsParkingLists)
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .background(Color.Transparent)
-                    .weight(5f),
-                verticalArrangement = Arrangement.Bottom,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ){
-                Button(
-                    width = 0.dp,
-                    height = 50.dp,
-                    text = stringResource(R.string.open_maps),
-                    backgroundColor = SeaBlue400,
-                    shape = Shapes.medium,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            top = 47.dp,
-                            bottom = 47.dp,
-                            start = 46.dp,
-                            end = 46.dp
-                        )
-                        .height(50.dp)
-                ) {
-
+fun BoatListScreen(
+    onParkNowClick: () -> Unit,
+    viewModel: ParkingViewModel = getKoin().get()
+) {
+    var isLoading by remember {
+        mutableStateOf(true)
+    }
+    var parkingList: List<Boat> by remember {
+        mutableStateOf(emptyList())
+    }
+    SideEffect {
+        CoroutineScope(Dispatchers.IO).launch {
+            viewModel.getParkingListResponse(1)
+            viewModel.boatsAvailableToParkResponse.collectLatest { list ->
+                if (list != null) {
+                    parkingList = list.data
+                    isLoading = false
                 }
             }
-
-
         }
     }
-}
-
-@Composable
-fun FirsImageRowSection() {
-    Row(
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                backgroundColor = Color.Transparent,
+                contentColor = Color.Black,
+                navigationIcon = painterResource(id = R.drawable.ic_back),
+                navigationIconContentDescription = "",
+                text = stringResource(id = R.string.my_boats),
+                actionIcons = { },
+                onNavigationIconClick = {}
+            )
+        },
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 40.dp)
-    ) {
-        Column(
-            modifier = Modifier.wrapContentSize(),
-            verticalArrangement = Arrangement.Center
-        ) {
-            RoundedCornerImageView(
-                painter = painterResource(id = R.drawable.ic_boat),
-                shape = Shapes.medium,
-                contentScale = ContentScale.Crop,
+            .fillMaxSize()
+            .animateContentSize(),
+        containerColor = Color.White,
+    ) { paddingValues ->
+        Box {
+            Column(
                 modifier = Modifier
-                    .width(90.dp)
-                    .height(80.dp)
-                    .padding(end = PaddingHalf)
-                    .border(
-                        width = 1.dp,
-                        color = SeaBlue400,
-                        shape = Shapes.medium
+                    .padding(
+                        top = paddingValues.calculateTopPadding(),
+                        start = PaddingDouble,
+                        end = PaddingDouble
                     )
-            )
-            Text(
-                text = stringResource(R.string.catamaran),
-                fontSize = 12.sp,
-                fontFamily = fontFamily,
-                color = Color.Black,
-                modifier = Modifier.padding(top = 3.dp)
-            )
-        }
-
-        Column(
-            modifier = Modifier.wrapContentSize(),
-            verticalArrangement = Arrangement.Center
-        ) {
-            RoundedCornerImageView(
-                painter = painterResource(id = R.drawable.yacht),
-                shape = Shapes.medium,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .width(90.dp)
-                    .height(80.dp)
-                    .padding(end = PaddingHalf)
-                    .border(
-                        width = 1.dp,
-                        color = SeaBlue400,
-                        shape = Shapes.medium
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.Top
+            ) {
+                if (parkingList.isNotEmpty()) {
+                    Text(
+                        text = stringResource(R.string.select_which_boat_to_park),
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = fontFamily,
+                        color = Color.Black,
+                        textAlign = TextAlign.Left,
+                        modifier = Modifier
+                            .padding(vertical = 14.dp)
+                            .fillMaxWidth()
                     )
-            )
-            Text(
-                text = stringResource(R.string.catamaran),
-                fontSize = 12.sp,
-                fontFamily = fontFamily,
-                color = Color.Black,
-                modifier = Modifier.padding(top = 3.dp)
-            )
+                    LazyColumn {
+                        itemsIndexed(
+                            parkingList
+                        ) { _, item ->
+                            isLoading = false
+                            BoatListCard(
+                                boatImage = coilImageLoadingAsync(imageUrl = item.image),
+                                boatName = item.name,
+                                boatLocation = item.address,
+                                boatPrice = "",
+                                isParked = item.parking_status == "parked",
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(140.dp)
+                                    .padding(top = 21.dp),
+                                locationFontWeight = FontWeight.Normal,
+                                paddingBetweenText = PaddingHalf,
+                                priceFontWeight = if (item.parking_status == "parked") FontWeight.Normal else FontWeight.SemiBold,
+                                viewOnMapText = if (item.parking_status == "parked") "" else stringResource(
+                                    R.string.not_parked
+                                ),
+                                parkingStatusText = if (item.parking_status == "parked") stringResource(
+                                    R.string.parked
+                                ) else stringResource(
+                                    R.string.park_now
+                                ),
+                                onParkNowClick = {
+                                    onParkNowClick()
+                                }
+                            )
+                        }
+                    }
+                } else {
+                    Column(
+                        modifier = Modifier
+                            .padding(
+                                horizontal = 26.dp,
+                                vertical = 130.dp
+                            )
+                            .fillMaxSize(),
+                        verticalArrangement = Arrangement.Top,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.boat_illustration),
+                            contentDescription = stringResource(
+                                R.string.boat_Image
+                            ),
+                            modifier = Modifier.padding(horizontal = 29.dp)
+                        )
+                        Text(
+                            text = stringResource(R.string.no_boat_message),
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            fontFamily = fontFamily,
+                            color = Color.Black,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(
+                                top = PaddingTripleLarge,
+                            )
+                        )
+                    }
+                }
+            }
+            if (isLoading) {
+                CircularProgressBar()
+            }
         }
     }
-}
-
-@Composable
-fun AvailableCareersSection(boatDetailsParkingList: MutableList<BoatDetailsParking>) {
-    Text(
-        text = stringResource(R.string.your_available_careers),
-        fontSize = 17.sp,
-        fontWeight = FontWeight.Bold,
-        fontFamily = fontFamily,
-        color = Color.Black,
-        textAlign = TextAlign.Left,
-        modifier = Modifier
-            .padding(vertical = 14.dp)
-            .fillMaxWidth()
-    )
-    boatDetailsParkingList.forEach { boat ->
-        BoatListCard(
-            boatImage = boat.boatImage,
-            boatName = boat.boatName,
-            boatLocation = boat.location,
-            boatPrice = boat.price,
-            isParked = boat.parkingStatus,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(140.dp)
-                .padding(top = 21.dp),
-            locationFontWeight = FontWeight.Normal,
-            paddingBetweenText = PaddingHalf,
-            priceFontWeight = if (boat.parkingStatus) FontWeight.Normal else FontWeight.SemiBold,
-            viewOnMapText = if (boat.parkingStatus) stringResource(R.string.view_on_map) else stringResource(
-                R.string.not_parked
-            ),
-            parkingStatusText = if (boat.parkingStatus) stringResource(R.string.parked) else stringResource(
-                R.string.park_now
-            )
-        )
-    }
-}
-
-
-@Preview
-@Composable
-fun PreviewBoatListScreen() {
-    BoatListScreen()
 }

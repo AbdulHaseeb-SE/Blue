@@ -2,6 +2,7 @@ package com.ah.studio.blueapp.util
 
 object Constants {
     const val SPLASH_ROUTE = "splash_route"
+    const val MAIN_ROUTE = "main_route"
     const val SIGN_IN_ROUTE = "signIn_route"
     const val SIGN_UP_ROUTE = "signUp_route"
     const val HOME_ROUTE = "home_route"
@@ -28,5 +29,6 @@ object Constants {
     const val EDIT_PROFILE_ROUTE = "edit_profile_route"
     const val CONTACT_US_ROUTE = "contact_us_route"
     const val REFUND_POLICY_ROUTE = "refund_policy_route"
-
+    const val PARK_BOAT_ROUTE = "park_boat_route"
+    const val PARK_BOAT_DETAILS_ROUTE = "parked_boat_details_route"
 }

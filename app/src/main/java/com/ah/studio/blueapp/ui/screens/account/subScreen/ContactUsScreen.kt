@@ -137,8 +137,9 @@ fun ContactUsScreen(
                         placeholder = {
                             Text(
                                 text = stringResource(R.string.your_reviews),
-                                fontSize = 15.sp,
-                                fontFamily = fontFamily
+                                fontSize = 16.sp,
+                                fontFamily = fontFamily,
+                                fontWeight = FontWeight.Normal
                             )
                         },
                         colors = TextFieldDefaults.textFieldColors(
@@ -150,7 +151,7 @@ fun ContactUsScreen(
                             unfocusedIndicatorColor = Color.Transparent
                         ),
                         textStyle = TextStyle(
-                            fontSize = 15.sp,
+                            fontSize = 20.sp,
                             fontFamily = fontFamily
                         ),
                         keyboardOptions = KeyboardOptions(

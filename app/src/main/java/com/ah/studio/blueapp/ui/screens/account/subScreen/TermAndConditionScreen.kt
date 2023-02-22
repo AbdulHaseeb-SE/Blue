@@ -5,22 +5,18 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.ah.studio.blueapp.R
 import com.ah.studio.blueapp.ui.component.CircularProgressBar
+import com.ah.studio.blueapp.ui.component.HtmlWebView
 import com.ah.studio.blueapp.ui.component.TopAppBar
-import com.ah.studio.blueapp.ui.component.htmlTextToPlainText
 import com.ah.studio.blueapp.ui.screens.account.AccountViewModel
-import com.ah.studio.blueapp.ui.theme.fontFamily
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -71,30 +67,24 @@ fun TermAndConditionScreen(
         containerColor = Color.White,
     ) { paddingValues ->
         Box {
-            Column(
-                modifier = Modifier
-                    .padding(
-                        top = paddingValues.calculateTopPadding() + 24.dp,
-                        start = 18.dp,
-                        end = 18.dp
-                    )
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.Top
-            ) {
-
-                Text(
-                    text = htmlTextToPlainText(htmlString = termAndCondition),
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 36.sp,
-                    fontFamily = fontFamily,
-                    color = Color.Black,
+            if(termAndCondition!=""){
+                isLoading = false
+                Column(
                     modifier = Modifier
-                        .padding(bottom = 5.dp)
-                        .fillMaxWidth()
-                )
+                        .padding(
+                            top = paddingValues.calculateTopPadding() + 24.dp,
+                            start = 2.dp,
+                            end = 2.dp
+                        )
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.Top
+                ) {
+                    HtmlWebView(html = termAndCondition)
+                }
             }
+
             if (isLoading) {
                 CircularProgressBar()
             }

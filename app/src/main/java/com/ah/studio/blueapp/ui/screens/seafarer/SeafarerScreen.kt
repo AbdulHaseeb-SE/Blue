@@ -1,5 +1,7 @@
 package com.ah.studio.blueapp.ui.screens.seafarer
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,12 +16,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import com.ah.studio.blueapp.R
 import com.ah.studio.blueapp.ui.component.BlueRoundedCornerShape
 import com.ah.studio.blueapp.ui.component.CircularProgressBar
@@ -55,6 +59,7 @@ fun SeafarerScreen(
     var seafarerListResponse: SeafarerListResponse? by remember {
         mutableStateOf(null)
     }
+    val context = LocalContext.current
 
     SideEffect {
         CoroutineScope(Dispatchers.IO).launch {
@@ -130,10 +135,18 @@ fun SeafarerScreen(
                                         CaptainDetailCard(
                                             item,
                                             onCallClick = {
-                                                onCallClick()
+                                                isLoading = true
+                                                val callUri = Uri.parse("tel:${item.phone_no}")
+                                                val intent = Intent(Intent.ACTION_DIAL, callUri)
+                                                startActivity(context, intent, null)
+                                                isLoading = false
                                             },
                                             onMessageClick = {
-                                                onMessageClick()
+                                                isLoading = true
+                                                val smsUri = Uri.parse("smsto:${item.phone_no}")
+                                                val intent = Intent(Intent.ACTION_SENDTO, smsUri)
+                                                startActivity(context, intent, null)
+                                                isLoading = false
                                             },
                                             onPayToUnlockClick = {
                                                 if (seafarerListResponse != null) {
@@ -205,9 +218,11 @@ fun CaptainDetailCard(
                     fontWeight = FontWeight.SemiBold,
                     fontFamily = fontFamily,
                     fontSize = 17.sp,
-                    textAlign = TextAlign.Center,
+                    textAlign = TextAlign.Start,
                     color = Color.Black,
-                    modifier = Modifier.fillMaxWidth(0.55f)
+                    modifier = Modifier
+                        .fillMaxWidth(0.55f)
+                        .padding(start = PaddingHalf)
                 )
                 Image(
                     painter = painterResource(id = R.drawable.ic_contact_us),

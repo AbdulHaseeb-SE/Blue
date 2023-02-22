@@ -46,6 +46,9 @@ fun BottomNavBar(
             }
 
             items.forEachIndexed { index, item ->
+               /* selectedIndex = if (currentDestination?.hierarchy?.any {
+                        it.route == item.route
+                    } == true) index else -1*/
                 BottomNavigationItem(
                     selected = currentDestination?.hierarchy?.any {
                         it.route == item.route

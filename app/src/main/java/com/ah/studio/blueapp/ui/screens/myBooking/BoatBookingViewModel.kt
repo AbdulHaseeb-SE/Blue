@@ -3,7 +3,6 @@ package com.ah.studio.blueapp.ui.screens.myBooking
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ah.studio.blueapp.ui.screens.myBooking.domain.IBoatBookingViewModel
 import com.ah.studio.blueapp.ui.screens.myBooking.domain.dto.BoatBookingListResponse
 import com.ah.studio.blueapp.ui.screens.myBooking.domain.repository.IMyBookingRepository
 import com.google.gson.JsonSyntaxException

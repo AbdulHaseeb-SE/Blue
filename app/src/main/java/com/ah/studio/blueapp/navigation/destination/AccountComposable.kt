@@ -25,7 +25,7 @@ fun NavGraphBuilder.accountComposable(navHostController: NavHostController) {
                 navHostController.navigate(ScreenController.RefundPolicy.route)
             },
             onLogoutClick = {
-                navHostController.popBackStack()
+                navHostController.popBackStack(Graph.Main, inclusive = false)
                 navHostController.navigate(Graph.AUTHENTICATION)
             },
             onChangePasswordClick = {

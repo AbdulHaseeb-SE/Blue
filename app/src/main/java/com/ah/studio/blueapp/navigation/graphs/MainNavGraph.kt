@@ -24,5 +24,8 @@ fun MainNavGraph(navHostController: NavHostController) {
         authNavGraph(navHostController)
         accountNavGraph(navHostController)
         addSeafarerComposable(navHostController)
+        mainScreenComposable()
+        myParkingNavGraph(navHostController)
+        parkedBoatDetailsComposable(navHostController)
     }
 }

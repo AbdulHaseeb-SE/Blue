@@ -1,4 +1,4 @@
-package com.ah.studio.blueapp.ui.screens.myBooking.domain
+package com.ah.studio.blueapp.ui.screens.myBooking
 
 import com.ah.studio.blueapp.ui.screens.myBooking.domain.dto.BoatBookingListResponse
 import kotlinx.coroutines.flow.Flow

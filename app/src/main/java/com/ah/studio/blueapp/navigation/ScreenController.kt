@@ -12,9 +12,12 @@ import com.ah.studio.blueapp.util.Constants.CONTACT_US_ROUTE
 import com.ah.studio.blueapp.util.Constants.EDIT_PROFILE_ROUTE
 import com.ah.studio.blueapp.util.Constants.GALLERY_ROUTE
 import com.ah.studio.blueapp.util.Constants.HOME_ROUTE
+import com.ah.studio.blueapp.util.Constants.MAIN_ROUTE
 import com.ah.studio.blueapp.util.Constants.MY_BOOKING_ROUTE
 import com.ah.studio.blueapp.util.Constants.MY_PARKING_ROUTE
 import com.ah.studio.blueapp.util.Constants.PACKAGE_ROUTE
+import com.ah.studio.blueapp.util.Constants.PARK_BOAT_DETAILS_ROUTE
+import com.ah.studio.blueapp.util.Constants.PARK_BOAT_ROUTE
 import com.ah.studio.blueapp.util.Constants.PAYMENT_ROUTE
 import com.ah.studio.blueapp.util.Constants.PRODUCT_DETAILS_ROUTE
 import com.ah.studio.blueapp.util.Constants.PRODUCT_LIST_ROUTE
@@ -30,6 +33,7 @@ import com.ah.studio.blueapp.util.Constants.THANK_YOU_ROUTE
 
 sealed class ScreenController(val route: String) {
     object Splash : ScreenController(SPLASH_ROUTE)
+    object Main : ScreenController(MAIN_ROUTE)
     object SignIn : ScreenController(SIGN_IN_ROUTE)
     object SignUp : ScreenController(SIGN_UP_ROUTE)
     object Home : ScreenController(HOME_ROUTE)
@@ -56,6 +60,8 @@ sealed class ScreenController(val route: String) {
     object EditProfile : ScreenController(EDIT_PROFILE_ROUTE)
     object ContactUs : ScreenController(CONTACT_US_ROUTE)
     object RefundPolicy : ScreenController(REFUND_POLICY_ROUTE)
+    object ParkBoat : ScreenController(PARK_BOAT_ROUTE)
+    object ParkedBoatDetails : ScreenController(PARK_BOAT_DETAILS_ROUTE)
 
     fun withArgs(vararg args: String): String {
         return buildString {

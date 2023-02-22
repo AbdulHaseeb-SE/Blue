@@ -1,6 +1,5 @@
 package com.ah.studio.blueapp.ui.screens.myBooking
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -60,7 +59,6 @@ fun MyBookingRatingScreen() {
             CaptainBoatNameSection()
             TimeDateSection()
             SummarySection()
-
             Button(
                 width = 0.dp,
                 height = 50.dp,

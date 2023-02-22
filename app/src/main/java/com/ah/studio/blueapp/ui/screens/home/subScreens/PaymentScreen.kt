@@ -30,14 +30,11 @@ import com.ah.studio.blueapp.ui.screens.home.domain.dto.PaymentMethod
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.boatDetails.BoatDetails
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.boatDetails.Package
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.booking.BoatBookingBody
-import com.ah.studio.blueapp.ui.screens.home.domain.dto.booking.Product
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.cart.CartItems
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.delete.DeleteCartResponse
 import com.ah.studio.blueapp.ui.theme.*
 import com.ah.studio.blueapp.util.BookingDetailsManager
 import com.ah.studio.blueapp.util.coilImageLoadingAsync
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -63,9 +60,6 @@ fun PaymentScreen(
     val packageId = bookingDetailsManager.retrieveDetails("package_id")
     val boatID = bookingDetailsManager.retrieveDetails("boat_id")
     val dateSelected = bookingDetailsManager.retrieveDetails("dateSelected")
-    val productListJson = bookingDetailsManager.retrieveDetails("product")
-    val productList =
-        Gson().fromJson<List<Product>>(productListJson, object : TypeToken<List<Product>>() {}.type)
     val boatGrandTotal = boatTotal.toString()
     var grandTotal = 0
     var isLoading by remember { mutableStateOf(true) }

@@ -5,7 +5,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.ah.studio.blueapp.navigation.ScreenController
 import com.ah.studio.blueapp.ui.screens.authentication.SignInScreen
-import com.ah.studio.blueapp.util.Graph
 
 fun NavGraphBuilder.signInComposable(
     navHostController: NavHostController
@@ -15,7 +14,7 @@ fun NavGraphBuilder.signInComposable(
     ) {
         SignInScreen(
             onLoginClick = {
-                navHostController.navigate(Graph.Main)
+                navHostController.navigate(ScreenController.Main.route)
             },
             onSignUpClick = {
                 navHostController.navigate(ScreenController.SignUp.route)
