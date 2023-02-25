@@ -1,4 +1,4 @@
-package com.ah.studio.blueapp.ui.screens.account.subScreen
+package com.ah.studio.blueapp.ui.screens.myParking.subScreens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -12,14 +12,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ah.studio.blueapp.R
 import com.ah.studio.blueapp.ui.component.*
-import com.ah.studio.blueapp.ui.screens.myBooking.CaptainBoatNameSection
-import com.ah.studio.blueapp.ui.screens.myBooking.LocationSection
-import com.ah.studio.blueapp.ui.screens.myBooking.SummarySection
-import com.ah.studio.blueapp.ui.screens.myBooking.TimeDateSection
+import com.ah.studio.blueapp.ui.screens.myBooking.subScreens.CaptainBoatNameSection
+import com.ah.studio.blueapp.ui.screens.myBooking.subScreens.LocationSection
+import com.ah.studio.blueapp.ui.screens.myBooking.subScreens.SummarySection
+import com.ah.studio.blueapp.ui.screens.myBooking.subScreens.TimeDateSection
 import com.ah.studio.blueapp.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -75,11 +74,4 @@ fun MyParkingRatingScreen() {
             ) {}
         }
     }
-}
-
-
-@Preview
-@Composable
-fun PreviewMyParkingRatingScreen() {
-    MyParkingRatingScreen()
 }

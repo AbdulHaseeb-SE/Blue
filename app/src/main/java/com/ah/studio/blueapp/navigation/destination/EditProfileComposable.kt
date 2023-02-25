@@ -8,6 +8,10 @@ import com.ah.studio.blueapp.ui.screens.account.subScreen.EditProfileScreen
 
 fun NavGraphBuilder.editProfileComposable(navHostController: NavHostController){
     composable(ScreenController.EditProfile.route){
-        EditProfileScreen()
+        EditProfileScreen(
+            onBackButtonClick = {
+                navHostController.popBackStack()
+            }
+        )
     }
 }

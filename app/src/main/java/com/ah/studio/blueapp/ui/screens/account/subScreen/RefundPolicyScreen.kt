@@ -28,6 +28,7 @@ import org.koin.androidx.compose.getKoin
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RefundPolicyScreen(
+    onBackButtonClick: () -> Unit,
     viewModel: AccountViewModel = getKoin().get()
 ) {
     var isLoading by remember {
@@ -62,7 +63,9 @@ fun RefundPolicyScreen(
                 navigationIconContentDescription = "",
                 text = stringResource(id = R.string.refund_policy),
                 actionIcons = {},
-                onNavigationIconClick = {}
+                onNavigationIconClick = {
+                    onBackButtonClick()
+                }
             )
         },
         modifier = Modifier

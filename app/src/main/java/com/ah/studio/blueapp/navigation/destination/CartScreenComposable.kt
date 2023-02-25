@@ -15,6 +15,9 @@ fun NavGraphBuilder.cartScreenComposable(
         CartScreen(
             onProceedToCheckoutClick = {
                 navHostController.navigate(ScreenController.Payment.route)
+            },
+            onBackButtonClick = {
+                navHostController.popBackStack()
             }
         )
     }

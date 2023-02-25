@@ -32,4 +32,5 @@ object ApiConstants{
     const val REFUND_POLICY_ENDPOINT = "refund-policy"
     const val MY_PARKING_BOOKING_ENDPOINT = "my-parking-booking"
     const val PARKING_LIST_ENDPOINT = "parking-list"
+    const val BOOKED_BOAT_DETAILS_ENDPOINT = "boat-booking-detail"
 }

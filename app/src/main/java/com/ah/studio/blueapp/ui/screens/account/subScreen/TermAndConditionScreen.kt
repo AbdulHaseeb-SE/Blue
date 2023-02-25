@@ -27,6 +27,7 @@ import org.koin.androidx.compose.getKoin
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TermAndConditionScreen(
+    onBackButtonClick: () -> Unit,
     viewModel: AccountViewModel = getKoin().get()
 ) {
     var isLoading by remember {
@@ -59,7 +60,9 @@ fun TermAndConditionScreen(
                 navigationIconContentDescription = "",
                 text = stringResource(id = R.string.terms_and_condition),
                 actionIcons = {},
-                onNavigationIconClick = {}
+                onNavigationIconClick = {
+                    onBackButtonClick()
+                }
             )
         },
         modifier = Modifier

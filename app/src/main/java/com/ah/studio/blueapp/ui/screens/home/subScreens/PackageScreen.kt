@@ -42,6 +42,7 @@ fun PackageScreen(
     boatId: Int,
     onNextClick: () -> Unit,
     onSkipClick: () -> Unit,
+    onBackButtonClick: () -> Unit,
     viewModel: HomeViewModel = getKoin().get()
 ) {
     val bookingDetailsManager = BookingDetailsManager(LocalContext.current)
@@ -88,7 +89,9 @@ fun PackageScreen(
                             .size(24.dp)
                     )
                 },
-                onNavigationIconClick = {}
+                onNavigationIconClick = {
+                        onBackButtonClick()
+                }
             )
         },
         modifier = Modifier.fillMaxSize(),

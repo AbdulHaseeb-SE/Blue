@@ -28,10 +28,14 @@ fun NavGraphBuilder.categoryDetailsComposable(
             entry.arguments?.getString("id")?.let { id ->
                 BoatCategoryDetailsScreen(
                     categoryName = categoryName,
-                    categoryId = id.toInt()
-                ) {boatId->
-                    navHostController.navigate(ScreenController.BoatDetails.route+"/$boatId")
-                }
+                    categoryId = id.toInt(),
+                    onBoatCardClick = {boatId->
+                        navHostController.navigate(ScreenController.BoatDetails.route+"/$boatId")
+                    },
+                    onBackButtonClick = {
+                        navHostController.popBackStack()
+                    }
+                )
             }
         }
     }

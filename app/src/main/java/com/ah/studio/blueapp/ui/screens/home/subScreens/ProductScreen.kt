@@ -43,6 +43,7 @@ import org.koin.androidx.compose.getKoin
 fun ProductScreen(
     onSubCategoryClick: (subCategoryId: Int, subCategoryName: String) -> Unit,
     onSkipButtonClick: () -> Unit,
+    onBackButtonClick: () -> Unit,
     viewModel: HomeViewModel = getKoin().get()
 ) {
     var type by remember { mutableStateOf("Restaurant") }
@@ -106,7 +107,9 @@ fun ProductScreen(
                             .size(24.dp)
                     )
                 },
-                onNavigationIconClick = {}
+                onNavigationIconClick = {
+                    onBackButtonClick()
+                }
             )
         },
         modifier = Modifier

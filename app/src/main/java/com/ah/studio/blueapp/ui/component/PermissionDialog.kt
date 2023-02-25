@@ -33,7 +33,7 @@ fun PermissionDialog(
                     text = if(isPermanentlyDeclined) {
                         "Grant permission"
                     } else {
-                        "OK"
+                        "Allow"
                     },
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,

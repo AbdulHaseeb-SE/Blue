@@ -35,6 +35,12 @@ fun NavGraphBuilder.productListComposable(
                         },
                         onSkipButtonClick = {
                             navHostController.navigate(ScreenController.Payment.route)
+                        },
+                        onBackButtonClick = {
+                            navHostController.popBackStack()
+                        },
+                        onCartButtonClick = {
+                            navHostController.navigate(ScreenController.Cart.route)
                         }
                     )
                 }

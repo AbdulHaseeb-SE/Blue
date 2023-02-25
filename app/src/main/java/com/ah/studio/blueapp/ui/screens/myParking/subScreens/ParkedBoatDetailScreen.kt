@@ -41,6 +41,7 @@ import java.util.*
 @Composable
 fun ParkedBoatDetailScreen(
     id: Int,
+    onBackButtonClick: () -> Unit,
     viewModel: ParkingViewModel = getKoin().get()
 ) {
     var isLoading by remember {
@@ -69,7 +70,9 @@ fun ParkedBoatDetailScreen(
                 text = stringResource(R.string.parking_details),
                 navigationIconContentDescription = "",
                 actionIcons = {},
-                onNavigationIconClick = {}
+                onNavigationIconClick = {
+                    onBackButtonClick()
+                }
             )
         },
         modifier = Modifier.fillMaxSize(),

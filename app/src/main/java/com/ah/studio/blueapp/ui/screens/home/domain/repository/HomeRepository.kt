@@ -34,6 +34,7 @@ import com.ah.studio.blueapp.util.ApiConstants.PRODUCT_SUB_CATEGORY_ENDPOINT
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.json.JSONObject
+import java.nio.charset.Charset
 
 class HomeRepository(private val context: Context) : IHomeRepository {
     override suspend fun getBoatCategorySubCategory(
@@ -519,8 +520,7 @@ class HomeRepository(private val context: Context) : IHomeRepository {
     override suspend fun getBookingResponse(
         bookingBody: BoatBookingBody,
         boatBookingResponse: (BoatBookingResponse) -> Unit
-    ): MutableStateFlow<String?> {
-        val state = MutableStateFlow<String?>(null)
+    ){
         val jsonObject = JSONObject()
         jsonObject.put("boat_category", bookingBody.boat_category)
         jsonObject.put("destination_id", bookingBody.destination_id)
@@ -542,30 +542,62 @@ class HomeRepository(private val context: Context) : IHomeRepository {
                 endPoint = BOAT_BOOKING_ENDPOINT,
                 jsonObject = jsonObject,
                 listener = { response ->
-                    if (response.getString("status") == "200") {
+                    if (response.getInt("status") == 200) {
                         boatBookingResponse(
                             Gson().fromJson(
                                 response.toString(),
                                 BoatBookingResponse::class.java
                             )
                         )
-                        state.value = response.getString("status")
                     } else {
-                        state.value = response.getString("status")
+                        boatBookingResponse(
+                            BoatBookingResponse(
+                                message = response.getString("message"),
+                                status = response.getInt("status"),
+                                data = listOf(),
+                                type = response.getString("type")
+                            )
+                        )
+                    }
+                },
+                errorListener = { error ->
+                    val responseCode = error.networkResponse?.statusCode ?: -1
+                    val responseBody =
+                        error.networkResponse?.data?.toString(Charset.defaultCharset()) ?: ""
+                    Log.d(
+                        "CheckResponse",
+                        "error status code = $responseCode, response body = $responseBody"
+                    )
+                    try {
+                        val errorJson = JSONObject(responseBody)
+                        boatBookingResponse(
+                            BoatBookingResponse(
+                                message = errorJson.getString("message"),
+                                status = errorJson.getInt("status"),
+                                data = listOf(),
+                                type = errorJson.getString("type")
+                            )
+                        )
+                        Log.d(
+                            "CheckResponse",
+                            "message = ${errorJson.getString("message")},\n" +
+                                    "success = ${errorJson.getBoolean("success")}"
+                        )
+                    } catch (e: Exception) {
+                        BoatBookingResponse(
+                            message = "Error: $responseCode $responseBody",
+                            status = 404,
+                            data = listOf(),
+                            type = ""
+                        )
                     }
                 }
-            ) { error ->
-                state.value = error.message?.ifEmpty { "false" }
-                Log.d(
-                    "CheckResponse", "error status = $error"
-                )
-            }
+            )
         } catch (e: Exception) {
-            state.value = e.message?.ifEmpty { "false" }
             Log.e(
-                "CheckResponse", "error status = ${e.message + e.localizedMessage + e.cause}"
+                "CheckResponse",
+                "error status = ${e.message + e.localizedMessage + e.cause}"
             )
         }
-        return state
     }
 }

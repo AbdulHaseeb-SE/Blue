@@ -8,6 +8,10 @@ import com.ah.studio.blueapp.ui.screens.account.subScreen.ContactUsScreen
 
 fun NavGraphBuilder.contactUsComposable(navHostController: NavHostController){
     composable(ScreenController.ContactUs.route){
-        ContactUsScreen()
+        ContactUsScreen(
+            onBackButtonClick = {
+                navHostController.popBackStack()
+            }
+        )
     }
 }

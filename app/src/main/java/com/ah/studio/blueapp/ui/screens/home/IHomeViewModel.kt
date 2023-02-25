@@ -35,7 +35,7 @@ interface IHomeViewModel {
     fun getCartCreateResponse(cartBody: CreateCartBody): Flow<String?>
     fun getCartListResponse(): Flow<String?>
     fun getDeleteCartResponse(cartId: Int): Flow<String?>
-    fun getBoatBookingResponse(bookingBody: BoatBookingBody): Flow<String?>
+    fun getBoatBookingResponse(bookingBody: BoatBookingBody)
 
 
     val boatCategorySubCategoryResponse: Flow<BoatCategorySubCategoryResponse?>

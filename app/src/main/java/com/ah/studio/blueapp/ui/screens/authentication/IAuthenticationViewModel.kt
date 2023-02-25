@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface IAuthenticationViewModel {
 
-    fun registerUserResponse(userDetails: User): Flow<String?>
-    fun loginUserResponse(loginCredentials: LoginCredentials): Flow<String?>
+    fun registerUserResponse(userDetails: User)
+    fun loginUserResponse(loginCredentials: LoginCredentials)
 
     val registerResponse: Flow<UserRegistrationResponse?>
     val validateUserResponse: Flow<UserLoginResponse?>

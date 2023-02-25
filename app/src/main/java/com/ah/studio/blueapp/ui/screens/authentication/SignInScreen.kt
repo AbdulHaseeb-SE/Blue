@@ -26,6 +26,7 @@ import com.ah.studio.blueapp.ui.component.*
 import com.ah.studio.blueapp.ui.screens.authentication.domain.dto.login.LoginCredentials
 import com.ah.studio.blueapp.ui.theme.*
 import com.ah.studio.blueapp.util.ApiConstants.FCM_TOKEN
+import com.ah.studio.blueapp.util.isInternetOn
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -40,7 +41,8 @@ fun SignInScreen(
     onSignUpClick: () -> Unit,
     viewModel: AuthenticationViewModel = getKoin().get()
 ) {
-    val activity = (LocalContext.current as? Activity)
+    val context = LocalContext.current
+    val activity = (context as? Activity)
     BackHandler {
         activity?.finish()
     }
@@ -90,45 +92,42 @@ fun SignInScreen(
             )
             Sign_In(
                 onLoginClick = { email, password ->
-                    isLoading = true
-                    try {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            val response = viewModel.loginUserResponse(
-                                LoginCredentials(
-                                    email = email,
-                                    password = password,
-                                    fcm_token = if (token == "") FCM_TOKEN else token
+                    if (isInternetOn(context = context)) {
+                        isLoading = true
+                        try {
+                            CoroutineScope(Dispatchers.Main).launch {
+                                viewModel.loginUserResponse(
+                                    LoginCredentials(
+                                        email = email,
+                                        password = password,
+                                        fcm_token = if (token == "") FCM_TOKEN else token
+                                    )
                                 )
-                            )
-                            response.collectLatest { _response ->
-                                if (_response != null) {
-                                    when (_response) {
-                                        "true" -> {
-                                            showSnackBar = true
-                                            snackbar = "Logged In Successfully!"
+                                viewModel.validateUserResponse.collectLatest { response ->
+                                    if (response != null) {
+                                        if (response.success) {
                                             onLoginClick()
-                                            isLoading = false
-                                        }
-                                        "false" -> {
-                                            snackbar = "The entered Email or Password is Incorrect!"
+                                            snackbar = "Logged In Successfully!!"
                                             showSnackBar = true
                                             isLoading = false
-                                        }
-                                        else -> {
-                                            snackbar = _response
-                                                .ifEmpty { "An Error Occurred, try again later!" }
+                                        } else {
+                                            snackbar = response.message
                                             showSnackBar = true
                                             isLoading = false
                                         }
                                     }
                                 }
                             }
+                        } catch (e: Exception) {
+                            viewModel.handleError(e)
+                            snackbar = "Error Logging user, try again!"
+                            showSnackBar = true
+                            isLoading = false
                         }
-                    } catch (e: Exception) {
-                        viewModel.handleError(e)
-                        snackbar = "Error Logging user, try again!"
-                        showSnackBar = true
+                    }else{
                         isLoading = false
+                        snackbar = "No Internet! Enable WiFi and try Again!!"
+                        showSnackBar= true
                     }
                 },
                 onForgotClick,

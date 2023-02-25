@@ -26,6 +26,9 @@ fun NavGraphBuilder.selectDestinationComposable(
                 selectedDestinationId = {destinationID->
                     navHostController.popBackStack()
                     navHostController.navigate(ScreenController.BoatBooking.route + "/$boatId/$destinationID")
+                },
+                onBackButtonClick = {
+                    navHostController.popBackStack()
                 }
             )
         }

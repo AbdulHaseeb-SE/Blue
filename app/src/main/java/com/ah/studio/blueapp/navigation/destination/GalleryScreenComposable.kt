@@ -22,7 +22,10 @@ fun NavGraphBuilder.galleryScreenComposable(
     ) { entry ->
         entry.arguments?.getString("boatId")?.let { boatId ->
             GalleyScreen(
-                boatId.toInt()
+                boatId.toInt(),
+                onBackButtonClick = {
+                    navHostController.popBackStack()
+                }
             )
         }
     }

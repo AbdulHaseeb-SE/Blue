@@ -1,6 +1,7 @@
 package com.ah.studio.blueapp.ui.screens.home.subScreens
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -41,22 +42,35 @@ fun BoatBookingScreen(
     destinationID: Int? = null,
     selectDestinationClick: () -> Unit,
     onNextClick: () -> Unit,
+    onBackButtonClick: () -> Unit,
     viewModel: HomeViewModel = getKoin().get()
 ) {
+    BackHandler {
+        onBackButtonClick()
+    }
+
     val bookingDetailsManager = BookingDetailsManager(LocalContext.current)
     var isLoading by remember { mutableStateOf(true) }
     var boatDetails: BoatDetails? by remember { mutableStateOf(null) }
     var timeSlotResponse: List<Time>? by remember { mutableStateOf(null) }
-
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
     var snackbar by remember { mutableStateOf("") }
     var showSnackBar by remember { mutableStateOf(false) }
-    var selectedDestinationAddress by remember { mutableStateOf("") }
+    var selectedDestinationAddress by remember { mutableStateOf("Select Destination") }
     var isFetchingTime by remember { mutableStateOf(false) }
     var dateSelected by remember { mutableStateOf("") }
     var startTime by remember { mutableStateOf("") }
     var endTime by remember { mutableStateOf("") }
+
+    Log.d(
+        "CheckDestinationDetails",
+        "boat id = $boatId \n destination id = $destinationID \n boat details = ${boatDetails.toString()} \n destination List = ${boatDetails?.destination_address.toString()}"
+    )
+    Log.d(
+        "CheckDestinationDetails",
+        "\n\n selected destination address = $selectedDestinationAddress"
+    )
 
     SideEffect {
         CoroutineScope(Dispatchers.IO).launch {
@@ -98,7 +112,9 @@ fun BoatBookingScreen(
                 text = stringResource(R.string.bookings),
                 navigationIconContentDescription = stringResource(id = R.string.back_button),
                 actionIcons = {},
-                onNavigationIconClick = {}
+                onNavigationIconClick = {
+                    onBackButtonClick()
+                }
             )
         },
         modifier = Modifier
@@ -106,12 +122,11 @@ fun BoatBookingScreen(
             .background(Color.White)
     ) {
         boatDetails?.destination_address?.forEach { destination ->
-            selectedDestinationAddress =
-                if ((destinationID != null && destination.id == destinationID)) {
+            if ((destinationID != null && destination.id == destinationID)) {
+                selectedDestinationAddress =
                     destination.destination_address
-                } else {
-                    stringResource(id = R.string.select_destination)
-                }
+                return@forEach
+            }
         }
         Box {
             LazyColumn(
@@ -231,22 +246,20 @@ fun BoatBookingScreen(
                                     .padding(top = 27.dp)
                             )
                             boatDetails?.destination_address?.forEach { destination ->
-                                TimeSlotTable(
-                                    startingSlot = trimTimeToHrMin(timeSlotResponse!!.first().date) + ":00",
-                                    endingSlot = trimTimeToHrMin(timeSlotResponse!!.last().date) + ":00",
-                                    startingTime = { start -> startTime = start },
-                                    endingTime = { end -> endTime = end },
-                                    duration = if ((destinationID != null && destination.id == destinationID)) {
-                                        destination.destination_hrs
-                                    } else {
-                                        0
-                                    },
-                                    modifier = Modifier
-                                        .padding(
-                                            top = 21.dp,
-                                        )
-                                        .fillMaxWidth()
-                                )
+                                if ((destinationID != null && destination.id == destinationID)) {
+                                    TimeSlotTable(
+                                        startingSlot = trimTimeToHrMin(timeSlotResponse!!.first().date) + ":00",
+                                        endingSlot = trimTimeToHrMin(timeSlotResponse!!.last().date) + ":00",
+                                        startingTime = { start -> startTime = start },
+                                        endingTime = { end -> endTime = end },
+                                        duration = destination.destination_hrs,
+                                        modifier = Modifier
+                                            .padding(
+                                                top = 21.dp,
+                                            )
+                                            .fillMaxWidth()
+                                    )
+                                }
                             }
                         }
                         if (isFetchingTime) {

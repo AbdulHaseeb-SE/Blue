@@ -37,8 +37,9 @@ import org.koin.androidx.compose.getKoin
 fun BoatCategoryDetailsScreen(
     categoryName: String,
     categoryId: Int,
-    viewModel: HomeViewModel = getKoin().get(),
-    onBoatCardClick: (boatId: Int) -> Unit
+    onBoatCardClick: (boatId: Int) -> Unit,
+    onBackButtonClick: () -> Unit,
+    viewModel: HomeViewModel = getKoin().get()
 ) {
     var boatList: List<Boat>? by remember {
         mutableStateOf(listOf())
@@ -129,7 +130,9 @@ fun BoatCategoryDetailsScreen(
                             .size(24.dp)
                     )
                 },
-                onNavigationIconClick = {})
+                onNavigationIconClick = {
+                    onBackButtonClick()
+                })
         }
     ) {
         Box {

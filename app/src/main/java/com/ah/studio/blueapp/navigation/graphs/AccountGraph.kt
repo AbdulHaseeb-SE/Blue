@@ -12,8 +12,8 @@ fun NavGraphBuilder.accountNavGraph(navHostController: NavHostController) {
         route = Graph.AccountGraph,
         startDestination = ScreenController.TermsCondition.route
     ) {
-        termsConditionComposable()
-        refundPolicyComposable()
+        termsConditionComposable(navHostController)
+        refundPolicyComposable(navHostController)
         changePasswordComposable(navHostController)
         editProfileComposable(navHostController)
         contactUsComposable(navHostController)

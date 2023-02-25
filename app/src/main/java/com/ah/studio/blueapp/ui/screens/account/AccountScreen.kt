@@ -61,13 +61,12 @@ fun AccountScreen(
             }
         }
     }
-
     Scaffold(
         topBar = {
             TopAppBar(
                 backgroundColor = Color.Transparent,
                 contentColor = Color.Black,
-                navigationIcon = painterResource(id = R.drawable.ic_back),
+                navigationIcon =null,
                 navigationIconContentDescription = "",
                 text = stringResource(R.string.account),
                 actionIcons = {},

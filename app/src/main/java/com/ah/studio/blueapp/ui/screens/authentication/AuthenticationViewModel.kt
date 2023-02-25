@@ -9,9 +9,13 @@ import com.ah.studio.blueapp.ui.screens.authentication.domain.dto.login.UserLogi
 import com.ah.studio.blueapp.ui.screens.authentication.domain.dto.register.User
 import com.ah.studio.blueapp.ui.screens.authentication.domain.dto.register.UserRegistrationResponse
 import com.ah.studio.blueapp.ui.screens.authentication.domain.repository.IUserRepository
+import com.google.gson.JsonSyntaxException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
+import java.io.IOException
 
 class AuthenticationViewModel(
     private val repository: IUserRepository,
@@ -24,22 +28,35 @@ class AuthenticationViewModel(
     override val registerResponse: MutableStateFlow<UserRegistrationResponse?>
         get() = _registerResponse
 
-    override fun registerUserResponse(userDetails: User): MutableStateFlow<String?> {
-        var response = MutableStateFlow<String?>(null)
-        viewModelScope.launch {
+    override fun registerUserResponse(userDetails: User){
+        viewModelScope.launch(Dispatchers.IO) {
             try {
-                response = repository.registerUser(
+                repository.registerUser(
                     userDetails = userDetails,
                     userRegistrationResponse = { userRegistrationResponse ->
                         _registerResponse.value = userRegistrationResponse
                     }
                 )
-            } catch (e: Exception) {
-                response.value = e.localizedMessage
-                handleError(e)
+            } catch (e: IOException) {
+                Log.d(
+                    "Response",
+                    "IOException, ${e.message.toString()}"
+                )
+                return@launch
+            } catch (e: HttpException) {
+                Log.d(
+                    "Response",
+                    "HttpException, unexpected response"
+                )
+                return@launch
+            } catch (e: JsonSyntaxException) {
+                Log.d(
+                    "Response",
+                    "JsonSyntaxException: ${e.message.toString()}"
+                )
+                return@launch
             }
         }
-        return response
     }
 
     /*************************************  User Login Validation **********************************************************/
@@ -48,25 +65,40 @@ class AuthenticationViewModel(
     override val validateUserResponse: Flow<UserLoginResponse?>
         get() = _validationResponse
 
-    override fun loginUserResponse(loginCredentials: LoginCredentials): MutableStateFlow<String?> {
-        var response = MutableStateFlow<String?>(null)
-        viewModelScope.launch {
+    override fun loginUserResponse(loginCredentials: LoginCredentials) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
-                response = repository.validateUserRequest(
+                repository.validateUserRequest(
                     loginCredentials,
-                    userLoginResponseBody = { userLoginResponse ->
-                        _validationResponse.value = userLoginResponse
-                        sessionManager.saveToken(userLoginResponse.data.token)
-                        sessionManager.saveRole(userLoginResponse.data.role)
+                    userLoginResponseBody = { response ->
+                        _validationResponse.value = response
+                        if (response.data != null) {
+                            sessionManager.saveToken(response.data.token)
+                            sessionManager.saveRole(response.data.role)
+                        }
                         Log.d("CheckToken", "token = " + sessionManager.getToken().toString())
                     }
                 )
-            } catch (e: Exception) {
-                response.value = e.localizedMessage
-                handleError(e)
+            } catch (e: IOException) {
+                Log.d(
+                    "Response",
+                    "IOException, ${e.message.toString()}"
+                )
+                return@launch
+            } catch (e: HttpException) {
+                Log.d(
+                    "Response",
+                    "HttpException, unexpected response"
+                )
+                return@launch
+            } catch (e: JsonSyntaxException) {
+                Log.d(
+                    "Response",
+                    "JsonSyntaxException: ${e.message.toString()}"
+                )
+                return@launch
             }
         }
-        return response
     }
 
     override fun handleError(throwable: Throwable) {

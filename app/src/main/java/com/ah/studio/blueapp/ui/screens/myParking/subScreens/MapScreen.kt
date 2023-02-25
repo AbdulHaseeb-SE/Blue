@@ -1,18 +1,16 @@
 package com.ah.studio.blueapp.ui.screens.myParking.subScreens
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,24 +19,58 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ah.studio.blueapp.R
 import com.ah.studio.blueapp.ui.component.*
+import com.ah.studio.blueapp.ui.screens.myParking.ParkingViewModel
+import com.ah.studio.blueapp.ui.screens.myParking.domain.dto.parkingList.Boat
 import com.ah.studio.blueapp.ui.theme.*
+import com.ah.studio.blueapp.util.coilImageLoadingAsync
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import org.koin.androidx.compose.getKoin
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MapScreen() {
+fun MapScreen(
+    id: Int,
+    selectedDate: String?,
+    startingTime: String?,
+    endingTime: String?,
+    price: Double,
+    onBackButtonClick: () -> Unit,
+    onNextButtonClick: (id:Int, selectedDate: String?, startingTime: String?, endingTime: String?, price: Double) -> Unit,
+    viewModel: ParkingViewModel = getKoin().get()
+) {
+    var isLoading by remember {
+        mutableStateOf(true)
+    }
+    var parkingList: List<Boat> by remember {
+        mutableStateOf(emptyList())
+    }
+    SideEffect {
+        CoroutineScope(Dispatchers.IO).launch {
+            viewModel.getParkingListResponse(1)
+            viewModel.boatsAvailableToParkResponse.collectLatest { list ->
+                if (list != null) {
+                    parkingList = list.data
+                    isLoading = false
+                }
+            }
+        }
+    }
     Scaffold(
         topBar = {
             TopAppBar(
                 backgroundColor = Color.Transparent,
                 contentColor = Color.Black,
-                navigationIcon = null,
+                navigationIcon = painterResource(id = R.drawable.ic_back),
                 text = "",
                 navigationIconContentDescription = "",
                 actionIcons = {
@@ -52,66 +84,124 @@ fun MapScreen() {
                             .size(24.dp)
                     )
                 },
-                onNavigationIconClick = { /*TODO*/ })
+                onNavigationIconClick = { onBackButtonClick() })
         },
         modifier = Modifier.fillMaxSize()
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .background(Color.White),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Bottom
-        ) {
-//            Map()
-            BottomCardSection()
+        Box {
+            if (parkingList.isNotEmpty()) {
+                parkingList.forEach { boat ->
+                    if (boat.id == id) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .verticalScroll(rememberScrollState())
+                                .background(Color.White),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Bottom
+                        ) {
+                            //            Map()
+                            BottomCardSection(
+                                boat,
+                                price,
+                                onNextButtonClick = {
+                                    onNextButtonClick(id, selectedDate, startingTime, endingTime, price)
+                                }
+                            )
+                        }
+                    }
+                }
+            }
+            if (isLoading) {
+                CircularProgressBar()
+            }
         }
     }
 }
 
 @Composable
-fun BottomCardSection() {
-
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.Bottom,
-        horizontalAlignment = Alignment.CenterHorizontally
+fun BottomCardSection(
+    boat: Boat,
+    price: Double,
+    onNextButtonClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(208.dp)
+            .background(Color.Transparent),
+        contentAlignment = Alignment.TopEnd
     ) {
-        androidx.compose.material3.Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(207.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = Color.White
-            ),
-            elevation = CardDefaults.cardElevation(
-                defaultElevation = 8.dp
-            ),
-            shape = RoundedCornerShape(
-                topStart = 30.dp,
-                topEnd = 30.dp,
-                bottomEnd = 0.dp,
-                bottomStart = 0.dp
-            )
+
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Card(
-                boatImage = painterResource(id = R.drawable.ic_boat),
-                parkingSlotName = "D1 Slot AL Kandari Parking ",
-                boatLocation = stringResource(id = R.string.al_jahra_kuwait),
-                boatPrice = "4.5 KWD / DAY",
-                rating = 4.9f,
-                priceFontWeight = FontWeight.Bold,
+            androidx.compose.material3.Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(150.dp)
-                    .padding(
-                        top = 24.dp,
-                        start = PaddingDouble,
-                        bottom = PaddingDouble
-                    ),
-                paddingBetweenText = 14.dp
-            )
+                    .height(207.dp)
+                    .padding(top = 30.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.White
+                ),
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = 8.dp
+                ),
+                shape = RoundedCornerShape(
+                    topStart = 30.dp,
+                    topEnd = 30.dp,
+                    bottomEnd = 0.dp,
+                    bottomStart = 0.dp
+                )
+            ) {
+                Card(
+                    boatImage = coilImageLoadingAsync(imageUrl = boat.image),
+                    parkingSlotName = boat.name,
+                    boatLocation = boat.address,
+                    boatPrice = "$price KWD",
+                    rating = 0f,
+                    priceFontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(150.dp)
+                        .padding(
+                            top = 24.dp,
+                            start = PaddingDouble,
+                            bottom = PaddingDouble
+                        ),
+                    paddingBetweenText = 14.dp
+                )
+            }
+        }
+        BlueRoundedCornerShape(
+            modifier = Modifier
+                .wrapContentSize()
+                .padding(end = PaddingLarge)
+                .clickable {
+                    onNextButtonClick()
+                },
+            borderColor = SeaBlue400,
+            containerColor = SeaBlue400,
+            shape = CircleShape
+        ) {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.size(60.dp)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.next),
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = fontFamily,
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .padding(PaddingHalf)
+                )
+            }
         }
     }
 }
@@ -202,11 +292,4 @@ fun Card(
             }
         }
     }
-}
-
-
-@Preview
-@Composable
-fun PreviewMapScreen() {
-    MapScreen()
 }

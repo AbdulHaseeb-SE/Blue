@@ -10,16 +10,14 @@ import com.ah.studio.blueapp.ui.screens.authentication.domain.dto.register.UserR
 import com.ah.studio.blueapp.util.ApiConstants
 import com.ah.studio.blueapp.util.ApiConstants.REGISTER_ENDPOINT
 import com.google.gson.Gson
-import kotlinx.coroutines.flow.MutableStateFlow
 import org.json.JSONObject
+import java.nio.charset.Charset
 
 class UserRepository(private val context: Context) : IUserRepository {
     override suspend fun registerUser(
         userDetails: User,
         userRegistrationResponse: (UserRegistrationResponse) -> Unit
-    ): MutableStateFlow<String?> {
-        val state = MutableStateFlow<String?>(null)
-
+    ) {
         val jsonObject = JSONObject()
         jsonObject.put("first_name", userDetails.first_name)
         jsonObject.put("last_name", userDetails.last_name)
@@ -34,37 +32,67 @@ class UserRepository(private val context: Context) : IUserRepository {
                 endPoint = REGISTER_ENDPOINT,
                 jsonObject = jsonObject,
                 listener = { response ->
-                    userRegistrationResponse(
-                        Gson().fromJson(
-                            response.toString(),
-                            UserRegistrationResponse::class.java
+                    if (response.getBoolean("success")) {
+                        userRegistrationResponse(
+                            Gson().fromJson(
+                                response.toString(),
+                                UserRegistrationResponse::class.java
+                            )
                         )
-                    )
-                    state.value = response.getString("success")
+                    } else {
+                        userRegistrationResponse(
+                            UserRegistrationResponse(
+                                message = response.getString("message"),
+                                success = response.getBoolean("success"),
+                                data = null
+                            )
+                        )
+                    }
                 },
                 errorListener = { error ->
-                    state.value = "false"
+                    val responseCode = error.networkResponse?.statusCode ?: -1
+                    val responseBody =
+                        error.networkResponse?.data?.toString(Charset.defaultCharset()) ?: ""
                     Log.d(
-                        "CheckResponse", "error status = $error"
+                        "CheckResponse",
+                        "error status code = $responseCode, response body = $responseBody"
                     )
+                    try {
+                        val errorJson = JSONObject(responseBody)
+                        userRegistrationResponse(
+                            UserRegistrationResponse(
+                                message = errorJson.getString("message"),
+                                success = errorJson.getBoolean("success"),
+                                data = null
+                            )
+                        )
+                        Log.d(
+                            "CheckResponse",
+                            "message = ${errorJson.getString("message")},\n" +
+                                    "success = ${errorJson.getBoolean("success")}"
+                        )
+                    } catch (e: Exception) {
+                        UserRegistrationResponse(
+                            message = "Error: $responseCode $responseBody",
+                            success = false,
+                            data = null
+                        )
+                    }
                 }
             )
         } catch (e: Exception) {
-            Log.d(
-                "CheckResponse", "error status = ${e.message + e.localizedMessage + e.cause}"
+            Log.e(
+                "CheckResponse",
+                "error status = ${e.message + e.localizedMessage + e.cause}"
             )
         }
-
-        return state
     }
 
 
     override suspend fun validateUserRequest(
         loginCredentials: LoginCredentials,
         userLoginResponseBody: (UserLoginResponse) -> Unit
-    ): MutableStateFlow<String?> {
-        val state = MutableStateFlow<String?>(null)
-
+    ) {
         val jsonObject = JSONObject()
         jsonObject.put("email", loginCredentials.email)
         jsonObject.put("fcm_token", loginCredentials.fcm_token)
@@ -77,26 +105,57 @@ class UserRepository(private val context: Context) : IUserRepository {
                 listener = { response ->
                     if (response.getBoolean("success")) {
                         userLoginResponseBody(
-                            Gson().fromJson(response.toString(), UserLoginResponse::class.java)
+                            Gson().fromJson(
+                                response.toString(),
+                                UserLoginResponse::class.java
+                            )
                         )
-                        state.value = response.getString("success")
                     } else {
-                        state.value = response.getString("success")
+                        userLoginResponseBody(
+                            UserLoginResponse(
+                                message = response.getString("message"),
+                                success = response.getBoolean("success"),
+                                data = null
+                            )
+                        )
                     }
                 },
                 errorListener = { error ->
-                    state.value = "false"
+                    val responseCode = error.networkResponse?.statusCode ?: -1
+                    val responseBody =
+                        error.networkResponse?.data?.toString(Charset.defaultCharset()) ?: ""
                     Log.d(
-                        "CheckResponse", "error status = $error"
+                        "CheckResponse",
+                        "error status code = $responseCode, response body = $responseBody"
                     )
+                    try {
+                        val errorJson = JSONObject(responseBody)
+                        userLoginResponseBody(
+                            UserLoginResponse(
+                                message = errorJson.getString("message"),
+                                success = errorJson.getBoolean("success"),
+                                data = null
+                            )
+                        )
+                        Log.d(
+                            "CheckResponse",
+                            "message = ${errorJson.getString("message")},\n" +
+                                    "success = ${errorJson.getBoolean("success")}"
+                        )
+                    } catch (e: Exception) {
+                        UserLoginResponse(
+                            message = "Error: $responseCode $responseBody",
+                            success = false,
+                            data = null
+                        )
+                    }
                 }
             )
         } catch (e: Exception) {
-            Log.d(
-                "CheckResponse", "error status = ${e.message + e.localizedMessage + e.cause}"
+            Log.e(
+                "CheckResponse",
+                "error status = ${e.message + e.localizedMessage + e.cause}"
             )
         }
-
-        return state
     }
 }

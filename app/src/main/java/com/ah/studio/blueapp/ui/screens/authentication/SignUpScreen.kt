@@ -88,7 +88,7 @@ fun SignUpScreen(
                     isLoading = true
                     try {
                         CoroutineScope(Dispatchers.Main).launch {
-                            val response = viewModel.registerUserResponse(
+                            viewModel.registerUserResponse(
                                 User(
                                     civil_id = civilId,
                                     email = email,
@@ -96,29 +96,20 @@ fun SignUpScreen(
                                     last_name = lastName,
                                     password = password,
                                     phone_no = phoneNumber,
-                                    fcm_token = token
+                                    fcm_token = FCM_TOKEN
                                 )
                             )
-                            response.collectLatest { _response ->
-                                if (_response != null) {
-                                    when (_response) {
-                                        "true" -> {
-                                            snackbar = "User registered successfully"
-                                            showSnackBar = true
-                                            onRegisterClick()
-                                            isLoading = false
-                                        }
-                                        "false" -> {
-                                            snackbar = "The Email is already Registered!"
-                                            showSnackBar = true
-                                            isLoading = false
-                                        }
-                                        else -> {
-                                            snackbar = _response
-                                                .ifEmpty { "An Error Occurred, try again later!" }
-                                            showSnackBar = true
-                                            isLoading = false
-                                        }
+                            viewModel.registerResponse.collectLatest { response ->
+                                if (response != null) {
+                                    if (response.success) {
+                                        snackbar = "User registered successfully"
+                                        showSnackBar = true
+                                        onRegisterClick()
+                                        isLoading = false
+                                    } else {
+                                        snackbar = response.message
+                                        showSnackBar = true
+                                        isLoading = false
                                     }
                                 }
                             }

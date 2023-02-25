@@ -38,6 +38,8 @@ fun ProductListScreen(
     subCategoryName: String,
     onProductClick: (productId: Int) -> Unit,
     onSkipButtonClick: () -> Unit,
+    onBackButtonClick: () -> Unit,
+    onCartButtonClick: () -> Unit,
     viewModel: HomeViewModel = getKoin().get()
 ) {
     var isLoading by remember {
@@ -73,7 +75,6 @@ fun ProductListScreen(
                 navigationIconContentDescription = "",
                 text = stringResource(id = R.string.restaurants),
                 actionIcons = {
-
                     Image(
                         painter = painterResource(id = R.drawable.ic_cart),
                         contentDescription = stringResource(
@@ -81,11 +82,16 @@ fun ProductListScreen(
                         ),
                         modifier = Modifier
                             .padding(end = 20.dp)
-                            .size(24.dp),
+                            .size(24.dp)
+                            .clickable {
+                                onCartButtonClick()
+                            },
                         colorFilter = ColorFilter.tint(Color.Black)
                     )
                 },
-                onNavigationIconClick = {}
+                onNavigationIconClick = {
+                    onBackButtonClick()
+                }
             )
         },
         modifier = Modifier.fillMaxSize(),
@@ -184,7 +190,7 @@ fun ProductListScreen(
                     modifier = Modifier
                         .fillMaxWidth(0.3f)
                         .height(50.dp)
-                        .clickable {onSkipButtonClick()}
+                        .clickable { onSkipButtonClick() }
                 ) {
                     Box(
                         modifier = Modifier.fillMaxSize(),

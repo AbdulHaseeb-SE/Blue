@@ -10,6 +10,10 @@ fun NavGraphBuilder.changePasswordComposable(navHostController: NavHostControlle
     composable(
         route = ScreenController.ChangePassword.route
     ){
-        ChangePasswordScreen()
+        ChangePasswordScreen(
+            onBackButtonClick = {
+                navHostController.popBackStack()
+            }
+        )
     }
 }

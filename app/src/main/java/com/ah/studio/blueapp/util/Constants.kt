@@ -31,4 +31,8 @@ object Constants {
     const val REFUND_POLICY_ROUTE = "refund_policy_route"
     const val PARK_BOAT_ROUTE = "park_boat_route"
     const val PARK_BOAT_DETAILS_ROUTE = "parked_boat_details_route"
+    const val PARKING_BOOKING_ROUTE = "parking_booking_route"
+    const val PARKING_MAP_ROUTE = "parking_map_route"
+    const val PARKING_PAYMENT_ROUTE = "parking_payment_route"
+    const val BOOKED_BOAT_DETAIL_ROUTE = "booked_boat_detail_route"
 }

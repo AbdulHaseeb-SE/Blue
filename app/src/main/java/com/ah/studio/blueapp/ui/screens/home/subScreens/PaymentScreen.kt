@@ -6,11 +6,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
-import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,6 +46,7 @@ import java.util.*
 @Composable
 fun PaymentScreen(
     onPayAndConfirmClick: () -> Unit,
+    onBackButtonClick: () -> Unit,
     viewModel: HomeViewModel = getKoin().get()
 ) {
     val bookingDetailsManager = BookingDetailsManager(LocalContext.current)
@@ -63,6 +63,7 @@ fun PaymentScreen(
     val boatGrandTotal = boatTotal.toString()
     var grandTotal = 0
     var isLoading by remember { mutableStateOf(true) }
+    var isBookingLoading by remember { mutableStateOf(false) }
     var boatDetails: BoatDetails? by remember { mutableStateOf(null) }
     var responseStatus by remember { mutableStateOf(0) }
 
@@ -94,7 +95,7 @@ fun PaymentScreen(
         }
     }
 
-    SideEffect {
+    /*SideEffect {
         Log.d("checkPay", responseStatus.toString())
         if (responseStatus == 200) {
             isLoading = false
@@ -102,9 +103,26 @@ fun PaymentScreen(
         } else if (responseStatus != 0) {
             isLoading = false
         }
-    }
+    }*/
 
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    var snackbar by remember { mutableStateOf("") }
+    var showSnackBar by remember { mutableStateOf(false) }
     Scaffold(
+        snackbarHost = {
+            SnackbarHost(snackbarHostState) { data ->
+                if (showSnackBar) {
+                    Snackbar(
+                        actionColor = SeaBlue400,
+                        contentColor = Color.Black,
+                        snackbarData = data,
+                        containerColor = Color.White,
+                        shape = RoundedCornerShape(50.dp)
+                    )
+                }
+            }
+        },
         topBar = {
             TopAppBar(
                 backgroundColor = Color.Transparent,
@@ -113,7 +131,9 @@ fun PaymentScreen(
                 text = stringResource(R.string.payment),
                 navigationIconContentDescription = "",
                 actionIcons = {},
-                onNavigationIconClick = {}
+                onNavigationIconClick = {
+                    onBackButtonClick()
+                }
             )
         },
         modifier = Modifier.fillMaxSize(),
@@ -165,7 +185,8 @@ fun PaymentScreen(
                         if (!cartList.isNullOrEmpty()) {
                             clearCartList(cartList, viewModel)
                         }
-                        CoroutineScope(Dispatchers.IO).launch {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            isBookingLoading = true
                             boatID?.toInt()?.let { boatId ->
                                 boatTotal?.let { boatTotal ->
                                     end?.let { end ->
@@ -193,7 +214,17 @@ fun PaymentScreen(
                                                         )
                                                         viewModel.boatBookingResponse.collectLatest { response ->
                                                             if (response != null) {
-                                                                responseStatus = response.status
+                                                                if (response.status == 200) {
+                                                                    isBookingLoading = false
+                                                                    snackbar =
+                                                                        "Your Boat Booked Successfully!!"
+                                                                    showSnackBar = true
+                                                                    onPayAndConfirmClick()
+                                                                } else {
+                                                                    snackbar = response.message
+                                                                    showSnackBar = true
+                                                                    isBookingLoading = false
+                                                                }
                                                             }
                                                         }
                                                     } catch (e: Exception) {
@@ -206,12 +237,24 @@ fun PaymentScreen(
                                 }
                             }
                         }
-                        onPayAndConfirmClick()
                     }
                 }
             }
             if (isLoading) {
                 CircularProgressBar()
+            }
+            if (isBookingLoading) {
+                CircularProgressBar()
+            }
+        }
+    }
+    if (showSnackBar) {
+        SideEffect {
+            scope.launch {
+                snackbarHostState.showSnackbar(
+                    snackbar, duration = SnackbarDuration.Short
+                )
+                showSnackBar = false
             }
         }
     }
@@ -266,14 +309,14 @@ fun CaptainBoatNameSection(boatDetails: BoatDetails) {
                     color = Color.Black,
                     fontWeight = FontWeight(600),
                     textAlign = TextAlign.Start
-                )
+                )/*
                 Text(
                     text = "Salim Alsafi",
                     fontSize = 13.sp,
                     fontFamily = fontFamily,
                     color = Grey700,
                     textAlign = TextAlign.Start
-                )
+                )*/
             }
         }
 

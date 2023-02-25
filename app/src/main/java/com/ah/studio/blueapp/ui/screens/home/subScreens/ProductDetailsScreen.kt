@@ -185,7 +185,7 @@ fun ProductDetailsScreen(
                                     .padding(start = 4.dp)
                                     .fillMaxWidth(0.6f)
                             )
-                            AddSubtractItem() { qty ->
+                            AddSubtractItem { qty ->
                                 quantity = qty
                             }
                         }

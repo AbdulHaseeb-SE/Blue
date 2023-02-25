@@ -7,6 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -16,12 +17,9 @@ import com.ah.studio.blueapp.ui.theme.SeaBlue08Percent
 import com.ah.studio.blueapp.ui.theme.SeaBlue400
 import com.ah.studio.blueapp.ui.theme.fontFamily
 import com.vanpra.composematerialdialogs.MaterialDialog
-import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
-import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.datetime.time.TimePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
-import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -62,6 +60,7 @@ fun TimePicker(
                 text = formattedTime,
                 fontSize = 17.sp,
                 fontWeight = FontWeight.Normal,
+                color = Color.Black,
                 fontFamily = fontFamily,
                 modifier = Modifier.padding(
                     vertical = 12.dp,
@@ -73,10 +72,24 @@ fun TimePicker(
         MaterialDialog(
             dialogState = timeDialogState,
             buttons = {
-                positiveButton(text = "Ok") {
+                positiveButton(
+                    text = "Ok",
+                    textStyle = TextStyle(
+                        color = OxfordBlue900,
+                        fontFamily = fontFamily,
+                        fontSize = 17.sp
+                    )
+                ) {
                     selectedTime(pickedTime)
                 }
-                negativeButton(text = "Cancel")
+                negativeButton(
+                    text = "Cancel",
+                    textStyle = TextStyle(
+                        color = OxfordBlue900,
+                        fontFamily = fontFamily,
+                        fontSize = 17.sp
+                    )
+                )
             },
         ) {
             timepicker(

@@ -573,41 +573,38 @@ class HomeViewModel(
         return response
     }
 
-    override fun getBoatBookingResponse(bookingBody: BoatBookingBody): Flow<String?> {
-        var response = MutableStateFlow<String?>(null)
-
+    override fun getBoatBookingResponse(bookingBody: BoatBookingBody){
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                response = homeRepository.getBookingResponse(bookingBody = bookingBody) { boatBookingResponse ->
-                    _bookingResponse.value = boatBookingResponse
+                homeRepository.getBookingResponse(bookingBody = bookingBody) { response ->
+                    _bookingResponse.value = response
                     Log.d(
-                        "CheckCreateCartResponse",
-                        "booking response = $boatBookingResponse"
+                        "CheckBoatBookingResponse",
+                        "booking response = $response"
                     )
                 }
             } catch (e: IOException) {
-                response.value = e.message.toString()
+                e.message.toString()
                 Log.d(
-                    "CheckCreateCartResponse",
+                    "CheckBoatBooking",
                     "IOException, ${e.message.toString()}"
                 )
                 return@launch
             } catch (e: HttpException) {
-                response.value = e.message.toString()
+                e.message.toString()
                 Log.d(
-                    "CheckCreateCartResponse",
+                    "CheckBoatBooking",
                     "HttpException, unexpected response"
                 )
                 return@launch
             } catch (e: JsonSyntaxException) {
-                response.value = e.message.toString()
+                e.message.toString()
                 Log.d(
-                    "CheckCreateCartResponse",
+                    "CheckBoatBooking",
                     "JsonSyntaxException: ${e.message.toString()}"
                 )
                 return@launch
             }
         }
-        return response
     }
 }

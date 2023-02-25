@@ -35,6 +35,7 @@ import org.koin.androidx.compose.getKoin
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileScreen(
+    onBackButtonClick: () -> Unit,
     viewModel: AccountViewModel = getKoin().get()
 ) {
     var isLoading by remember {
@@ -100,7 +101,9 @@ fun EditProfileScreen(
                 navigationIconContentDescription = "",
                 text = stringResource(id = R.string.edit_profile),
                 actionIcons = { },
-                onNavigationIconClick = {}
+                onNavigationIconClick = {
+                    onBackButtonClick()
+                }
             )
         },
         modifier = Modifier

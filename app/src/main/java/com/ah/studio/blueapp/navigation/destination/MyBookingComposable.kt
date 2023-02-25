@@ -6,8 +6,12 @@ import androidx.navigation.compose.composable
 import com.ah.studio.blueapp.navigation.ScreenController
 import com.ah.studio.blueapp.ui.screens.myBooking.MyBookingScreen
 
-fun NavGraphBuilder.myBookingComposable(navHostController: NavHostController){
-    composable(ScreenController.MyBooking.route){
-        MyBookingScreen()
+fun NavGraphBuilder.myBookingComposable(navHostController: NavHostController) {
+    composable(ScreenController.MyBooking.route) {
+        MyBookingScreen(
+            onBookedItemClick = { id ->
+                navHostController.navigate(ScreenController.BookedBoatDetail.route + "/$id")
+            }
+        )
     }
 }

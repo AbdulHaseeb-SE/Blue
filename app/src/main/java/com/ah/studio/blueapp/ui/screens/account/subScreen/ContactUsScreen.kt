@@ -39,6 +39,7 @@ import org.koin.androidx.compose.getKoin
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContactUsScreen(
+    onBackButtonClick: () -> Unit,
     viewModel: AccountViewModel = getKoin().get()
 ) {
     var isLoading by remember {
@@ -70,7 +71,9 @@ fun ContactUsScreen(
                 navigationIconContentDescription = "",
                 text = stringResource(id = R.string.contact_us),
                 actionIcons = {},
-                onNavigationIconClick = {}
+                onNavigationIconClick = {
+                    onBackButtonClick()
+                }
             )
         },
         modifier = Modifier

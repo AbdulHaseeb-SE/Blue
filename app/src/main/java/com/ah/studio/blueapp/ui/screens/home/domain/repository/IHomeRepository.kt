@@ -82,5 +82,5 @@ interface IHomeRepository {
     suspend fun getBookingResponse(
         bookingBody: BoatBookingBody,
         boatBookingResponse: (BoatBookingResponse) -> Unit
-    ): MutableStateFlow<String?>
+    )
 }

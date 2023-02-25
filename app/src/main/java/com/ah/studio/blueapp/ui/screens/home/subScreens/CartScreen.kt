@@ -44,6 +44,7 @@ import org.koin.androidx.compose.getKoin
 @Composable
 fun CartScreen(
     onProceedToCheckoutClick: () -> Unit,
+    onBackButtonClick: () -> Unit,
     viewModel: HomeViewModel = getKoin().get()
 ) {
     val bookingDetailsManager = BookingDetailsManager(LocalContext.current)
@@ -93,7 +94,9 @@ fun CartScreen(
                 navigationIconContentDescription = "",
                 text = stringResource(id = R.string.cart),
                 actionIcons = {},
-                onNavigationIconClick = {}
+                onNavigationIconClick = {
+                    onBackButtonClick()
+                }
             )
         },
         modifier = Modifier
@@ -214,7 +217,22 @@ fun CartScreen(
                         }
                     }
                 }
-
+            } else {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = stringResource(R.string.empty_cart),
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = fontFamily,
+                        color = Color.Black,
+                    )
+                }
             }
             Button(
                 width = 0.dp,

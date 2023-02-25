@@ -39,6 +39,7 @@ import org.koin.androidx.compose.getKoin
 @Composable
 fun GalleyScreen(
     boatId: Int,
+    onBackButtonClick: () -> Unit,
     viewModel: HomeViewModel = getKoin().get()
 ) {
     var galleryDetails: List<Gallery>? by remember {
@@ -80,7 +81,9 @@ fun GalleyScreen(
                             .size(24.dp)
                     )
                 },
-                onNavigationIconClick = {}
+                onNavigationIconClick = {
+                    onBackButtonClick()
+                }
             )
         },
         modifier = Modifier.fillMaxSize(),

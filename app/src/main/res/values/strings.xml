@@ -155,4 +155,10 @@
     <string name="my_boats">My Boats</string>
     <string name="select_which_boat_to_park">Select which boat to park</string>
     <string name="parking_name">Parking Name</string>
+    <string name="date">Date</string>
+    <string name="apply">Apply</string>
+    <string name="coupon_code">Coupon Code</string>
+    <string name="discount">Discount</string>
+    <string name="coupon_amount">Coupon Amount</string>
+    <string name="empty_cart">Cart is Empty</string>
 </resources>

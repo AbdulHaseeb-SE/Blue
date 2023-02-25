@@ -22,7 +22,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -100,5 +100,8 @@ dependencies {
     implementation 'com.android.volley:volley:1.2.1'
     // GSON
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+
+    implementation "androidx.work:work-runtime-ktx:2.8.0"
+    implementation "androidx.activity:activity-compose:1.6.1"
 
 }

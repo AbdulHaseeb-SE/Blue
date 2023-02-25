@@ -1,4 +1,4 @@
-package com.ah.studio.blueapp.ui.screens.myBooking.domain.dto
+package com.ah.studio.blueapp.ui.screens.myBooking.domain.dto.bookedBoatList
 
 data class BookingList(
     val booking_id_string: String,

@@ -15,7 +15,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ah.studio.blueapp.R
 import com.ah.studio.blueapp.ui.component.Button
@@ -34,6 +33,7 @@ import org.koin.androidx.compose.getKoin
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChangePasswordScreen(
+    onBackButtonClick: () -> Unit,
     viewModel: AccountViewModel = getKoin().get()
 ) {
     var isLoading by remember {
@@ -73,8 +73,10 @@ fun ChangePasswordScreen(
                 navigationIcon = painterResource(id = R.drawable.ic_back),
                 navigationIconContentDescription = "",
                 text = stringResource(id = R.string.change_password),
-                actionIcons = { },
-                onNavigationIconClick = {}
+                actionIcons = {},
+                onNavigationIconClick = {
+                    onBackButtonClick()
+                }
             )
         },
         modifier = Modifier
@@ -164,7 +166,7 @@ fun ChangePasswordScreen(
                                         showSnackBar = true
                                         isLoading = false
                                     } else {
-                                        snackbar = response.message.toString()
+                                        snackbar = response.message
                                         showSnackBar = true
                                         isLoading = false
                                     }
@@ -189,10 +191,4 @@ fun ChangePasswordScreen(
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun PreviewChangePasswordScreen() {
-    ChangePasswordScreen()
 }

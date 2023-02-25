@@ -2,6 +2,7 @@ package com.ah.studio.blueapp.ui.screens.myBooking
 
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -17,7 +18,7 @@ import com.ah.studio.blueapp.R
 import com.ah.studio.blueapp.ui.component.BookedItem
 import com.ah.studio.blueapp.ui.component.CircularProgressBar
 import com.ah.studio.blueapp.ui.component.TopAppBar
-import com.ah.studio.blueapp.ui.screens.myBooking.domain.dto.BookingList
+import com.ah.studio.blueapp.ui.screens.myBooking.domain.dto.bookedBoatList.BookingList
 import com.ah.studio.blueapp.ui.theme.*
 import com.ah.studio.blueapp.util.coilImageLoadingAsync
 import kotlinx.coroutines.CoroutineScope
@@ -29,6 +30,7 @@ import org.koin.androidx.compose.getKoin
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyBookingScreen(
+    onBookedItemClick: (id: String?) -> Unit,
     viewModel: BoatBookingViewModel = getKoin().get()
 ) {
     var isLoading by remember {
@@ -88,10 +90,13 @@ fun MyBookingScreen(
                                 itemDescription = "",
                                 itemImage = coilImageLoadingAsync(imageUrl = item.image),
                                 price = "${item.grand_total} KWD",
-                                bookingId = "Booking id: ${if (item.booking_id_string!= null) item.booking_id_string else index.toString() }",
+                                bookingId = "Booking id: ${item.id}",
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(bottom = 28.dp)
+                                    .clickable {
+                                        onBookedItemClick(item.id.toString())
+                                    }
                             )
                         }
                     }

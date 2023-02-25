@@ -27,5 +27,6 @@ fun MainNavGraph(navHostController: NavHostController) {
         mainScreenComposable()
         myParkingNavGraph(navHostController)
         parkedBoatDetailsComposable(navHostController)
+        bookedBoatDetailComposable(navHostController)
     }
 }

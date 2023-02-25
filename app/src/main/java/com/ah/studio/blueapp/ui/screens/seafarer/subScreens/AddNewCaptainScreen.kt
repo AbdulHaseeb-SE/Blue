@@ -29,30 +29,6 @@ import com.ah.studio.blueapp.ui.theme.fontFamily
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddNewCaptainScreen() {
-    var captain by remember {
-        mutableStateOf("")
-    }
-    var mobileNumber by remember {
-        mutableStateOf("")
-    }
-    var age by remember {
-        mutableStateOf("")
-    }
-    var nationality by remember {
-        mutableStateOf("")
-    }
-    var spokenLanguages: List<String> by remember {
-        mutableStateOf(listOf())
-    }
-    var experience by remember {
-        mutableStateOf("")
-    }
-    var boatExperience: List<String> by remember {
-        mutableStateOf(listOf())
-    }
-    var licenseNumber by remember {
-        mutableStateOf("")
-    }
     Scaffold(
         topBar = {
             TopAppBar(

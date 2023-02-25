@@ -3,21 +3,17 @@ package com.ah.studio.blueapp.ui.screens.home
 import android.Manifest
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
-import android.provider.Settings
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,16 +26,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import com.ah.studio.blueapp.R
+import com.ah.studio.blueapp.ui.component.CircularProgressBar
 import com.ah.studio.blueapp.ui.component.LocationComponent
-import com.ah.studio.blueapp.ui.component.LocationPermissionTextProvider
-import com.ah.studio.blueapp.ui.component.PermissionDialog
 import com.ah.studio.blueapp.ui.component.VehicleCategoryCard
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.boatCategory.Category
 import com.ah.studio.blueapp.ui.screens.main.viewModel.BottomNavViewModel
 import com.ah.studio.blueapp.ui.theme.*
 import com.ah.studio.blueapp.util.ApiConstants.STORAGE_URL
+import com.ah.studio.blueapp.util.SetStatusBarColor
+import com.ah.studio.blueapp.util.checkLocationStatus
 import com.ah.studio.blueapp.util.locationName
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.CoroutineScope
@@ -55,21 +51,19 @@ fun HomeScreen(
     viewModel: HomeViewModel = getKoin().get(),
     mainViewModel: BottomNavViewModel = getKoin().get()
 ) {
-    val dialogQueue = mainViewModel.visiblePermissionDialogQueue
-    val permissionsToRequest = arrayOf(
-        Manifest.permission.ACCESS_COARSE_LOCATION,
-        Manifest.permission.ACCESS_FINE_LOCATION
-    )
     val context = LocalContext.current
+    val activity = (context as? Activity)
+    BackHandler {
+        activity?.finish()
+    }
+    SetStatusBarColor(true,color = Color.White)
     val locationPermissionResultLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestMultiplePermissions(),
-        onResult = { perms ->
-            permissionsToRequest.forEach { permission ->
-                mainViewModel.onPermissionResult(
-                    permission = permission,
-                    isGranted = perms[permission] == true
-                )
-            }
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            mainViewModel.onPermissionResult(
+                permission = Manifest.permission.ACCESS_FINE_LOCATION,
+                isGranted = isGranted
+            )
         }
     )
     val fusedLocationProviderClient =
@@ -97,6 +91,7 @@ fun HomeScreen(
                 viewModel.categoryList.collectLatest { list ->
                     if (!list.isNullOrEmpty()) {
                         categoryList = list
+                        isLoading = false
                     }
                 }
             } catch (e: Exception) {
@@ -107,6 +102,10 @@ fun HomeScreen(
     }
 
     var hasLocationPermission by remember {
+        mutableStateOf(true)
+    }
+
+    var isLocationEnabled by remember {
         mutableStateOf(true)
     }
 
@@ -121,6 +120,8 @@ fun HomeScreen(
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.Start
             ) {
+                isLocationEnabled = checkLocationStatus(context = context)
+
                 if (hasLocationPermission) {
                     if (checkPermission(context)) {
                         fusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
@@ -132,11 +133,16 @@ fun HomeScreen(
                         }
                     }
                 }
-                location = if (longitude != 0.0 && latitude != 0.0) locationName(
-                    longitude = longitude,
-                    latitude = latitude,
-                    context = context
-                ).ifEmpty { "Fetch Location" } else "Fetch Location"
+                location = if (isLocationEnabled) {
+                    if (longitude != 0.0 && latitude != 0.0) locationName(
+                        longitude = longitude,
+                        latitude = latitude,
+                        context = context
+                    ).ifEmpty { "Fetch Location" } else "Fetch Location"
+                } else {
+                    "Turn-on Location & try again!!"
+                }
+
                 LocationComponent(
                     painterResource(id = R.drawable.ic_location),
                     if (hasLocationPermission) location else "Fetch Location",
@@ -156,7 +162,7 @@ fun HomeScreen(
                                 hasLocationPermission = true
                             }
                         } else {
-                            locationPermissionResultLauncher.launch(permissionsToRequest)
+                            locationPermissionResultLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
                         }
                     }
                 )
@@ -177,58 +183,20 @@ fun HomeScreen(
                 )
 
                 if (categoryList != null) {
-                    isLoading = false
+                    isLoading = true
                     CategoryComponent(
                         categoryList = categoryList!!,
                         onClick = { name, id ->
                             onClick(name, id)
                         }
                     )
+                    isLoading = false
                 }
             }
             if (isLoading) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.White.copy(alpha = 0f))
-                ) {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .size(40.dp)
-                            .align(Alignment.Center),
-                        color = SeaBlue400,
-                        strokeWidth = 4.dp
-                    )
-                }
+                CircularProgressBar()
             }
         }
-        dialogQueue
-            .reversed()
-            .forEach { permission ->
-                PermissionDialog(
-                    permissionTextProvider = when (permission) {
-                        Manifest.permission.ACCESS_FINE_LOCATION -> {
-                            LocationPermissionTextProvider()
-                        }
-                        Manifest.permission.ACCESS_COARSE_LOCATION -> {
-                            LocationPermissionTextProvider()
-                        }
-                        else -> return@forEach
-                    },
-                    isPermanentlyDeclined = !shouldShowRequestPermissionRationale(
-                        Activity(),
-                        permission
-                    ),
-                    onDismiss = mainViewModel::dismissDialog,
-                    onOkClick = {
-                        mainViewModel.dismissDialog()
-                        locationPermissionResultLauncher.launch(
-                            arrayOf(permission)
-                        )
-                    },
-                    onGoToAppSettingsClick = Activity()::openAppSettings
-                )
-            }
     }
 }
 
@@ -286,11 +254,4 @@ private fun checkPermission(
                 context,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
-}
-
-fun Activity.openAppSettings() {
-    Intent(
-        Settings.ACTION_LOCATION_SOURCE_SETTINGS,
-        Uri.fromParts("package", packageName, null)
-    ).also(::startActivity)
 }

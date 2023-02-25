@@ -11,13 +11,8 @@ fun NavGraphBuilder.seafarerComposable(navHostController: NavHostController) {
         route = ScreenController.Seafarer.route
     ) {
         SeafarerScreen(
-            onAddSeafarerClick = {
-                navHostController.navigate(ScreenController.AddSeafarer.route)
-            },
-            onCallClick = {},
-            onMessageClick = {},
-            onPayToUnlockClick = {
-                navHostController.navigate(ScreenController.CaptainPayment.route)
+            onPayToUnlockClick = {captainId, category->
+                navHostController.navigate(ScreenController.CaptainPayment.route+"/$captainId/$category")
             }
         )
     }

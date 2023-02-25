@@ -13,6 +13,9 @@ fun NavGraphBuilder.paymentScreenComposable(navHostController: NavHostController
         PaymentScreen(
             onPayAndConfirmClick = {
                 navHostController.navigate(ScreenController.ThankYou.route)
+            },
+            onBackButtonClick = {
+                navHostController.popBackStack()
             }
         )
     }

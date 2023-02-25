@@ -41,10 +41,7 @@ import org.koin.androidx.compose.getKoin
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SeafarerScreen(
-    onAddSeafarerClick: () -> Unit,
-    onMessageClick: () -> Unit,
-    onCallClick: () -> Unit,
-    onPayToUnlockClick: () -> Unit,
+    onPayToUnlockClick: (captainId: Int, category: String) -> Unit,
     viewModel: SeafarerViewModel = getKoin().get()
 ) {
     var isLoading by remember {
@@ -56,9 +53,9 @@ fun SeafarerScreen(
     var seafarerCategoryListResponse: SeafarerCategoryResponse? by remember {
         mutableStateOf(null)
     }
-    var seafarerListResponse: SeafarerListResponse? by remember {
-        mutableStateOf(null)
-    }
+        var seafarerListResponse: SeafarerListResponse? by remember {
+            mutableStateOf(null)
+        }
     val context = LocalContext.current
 
     SideEffect {
@@ -150,7 +147,10 @@ fun SeafarerScreen(
                                             },
                                             onPayToUnlockClick = {
                                                 if (seafarerListResponse != null) {
-                                                    onPayToUnlockClick()
+                                                    onPayToUnlockClick(
+                                                        item.id,
+                                                        item.category
+                                                    )
                                                 }
                                             }
                                         )

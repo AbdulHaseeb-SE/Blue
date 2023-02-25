@@ -7,9 +7,14 @@ import com.ah.studio.blueapp.navigation.ScreenController
 import com.ah.studio.blueapp.ui.screens.myParking.subScreens.BoatListScreen
 
 fun NavGraphBuilder.parkBoatComposable(navHostController: NavHostController) {
-    composable(ScreenController.ParkBoat.route){
+    composable(ScreenController.ParkBoat.route) {
         BoatListScreen(
-            onParkNowClick = {}
+            onParkNowClick = { id ->
+                navHostController.navigate(ScreenController.ParkingBooking.route + "/$id")
+            },
+            onBackButtonClick = {
+                navHostController.popBackStack()
+            }
         )
     }
 }

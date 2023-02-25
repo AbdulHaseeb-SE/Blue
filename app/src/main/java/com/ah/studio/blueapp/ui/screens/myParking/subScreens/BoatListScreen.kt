@@ -33,7 +33,8 @@ import org.koin.androidx.compose.getKoin
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BoatListScreen(
-    onParkNowClick: () -> Unit,
+    onParkNowClick: (id: Int) -> Unit,
+    onBackButtonClick: () -> Unit,
     viewModel: ParkingViewModel = getKoin().get()
 ) {
     var isLoading by remember {
@@ -62,7 +63,9 @@ fun BoatListScreen(
                 navigationIconContentDescription = "",
                 text = stringResource(id = R.string.my_boats),
                 actionIcons = { },
-                onNavigationIconClick = {}
+                onNavigationIconClick = {
+                    onBackButtonClick()
+                }
             )
         },
         modifier = Modifier
@@ -121,7 +124,7 @@ fun BoatListScreen(
                                     R.string.park_now
                                 ),
                                 onParkNowClick = {
-                                    onParkNowClick()
+                                    onParkNowClick(item.id)
                                 }
                             )
                         }

@@ -34,6 +34,7 @@ import org.koin.androidx.compose.getKoin
 fun DestinationScreen(
     boatId: Int,
     selectedDestinationId: (Int) -> Unit,
+    onBackButtonClick: () -> Unit,
     viewModel: HomeViewModel = getKoin().get()
 ) {
     val selectedItemColor by remember { mutableStateOf(SeaBlue400) }
@@ -47,7 +48,6 @@ fun DestinationScreen(
     val scope = rememberCoroutineScope()
     var snackbar by remember { mutableStateOf("") }
     var showSnackBar by remember { mutableStateOf(false) }
-
 
     SideEffect {
         CoroutineScope(Dispatchers.IO).launch {
@@ -95,7 +95,9 @@ fun DestinationScreen(
                 text = stringResource(R.string.destination),
                 navigationIconContentDescription = "",
                 actionIcons = {},
-                onNavigationIconClick = {}
+                onNavigationIconClick = {
+                    onBackButtonClick()
+                }
             )
         },
         modifier = Modifier

@@ -43,6 +43,7 @@ fun BoatDetailsScreen(
     onViewAllClick: () -> Unit,
     onBookNowClick: () -> Unit,
     onReviewsClick: () -> Unit,
+    onBackButtonClick: () -> Unit,
     viewModel: HomeViewModel = getKoin().get()
 ) {
     Log.d("CheckBoatId", boatId.toString())
@@ -93,7 +94,9 @@ fun BoatDetailsScreen(
                 text = "",
                 navigationIconContentDescription = stringResource(id = R.string.back_button),
                 actionIcons = {},
-                onNavigationIconClick = {})
+                onNavigationIconClick = {
+                    onBackButtonClick()
+                })
         },
         modifier = Modifier
             .fillMaxSize()
