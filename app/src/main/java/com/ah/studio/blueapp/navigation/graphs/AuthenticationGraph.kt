@@ -11,7 +11,7 @@ import com.ah.studio.blueapp.util.Graph
 fun NavGraphBuilder.authNavGraph(navHostController: NavHostController) {
     navigation(
         route = Graph.AUTHENTICATION,
-        startDestination = ScreenController.SignUp.route
+        startDestination = ScreenController.SignIn.route
     ) {
         signUpComposable(navHostController)
         signInComposable(navHostController)

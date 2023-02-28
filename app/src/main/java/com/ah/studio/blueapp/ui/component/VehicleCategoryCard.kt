@@ -12,20 +12,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import com.ah.studio.blueapp.R
 
 @Composable
 fun VehicleCategoryCard(
     backgroundColor: Color,
     shape: Shape,
     elevation: Dp,
-    vehicleImage: Painter,
+    imageUrl: String,
     vehicleName: String,
     textColor: Color,
     textSize: TextUnit,
@@ -42,6 +45,14 @@ fun VehicleCategoryCard(
     nameEndPadding: Dp = 0.dp,
     onCardClick: (String) -> Unit
 ) {
+    val painter = rememberAsyncImagePainter(
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(imageUrl)
+            .crossfade(500)
+            .error(R.drawable.yacht)
+            .build(),
+        contentScale = ContentScale.Crop
+    )
     Card(
         modifier = modifier
             .clickable { onCardClick(vehicleName) },
@@ -54,7 +65,7 @@ fun VehicleCategoryCard(
                 .fillMaxSize()
         ) {
             Image(
-                painter = vehicleImage,
+                painter = painter,
                 contentDescription = "",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -64,7 +75,7 @@ fun VehicleCategoryCard(
                         start = imageStartPadding,
                         end = imageEndPadding
                     )
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
             )
             Text(
                 text = vehicleName,

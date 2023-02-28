@@ -11,8 +11,12 @@ fun NavGraphBuilder.signUpComposable(navHostController: NavHostController) {
         route = ScreenController.SignUp.route
     ) {
         SignUpScreen(
-            onRegisterClick = {},
+            onRegisterClick = {
+                navHostController.popBackStack()
+                navHostController.navigate(ScreenController.SignIn.route)
+            },
             onSignInClick = {
+                navHostController.popBackStack()
                 navHostController.navigate(ScreenController.SignIn.route)
             }
         )

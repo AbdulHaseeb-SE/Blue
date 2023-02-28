@@ -7,8 +7,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ah.studio.blueapp.ui.theme.OxfordBlue900
@@ -23,6 +23,7 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun DatePicker(
+    modifier: Modifier = Modifier,
     currentDate: LocalDate = LocalDate.now(),
     selectedDate: (LocalDate) -> Unit
 ) {
@@ -42,14 +43,14 @@ fun DatePicker(
     val dateDialogState = rememberMaterialDialogState()
 
     BlueRoundedCornerShape(
-        modifier = Modifier
+        modifier = modifier
             .wrapContentHeight()
-            .wrapContentWidth()
             .clickable {
                 dateDialogState.show()
             }
     ) {
         Column(
+            modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -57,6 +58,7 @@ fun DatePicker(
                 text = formattedDate,
                 fontSize = 17.sp,
                 fontWeight = FontWeight.Normal,
+                color = Color.Black,
                 fontFamily = fontFamily,
                 modifier = Modifier.padding(
                     vertical = 12.dp,
@@ -68,10 +70,24 @@ fun DatePicker(
         MaterialDialog(
             dialogState = dateDialogState,
             buttons = {
-                positiveButton(text = "Ok") {
+                positiveButton(
+                    text = "Ok",
+                    textStyle = TextStyle(
+                        color = OxfordBlue900,
+                        fontFamily = fontFamily,
+                        fontSize = 17.sp
+                    )
+                ) {
                     selectedDate(pickedDate)
                 }
-                negativeButton(text = "Cancel")
+                negativeButton(
+                    text = "Cancel",
+                    textStyle = TextStyle(
+                        color = OxfordBlue900,
+                        fontFamily = fontFamily,
+                        fontSize = 17.sp
+                    )
+                )
             },
         ) {
             datepicker(
@@ -88,11 +104,4 @@ fun DatePicker(
             }
         }
     }
-}
-
-
-@Composable
-@Preview
-fun PreviewDatePicker() {
-    DatePicker(){}
 }

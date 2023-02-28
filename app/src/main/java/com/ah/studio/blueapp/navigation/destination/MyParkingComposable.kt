@@ -5,11 +5,19 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.ah.studio.blueapp.navigation.ScreenController
 import com.ah.studio.blueapp.ui.screens.myParking.MyParkingScreen
+import com.ah.studio.blueapp.util.Graph
 
-fun NavGraphBuilder.myParkingComposable(navHostController: NavHostController){
+fun NavGraphBuilder.myParkingComposable(navHostController: NavHostController) {
     composable(
         route = ScreenController.MyParking.route
-    ){
-        MyParkingScreen(navHostController = navHostController)
+    ) {
+        MyParkingScreen(
+            onAddBoatClick = {
+                navHostController.navigate(Graph.MyParkingGraph)
+            },
+            onParkedBoatClick = {id->
+                navHostController.navigate(ScreenController.ParkedBoatDetails.route+"/$id")
+            }
+        )
     }
 }

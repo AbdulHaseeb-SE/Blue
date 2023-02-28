@@ -41,7 +41,8 @@ fun TopAppBar(
                     Icon(
                         modifier = modifier.size(24.dp),
                         painter = navigationIcon,
-                        contentDescription = navigationIconContentDescription
+                        contentDescription = navigationIconContentDescription,
+                        tint =  contentColor
                     )
                 }
             }

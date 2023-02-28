@@ -27,7 +27,8 @@ fun BookedItem(
     itemImage: Painter,
     price: String,
     bookingId: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    bookingStatus:String = stringResource(id = R.string.booked)
 ) {
     Row(
         modifier = modifier
@@ -94,7 +95,7 @@ fun BookedItem(
                     )
 
                     Text(
-                        text = stringResource(R.string.booked),
+                        text = bookingStatus,
                         fontSize = 17.sp,
                         fontWeight = FontWeight.Normal,
                         fontFamily = fontFamily,

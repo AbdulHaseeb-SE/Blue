@@ -14,8 +14,10 @@ fun NavGraphBuilder.homeComposable(
         route = ScreenController.Home.route
     ) {
         HomeScreen(
-            onClick = { categoryName ->
-                navHostController.navigate(Graph.HomeGraph + "/$categoryName")
+            onClick = { categoryName, id ->
+                navHostController.navigate(
+                    Graph.HomeGraph + "/$categoryName/$id"
+                )
             }
         )
     }

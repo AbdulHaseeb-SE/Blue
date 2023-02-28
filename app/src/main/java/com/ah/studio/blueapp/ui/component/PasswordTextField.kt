@@ -7,7 +7,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -28,6 +27,7 @@ fun PasswordTextField(
     placeholder: String,
     modifier: Modifier = Modifier,
     keyboardType: KeyboardType = KeyboardType.Text,
+    imeAction: ImeAction = ImeAction.Next,
     value: (String) -> Unit
 ) {
     var text by remember {
@@ -77,7 +77,7 @@ fun PasswordTextField(
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 keyboardType = keyboardType,
-                imeAction = ImeAction.Next
+                imeAction = imeAction,
             ),
             visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {

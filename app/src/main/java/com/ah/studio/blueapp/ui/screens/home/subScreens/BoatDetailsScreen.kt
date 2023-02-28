@@ -1,18 +1,17 @@
 package com.ah.studio.blueapp.ui.screens.home.subScreens
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import android.util.Log
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,16 +23,67 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ah.studio.blueapp.R
-import com.ah.studio.blueapp.ui.component.Button
-import com.ah.studio.blueapp.ui.component.RoundedCornerImageView
-import com.ah.studio.blueapp.ui.component.StarRatingBar
-import com.ah.studio.blueapp.ui.component.TopAppBar
+import com.ah.studio.blueapp.ui.component.*
+import com.ah.studio.blueapp.ui.screens.home.HomeViewModel
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.boatDetails.BoatDetails
+import com.ah.studio.blueapp.ui.screens.home.domain.dto.gallery.Gallery
 import com.ah.studio.blueapp.ui.theme.*
+import com.ah.studio.blueapp.util.coilImageLoadingAsync
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import org.koin.androidx.compose.getKoin
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BoatDetailsScreen() {
+fun BoatDetailsScreen(
+    boatId: Int,
+    onViewAllClick: () -> Unit,
+    onBookNowClick: () -> Unit,
+    onReviewsClick: () -> Unit,
+    onBackButtonClick: () -> Unit,
+    viewModel: HomeViewModel = getKoin().get()
+) {
+    Log.d("CheckBoatId", boatId.toString())
+
+    var galleryDetails: List<Gallery>? by remember {
+        mutableStateOf(listOf())
+    }
+    var boatDetails: BoatDetails? by remember {
+        mutableStateOf(null)
+    }
+
+    var isLoading by remember { mutableStateOf(true) }
+
+    SideEffect {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                viewModel.getBoatDetailsResponse(boatId = boatId)
+                viewModel.boatDetailsResponse.collectLatest { response ->
+                    response?.data?.forEach {
+                        boatDetails = it
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("Exception", "${e.message.toString()} ${e.cause} ${e.localizedMessage}")
+            }
+        }
+    }
+
+    SideEffect {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                viewModel.getGalleryImageResponse(boatId = boatId)
+                viewModel.galleryImagesResponse.collectLatest { response ->
+                    galleryDetails = response?.data
+                }
+            } catch (e: Exception) {
+                Log.e("Exception", "${e.message.toString()} ${e.cause} ${e.localizedMessage}")
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -44,50 +94,109 @@ fun BoatDetailsScreen() {
                 text = "",
                 navigationIconContentDescription = stringResource(id = R.string.back_button),
                 actionIcons = {},
-                onNavigationIconClick = {})
+                onNavigationIconClick = {
+                    onBackButtonClick()
+                })
         },
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ) {
-            RoundedCornerImageView(
-                painter = painterResource(id = R.drawable.ic_boat_bottom_rounded),
-                shape = RoundedCornerShape(
-                    topEnd = 0.dp,
-                    topStart = 0.dp,
-                    bottomStart = 10.dp,
-                    bottomEnd = 10.dp
-                ),
-                contentScale = ContentScale.Crop,
+
+        var imageClickedIndex: Int? by remember {
+            mutableStateOf(null)
+        }
+
+        Box {
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(370.dp)
-            )
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .background(Color.White)
+            ) {
+                isLoading = true
+                boatDetails
+                    ?.let { it1 -> coilImageLoadingAsync(imageUrl = it1.featured_image) }
+                    ?.let { boatImage ->
+                        isLoading = false
+                        RoundedCornerImageView(
+                            painter = boatImage,
+                            shape = RoundedCornerShape(
+                                topEnd = 0.dp,
+                                topStart = 0.dp,
+                                bottomStart = 16.dp,
+                                bottomEnd = 16.dp
+                            ),
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(370.dp)
+                        )
+                    }
 
-            BoatNameDetailsSection()
+                BoatNameDetailsSection(boatDetails)
 
-            BoatGallerySection()
+                BoatGallerySection(
+                    boatDetails,
+                    galleryDetails,
+                    onViewAllClick = { onViewAllClick() },
+                    onImageClick = { index ->
+                        imageClickedIndex = index
+                    }
+                )
+                FacilitiesSection(boatDetails)
 
-            FacilitiesSection()
+                AddressSection(boatDetails)
 
-            AddressSection()
-
-            BottomSection()
-
+                BottomSection(
+                    onBookNowClick = {
+                        isLoading = true
+                        onBookNowClick()
+                    },
+                    onReviewsClick = {
+                        onReviewsClick()
+                    }
+                )
+            }
+            if (isLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.White)
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .align(Alignment.Center),
+                        color = SeaBlue400,
+                        strokeWidth = 4.dp
+                    )
+                }
+            }
+            if (imageClickedIndex != null) {
+                galleryDetails?.let { list ->
+                    ImageViewer(
+                        images = list,
+                        clickedImageIndex = imageClickedIndex!!
+                    ) {
+                        imageClickedIndex = null
+                    }
+                }
+            }
         }
     }
-
 }
 
 @Composable
-fun BottomSection() {
+fun BottomSection(
+    onBookNowClick: () -> Unit,
+    onReviewsClick: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 20.dp, bottom = 40.dp, start = PaddingDouble, end = PaddingDouble),
+            .padding(top = 20.dp, bottom = 40.dp, start = PaddingDouble, end = PaddingDouble)
+            .background(Color.White),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -98,17 +207,28 @@ fun BottomSection() {
             backgroundColor = SeaBlue400,
             shape = Shapes.medium
         ) {
-
+            onBookNowClick()
+        }
+        Button(
+            width = 283.dp,
+            height = 50.dp,
+            text = stringResource(R.string.reviews),
+            backgroundColor = SeaBlue400,
+            shape = Shapes.medium,
+            modifier = Modifier.padding(top = PaddingDouble)
+        ) {
+            onReviewsClick()
         }
     }
 }
 
 @Composable
-fun AddressSection() {
+fun AddressSection(boatDetails: BoatDetails?) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 23.dp, horizontal = PaddingDouble),
+            .padding(vertical = 30.dp, horizontal = PaddingDouble)
+            .background(Color.White),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.Start
     ) {
@@ -119,6 +239,7 @@ fun AddressSection() {
             Image(
                 painter = painterResource(id = R.drawable.ic_circled_location),
                 contentDescription = stringResource(R.string.location_icon),
+                modifier = Modifier.size(40.dp)
             )
 
             Column(
@@ -135,33 +256,47 @@ fun AddressSection() {
                     modifier = Modifier
                         .fillMaxWidth()
                 )
-                Text(
-                    text = "Marina Mall, Salmiya",
-                    fontSize = 14.sp,
-                    fontFamily = fontFamily,
-                    color = Color.Black,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
+                boatDetails?.pickup_address?.let {
+                    Text(
+                        text = it,
+                        fontSize = 14.sp,
+                        fontFamily = fontFamily,
+                        color = Color.Black,
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+                }
             }
         }
 
-        Row(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(
-                    vertical = 22.dp,
-                    horizontal = 50.dp
-                ),
+                .height(90.dp)
+                .background(Color.White)
+                .padding(top = 5.dp)
+        ) {
+//map to show here
+        }
+
+        /*Row(
+            modifier = Modifier
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_captian_cap),
+                contentDescription = stringResource(R.string.seafarer),
+                modifier = Modifier.size(40.dp)
+                    .padding(5.dp)
+            )
             Column(
                 modifier = Modifier.padding(horizontal = 9.dp),
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = stringResource(R.string.captain),
+                    text = stringResource(R.string.seafarer),
                     fontSize = 17.sp,
                     fontFamily = fontFamily,
                     color = Color.Black,
@@ -170,17 +305,32 @@ fun AddressSection() {
                     modifier = Modifier
                         .fillMaxWidth()
                 )
+                if (boatDetails?.seafarer_name.isNullOrEmpty()) {
+                    Text(
+                        text = stringResource(R.string.no_seafarer_hired_yet),
+                        fontSize = 17.sp,
+                        fontFamily = fontFamily,
+                        color = Color.Black,
+                        fontWeight = FontWeight.Normal,
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+                } else {
+
+                }
             }
-        }
+        }*/
     }
 }
 
 @Composable
-fun FacilitiesSection() {
+fun FacilitiesSection(boatDetails: BoatDetails?) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 30.dp),
+            .padding(top = 30.dp)
+            .background(Color.White),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -195,125 +345,185 @@ fun FacilitiesSection() {
                 .fillMaxWidth()
                 .padding(horizontal = PaddingDouble)
         )
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 21.dp, start = PaddingHalf, end = PaddingDouble),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            LazyRow(content = {
-                itemsIndexed(
-                    listOf(
-                        R.drawable.ic_wifi,
-                        R.drawable.ic_food,
-                        R.drawable.ic_snack,
-                        R.drawable.ic_ac
+        if (boatDetails?.facilities?.isNotEmpty() == true) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 20.dp, start = PaddingHalf, end = PaddingDouble),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                LazyRow(content = {
+                    itemsIndexed(
+                        boatDetails.facilities
+                    ) { _, item ->
+                        RoundedCornerImageView(
+                            painter = coilImageLoadingAsync(imageUrl = item.image),
+                            shape = Shapes.medium,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .padding(start = 8.dp)
+                                .width(80.dp)
+                                .height(80.dp)
+                        )
+                    }
+                })
+            }
+        } else {
+            Text(
+                text = "No Facilities are available yet!!",
+                fontSize = 17.sp,
+                fontFamily = fontFamily,
+                color = Color.Black,
+                fontWeight = FontWeight.Normal,
+                textAlign = TextAlign.Start,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = PaddingDouble,
+                        end = PaddingDouble
                     )
-                ) { _, image ->
-                    RoundedCornerImageView(
-                        painter = painterResource(id = image),
-                        shape = Shapes.medium,
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier
-                            .padding(start = 8.dp)
-                    )
-                }
-            })
+            )
         }
     }
 }
 
 @Composable
-fun BoatGallerySection() {
+fun BoatGallerySection(
+    boatDetails: BoatDetails?, galleryDetails: List<Gallery>?,
+    onViewAllClick: () -> Unit,
+    onImageClick: (index: Int) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 22.dp)
+            .padding(top = 14.dp)
+            .background(Color.White)
     ) {
-        Text(
-            text = "View all",
-            fontSize = 14.sp,
-            fontFamily = fontFamily,
-            color = Grey500,
-            textAlign = TextAlign.End,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = PaddingDouble)
-        )
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 12.dp, end = PaddingDouble),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            LazyRow(content = {
-                itemsIndexed(
-                    listOf(
-                        R.drawable.boat,
-                        R.drawable.ic_boat,
-                        R.drawable.boat
-                    )
-                ) { _, image ->
-                    RoundedCornerImageView(
-                        painter = painterResource(id = image),
-                        shape = Shapes.medium,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .width(124.dp)
-                            .height(112.dp)
-                            .padding(start = 16.dp)
-                    )
+        if (galleryDetails.isNullOrEmpty()) {
+            Text(
+                text = "No data found in gallery !!",
+                fontSize = 14.sp,
+                fontFamily = fontFamily,
+                color = Color.Black,
+                textAlign = TextAlign.Start,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = PaddingDouble, vertical = 20.dp)
+            )
+        } else {
+            Text(
+                text = "View all",
+                fontSize = 14.sp,
+                fontFamily = fontFamily,
+                color = Grey500,
+                textAlign = TextAlign.End,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = PaddingDouble)
+                    .clickable { onViewAllClick() }
+            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 12.dp, end = PaddingDouble),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                LazyRow {
+                    itemsIndexed(
+                        galleryDetails
+                    ) { index, item ->
+                        RoundedCornerImageView(
+                            painter = coilImageLoadingAsync(imageUrl = item.image),
+                            shape = Shapes.medium,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .width(124.dp)
+                                .height(112.dp)
+                                .padding(start = 16.dp)
+                                .clickable {
+                                    onImageClick(index)
+                                }
+                        )
+                    }
                 }
-            })
+            }
         }
 
-        Text(
-            text = stringResource(R.string.dummy_description),
-            fontSize = 17.sp,
-            fontFamily = fontFamily,
-            color = Color.Black,
-            textAlign = TextAlign.Justify,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    start = PaddingDouble,
-                    end = PaddingDouble,
-                    top = 70.dp
-                )
-        )
+
+        boatDetails?.description?.let {
+            Text(
+                text = stringResource(R.string.description),
+                fontSize = 17.sp,
+                fontFamily = fontFamily,
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Start,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = PaddingDouble,
+                        end = PaddingDouble,
+                        top = 30.dp
+                    )
+            )
+            Text(
+                text = it,
+                fontSize = 17.sp,
+                fontFamily = fontFamily,
+                color = Color.Black,
+                textAlign = TextAlign.Justify,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = PaddingDouble,
+                        end = PaddingDouble
+                    )
+            )
+        }
     }
 }
 
 @Composable
-fun BoatNameDetailsSection() {
+fun BoatNameDetailsSection(boatDetails: BoatDetails?) {
     Column(
-        modifier = Modifier.padding(
-            horizontal = PaddingDouble,
-            vertical = PaddingHalf
-        )
+        modifier = Modifier
+            .padding(
+                horizontal = PaddingDouble,
+                vertical = PaddingHalf
+            )
+            .background(Color.White)
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .background(Color.White),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(
-                modifier = Modifier.wrapContentWidth()
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .background(Color.White)
             ) {
-                Text(
-                    text = "Catamaran Boats",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    fontFamily = fontFamily,
-                    color = Color.Black
-                )
+                boatDetails?.name?.let {
+                    Text(
+                        text = it,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        fontFamily = fontFamily,
+                        color = Color.Black
+                    )
+                }
 
                 StarRatingBar(
-                    rating = 4.0,
-                    modifier = Modifier.background(Color.Transparent)
+                    rating = if (boatDetails?.boat_rating != null) boatDetails.boat_rating.toString()
+                        .toDouble() else 0.0,
+                    modifier = Modifier
+                        .background(Color.Transparent)
+                        .padding(top = 5.dp)
+                        .height(20.dp)
                 )
             }
             Column(
@@ -321,7 +531,7 @@ fun BoatNameDetailsSection() {
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Starting from\n 100.000 KWD",
+                    text = "Starting from\n ${boatDetails?.starting_from} KWD",
                     fontSize = 17.sp,
                     fontFamily = fontFamily,
                     color = OxfordBlue900
@@ -331,10 +541,3 @@ fun BoatNameDetailsSection() {
     }
 }
 
-/*
-
-@Preview
-@Composable
-fun Preview() {
-    BoatDetailsScreen()
-}*/

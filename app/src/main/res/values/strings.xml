@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BlueApp</string>
+    <string name="app_name">BLUE</string>
     <string name="register">Register</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
@@ -140,4 +140,32 @@
     <string name="boat_experience">"Boat Experience : "</string>
     <string name="spoken_languages_text">"Spoken Languages : "</string>
     <string name="pay_to_unlock">Pay to Unlock</string>
+    <string name="fetch_location">Fetch Location</string>
+    <string name="kwd">KWD</string>
+    <string name="starting_from">Starting from</string>
+    <string name="seafarer">Seafarer List</string>
+    <string name="no_seafarer_hired_yet">No Seafarer Hired Yet !!</string>
+    <string name="reviews">Reviews</string>
+    <string name="skip">SKIP</string>
+    <string name="button_cart">go to cart button</string>
+    <string name="delete_item">delete item</string>
+    <string name="view_cart">View Cart</string>
+    <string name="seafarer_text">Seafarer</string>
+    <string name="no_boat_parked">No Boat Parked Yet!!</string>
+    <string name="my_boats">My Boats</string>
+    <string name="select_which_boat_to_park">Select which boat to park</string>
+    <string name="parking_name">Parking Name</string>
+    <string name="date">Date</string>
+    <string name="apply">Apply</string>
+    <string name="coupon_code">Coupon Code</string>
+    <string name="discount">Discount</string>
+    <string name="coupon_amount">Coupon Amount</string>
+    <string name="empty_cart">Cart is Empty</string>
+    <string name="logout_confirmation">Logout Confirmation</string>
+    <string name="logout_question">Are you sure you want to log out?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="confirmation">Confirmation</string>
+    <string name="skip_confirmation_dialog_message">By Pressing Skip, Any added package will be removed.</string>
+    <string name="proceed_to_cart">Proceed To Cart</string>
 </resources>

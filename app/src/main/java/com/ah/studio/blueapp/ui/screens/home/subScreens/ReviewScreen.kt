@@ -1,6 +1,5 @@
 package com.ah.studio.blueapp.ui.screens.home.subScreens
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -225,6 +224,6 @@ fun ItemSection() {
 
 @Preview
 @Composable
-fun PreviewReviewScreen() {
+fun PreviewReview(){
     ReviewScreen()
 }

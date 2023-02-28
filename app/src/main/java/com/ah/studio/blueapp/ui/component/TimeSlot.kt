@@ -1,5 +1,6 @@
 package com.ah.studio.blueapp.ui.component
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,34 +15,37 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ah.studio.blueapp.ui.theme.*
+import com.ah.studio.blueapp.util.trimTimeToHrMin
 
 @Composable
 fun TimeSlotTable(
     startingSlot: String,
     endingSlot: String,
+    duration: Int,
     modifier: Modifier = Modifier,
     startingTime: (String) -> Unit,
     endingTime: (String) -> Unit
 ) {
     var startingSelectedSlot by remember {
-        mutableStateOf(startingSlot)
+        mutableStateOf("")
     }
     var endingSelectedSlot by remember {
-        mutableStateOf(endingSlot)
+        mutableStateOf("")
     }
-    var isFirstSelect by remember {
-        mutableStateOf(true)
-    }
+    /*  var isFirstSelect by remember {
+          mutableStateOf(true)
+      }*/
     var rangeStartIndex by remember {
         mutableStateOf(-1)
     }
     var rangeEndIndex by remember {
         mutableStateOf(-1)
     }
+
+    Log.d("CheckTimeSlot", endingSlot)
 
     val slots = listOf(
         listOf("00:00", "01:00", "02:00", "03:00", "04:00", "05:00"),
@@ -71,15 +75,15 @@ fun TimeSlotTable(
     }
 
     LazyColumn(
-        modifier = modifier.background(Color.White)
+        modifier = modifier
+            .background(Color.White)
             .fillMaxWidth()
-            .height(200.dp)
+            .height(195.dp)
     ) {
         itemsIndexed(
             slots
         ) { rowIndex, item ->
             val context = LocalContext.current
-
             BlueRoundedCornerShape(
                 modifier = Modifier
                     .wrapContentWidth()
@@ -102,6 +106,18 @@ fun TimeSlotTable(
                             containerColor = if (currentIndex in rangeStartIndex..rangeEndIndex) SeaBlue50Percent else Color.White,
                             borderColor = Color.Transparent,
                             shape = when (text) {
+                                startingSlot -> {
+                                    RoundedCornerShape(
+                                        topStart = 50.dp,
+                                        bottomStart = 50.dp,
+                                    )
+                                }
+                                endingSlot -> {
+                                    RoundedCornerShape(
+                                        topEnd = 50.dp,
+                                        bottomEnd = 50.dp,
+                                    )
+                                }
                                 startingSelectedSlot -> {
                                     if (text.indexOf(startingSelectedSlot) > text.indexOf(
                                             startingSlot
@@ -171,7 +187,17 @@ fun TimeSlotTable(
                                 modifier = Modifier.wrapContentSize(),
                                 containerColor = if (text == startingSelectedSlot || text == endingSelectedSlot) OxfordBlue900 else Color.Transparent,
                                 borderColor = if (text == startingSelectedSlot || text == endingSelectedSlot) SeaBlue400 else Color.Transparent,
-                                shape = RoundedCornerShape(50.dp)
+                                shape = if (text == startingSelectedSlot) RoundedCornerShape(
+                                    topStart = 50.dp,
+                                    topEnd = 0.dp,
+                                    bottomStart = 50.dp,
+                                    bottomEnd = 0.dp
+                                ) else RoundedCornerShape(
+                                    topStart = 0.dp,
+                                    topEnd = 50.dp,
+                                    bottomStart = 0.dp,
+                                    bottomEnd = 50.dp
+                                )
                             ) {
                                 Text(
                                     text = text,
@@ -186,64 +212,32 @@ fun TimeSlotTable(
                                             vertical = 8.dp
                                         )
                                         .clickable {
-
-                                            if (isFirstSelect) {
-                                                if (
-                                                    currentIndex in rangeStartIndex..rangeEndIndex &&
-                                                    currentIndex < rangeEndIndex
-                                                ) {
-                                                    if (
-                                                        text < endingSelectedSlot
-                                                    ) {
-                                                        startingSelectedSlot = text
-                                                        isFirstSelect = !isFirstSelect
-                                                        startingTime(text)
-                                                        Toast
-                                                            .makeText(
-                                                                context,
-                                                                "Starting Time: $text ",
-                                                                Toast.LENGTH_LONG
-                                                            )
-                                                            .show()
-                                                    } else {
-                                                        Toast
-                                                            .makeText(
-                                                                context,
-                                                                "Starting Time must be less than Ending Time",
-                                                                Toast.LENGTH_LONG
-                                                            )
-                                                            .show()
-                                                    }
-                                                }
+                                            if (
+                                                (currentIndex in (rangeStartIndex..rangeEndIndex)) &&
+                                                (currentIndex <= (rangeEndIndex - duration))
+                                            ) {
+                                                startingSelectedSlot = text
+                                                startingTime(text)
+                                                val trimmedTimeSlot =
+                                                    trimTimeToHrMin(startingSelectedSlot)
+                                                val formatTrimmedText =
+                                                    String.format(
+                                                        "%02d",
+                                                        (trimmedTimeSlot.toInt()) + duration
+                                                    )
+                                                endingSelectedSlot =
+                                                    if ("$formatTrimmedText:00" <= endingSlot) "$formatTrimmedText:00" else ""
+                                                endingTime(endingSelectedSlot)
                                             } else {
-                                                if (
-                                                    currentIndex in rangeStartIndex..rangeEndIndex &&
-                                                    currentIndex > rangeStartIndex
-                                                ) {
-                                                    if (
-                                                        text > startingSelectedSlot) {
-                                                        endingSelectedSlot = text
-                                                        isFirstSelect = !isFirstSelect
-                                                        endingTime(text)
-                                                        Toast
-                                                            .makeText(
-                                                                context,
-                                                                "Ending Time: $text ",
-                                                                Toast.LENGTH_LONG
-                                                            )
-                                                            .show()
-                                                    } else {
-                                                        Toast
-                                                            .makeText(
-                                                                context,
-                                                                "Ending Time must be greater than Starting Time",
-                                                                Toast.LENGTH_LONG
-                                                            )
-                                                            .show()
-                                                    }
-
-                                                }
+                                                Toast
+                                                    .makeText(
+                                                        context,
+                                                        "Not Available for your Starting Time!",
+                                                        Toast.LENGTH_LONG
+                                                    )
+                                                    .show()
                                             }
+
                                         }
                                 )
                             }
@@ -254,9 +248,62 @@ fun TimeSlotTable(
         }
     }
 }
+/*{
+    if (isFirstSelect) {
+        if (
+            currentIndex in rangeStartIndex..rangeEndIndex &&
+            currentIndex < rangeEndIndex
+        ) {
+            if (
+                text < endingSelectedSlot
+            ) {
+                startingSelectedSlot = text
+                isFirstSelect = !isFirstSelect
+                startingTime(text)
+                Toast
+                    .makeText(
+                        context,
+                        "Starting Time: $text ",
+                        Toast.LENGTH_LONG
+                    )
+                    .show()
+            } else {
+                Toast
+                    .makeText(
+                        context,
+                        "Starting Time must be less than Ending Time",
+                        Toast.LENGTH_LONG
+                    )
+                    .show()
+            }
+        }
+    } else {
+        if (
+            currentIndex in rangeStartIndex..rangeEndIndex &&
+            currentIndex > rangeStartIndex
+        ) {
+            if (
+                text > startingSelectedSlot) {
+                endingSelectedSlot = text
+                isFirstSelect = !isFirstSelect
+                endingTime(text)
+                Toast
+                    .makeText(
+                        context,
+                        "Ending Time: $text ",
+                        Toast.LENGTH_LONG
+                    )
+                    .show()
+            } else {
+                Toast
+                    .makeText(
+                        context,
+                        "Ending Time must be greater than Starting Time",
+                        Toast.LENGTH_LONG
+                    )
+                    .show()
+            }
 
-@Preview
-@Composable
-fun PreviewTimeSlot() {
-    TimeSlotTable("07:00", "22:00", startingTime = {}, endingTime = {})
-}
+        }
+    }
+}*/

@@ -1,5 +1,7 @@
 package com.ah.studio.blueapp.ui.component
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -31,7 +33,8 @@ fun BoatListCard(
     paddingBetweenText: Dp = 11.dp,
     isParked: Boolean = false,
     viewOnMapText: String = "",
-    parkingStatusText: String = ""
+    parkingStatusText: String = "",
+    onParkNowClick: () -> Unit
 ) {
     Row(
         modifier = modifier
@@ -40,7 +43,9 @@ fun BoatListCard(
             painter = boatImage,
             shape = Shapes.medium,
             contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxWidth(0.35f)
+            modifier = Modifier
+                .fillMaxWidth(0.35f)
+                .background(White50Percent)
         )
         Column(
             modifier = Modifier
@@ -100,11 +105,17 @@ fun BoatListCard(
                     fontSize = 17.sp,
                     fontWeight = titleFontWeight,
                     fontFamily = fontFamily,
-                    color = if (isParked) Color.Black else Black25Percent,
+                    color = if (isParked) Color.Black else SeaBlue400,
                     style = TextStyle(
                         textDecoration = if (!isParked) TextDecoration.Underline else TextDecoration.None
                     ),
-                    modifier = Modifier.padding(top = (4.dp))
+                    modifier = Modifier
+                        .padding(top = (4.dp))
+                        .clickable {
+                            if (!isParked) {
+                                onParkNowClick()
+                            }
+                        }
                 )
             }
         }
