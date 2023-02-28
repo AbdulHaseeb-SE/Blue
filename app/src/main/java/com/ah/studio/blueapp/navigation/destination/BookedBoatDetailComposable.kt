@@ -16,9 +16,14 @@ fun NavGraphBuilder.bookedBoatDetailComposable(navHostController: NavHostControl
                 nullable = false
             }
         )
-    ) {entry->
-        entry.arguments?.getString("id")?.let {id->
-            BookedItemDetailsScreen(id = id)
+    ) { entry ->
+        entry.arguments?.getString("id")?.let { id ->
+            BookedItemDetailsScreen(
+                id = id,
+                onBackButtonClick = {
+                    navHostController.popBackStack()
+                }
+            )
         }
     }
 }

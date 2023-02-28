@@ -126,7 +126,7 @@ fun DestinationScreen(
                             DestinationListComponent(
                                 destinationName = item.destination_address,
                                 destinationTime = "Min ${item.destination_hrs} Hrs",
-                                cost = item.price,
+                                cost = item.price +" KWD",
                                 textColor = if (index != selectedIndex) Grey700 else Color.White,
                                 costTextColor = if (index == selectedIndex) Color.White else OxfordBlue900,
                                 containerColor = if (index == selectedIndex) selectedItemColor else unSelectedItemColor

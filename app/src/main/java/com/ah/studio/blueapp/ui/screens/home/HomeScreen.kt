@@ -91,7 +91,6 @@ fun HomeScreen(
                 viewModel.categoryList.collectLatest { list ->
                     if (!list.isNullOrEmpty()) {
                         categoryList = list
-                        isLoading = false
                     }
                 }
             } catch (e: Exception) {
@@ -183,14 +182,13 @@ fun HomeScreen(
                 )
 
                 if (categoryList != null) {
-                    isLoading = true
+                    isLoading = false
                     CategoryComponent(
                         categoryList = categoryList!!,
                         onClick = { name, id ->
                             onClick(name, id)
                         }
                     )
-                    isLoading = false
                 }
             }
             if (isLoading) {

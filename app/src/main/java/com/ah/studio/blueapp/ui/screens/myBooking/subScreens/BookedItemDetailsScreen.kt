@@ -44,6 +44,7 @@ import java.util.*
 @Composable
 fun BookedItemDetailsScreen(
     id: String,
+    onBackButtonClick: ()-> Unit,
     viewModel: BoatBookingViewModel = getKoin().get()
 ) {
     var isLoading by remember {
@@ -77,7 +78,9 @@ fun BookedItemDetailsScreen(
                 text = stringResource(R.string.my_bookings),
                 navigationIconContentDescription = "",
                 actionIcons = {},
-                onNavigationIconClick = {}
+                onNavigationIconClick = {
+                    onBackButtonClick()
+                }
             )
         },
         modifier = Modifier.fillMaxSize(),
@@ -158,7 +161,7 @@ fun BookedBoatCaptainBoatNameSection(bookedBoatDetails: BookedBoatDetail) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_captian_cap),
                         contentDescription = stringResource(R.string.captain),
-                        modifier = Modifier.padding(4.dp)
+                        modifier = Modifier.padding(6.dp)
                     )
                 }
             }
@@ -248,6 +251,9 @@ fun BookedBoatTimeDateSection(bookedBoatDetails: BookedBoatDetail) {
             Image(
                 painter = painterResource(id = R.drawable.ic_clock),
                 contentDescription = stringResource(R.string.clock_icon),
+                modifier = Modifier
+                    .width(40.dp)
+                    .height(40.dp)
             )
             Text(
                 text = "${
@@ -322,6 +328,9 @@ fun BookedBoatLocationSection(bookedBoatDetails: BookedBoatDetail) {
         Image(
             painter = painterResource(id = R.drawable.ic_circled_location),
             contentDescription = stringResource(R.string.location_icon),
+            modifier = Modifier
+                .width(40.dp)
+                .height(40.dp)
         )
 
         Column(

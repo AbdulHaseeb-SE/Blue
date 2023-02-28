@@ -90,6 +90,8 @@ dependencies {
     implementation "io.github.boguszpawlowski.composecalendar:composecalendar:1.0.2"
     implementation "io.github.boguszpawlowski.composecalendar:kotlinx-datetime:1.0.2"
 
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
+
     //DataStore
     implementation "androidx.datastore:datastore-preferences:1.0.0"
 

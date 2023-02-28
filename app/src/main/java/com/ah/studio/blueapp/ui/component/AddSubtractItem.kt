@@ -19,9 +19,9 @@ fun AddSubtractItem(
     buttonTextSize: TextUnit = 20.sp,
     paddingAroundItemText: Dp = 10.dp,
     buttonSize: Dp = 34.dp,
-    qty : Int = 1,
+    qty: Int = 1,
     horizontalArrangement: Arrangement.Horizontal = Arrangement.SpaceEvenly,
-    onItemCountChanged: (Int)->Unit
+    onItemCountChanged: (Int) -> Unit
 ) {
     var itemCount by remember {
         mutableStateOf(qty)
@@ -33,41 +33,6 @@ fun AddSubtractItem(
         horizontalArrangement = horizontalArrangement,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        BlueRoundedCornerShape(
-            modifier = Modifier
-                .width(buttonSize)
-                .height(buttonSize)
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "+",
-                    fontSize = buttonTextSize,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = fontFamily,
-                    color = Color.Black,
-                    modifier = Modifier.clickable {
-                        itemCount += 1
-                        onItemCountChanged(itemCount)
-                    }
-                )
-            }
-        }
-
-        Text(
-            text = String.format("%02d", itemCount),
-            fontSize = 17.sp,
-            fontWeight = FontWeight.SemiBold,
-            fontFamily = fontFamily,
-            color = Color.Black,
-            modifier = Modifier.padding(horizontal = paddingAroundItemText, vertical = 1.dp)
-        )
-
         BlueRoundedCornerShape(
             modifier = Modifier
                 .width(buttonSize)
@@ -96,5 +61,42 @@ fun AddSubtractItem(
                 )
             }
         }
+
+        Text(
+            text = String.format("%02d", itemCount),
+            fontSize = 17.sp,
+            fontWeight = FontWeight.SemiBold,
+            fontFamily = fontFamily,
+            color = Color.Black,
+            modifier = Modifier.padding(horizontal = paddingAroundItemText, vertical = 1.dp)
+        )
+
+        BlueRoundedCornerShape(
+            modifier = Modifier
+                .width(buttonSize)
+                .height(buttonSize)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "+",
+                    fontSize = buttonTextSize,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = fontFamily,
+                    color = Color.Black,
+                    modifier = Modifier.clickable {
+                        itemCount += 1
+                        onItemCountChanged(itemCount)
+                    }
+                )
+            }
+        }
+
+
     }
 }

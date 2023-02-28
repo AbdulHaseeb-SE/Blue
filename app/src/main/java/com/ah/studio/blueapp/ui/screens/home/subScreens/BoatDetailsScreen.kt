@@ -227,7 +227,7 @@ fun AddressSection(boatDetails: BoatDetails?) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 23.dp, horizontal = PaddingDouble)
+            .padding(vertical = 30.dp, horizontal = PaddingDouble)
             .background(Color.White),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.Start
@@ -239,6 +239,7 @@ fun AddressSection(boatDetails: BoatDetails?) {
             Image(
                 painter = painterResource(id = R.drawable.ic_circled_location),
                 contentDescription = stringResource(R.string.location_icon),
+                modifier = Modifier.size(40.dp)
             )
 
             Column(
@@ -276,10 +277,10 @@ fun AddressSection(boatDetails: BoatDetails?) {
                 .background(Color.White)
                 .padding(top = 5.dp)
         ) {
-
+//map to show here
         }
 
-        Row(
+        /*Row(
             modifier = Modifier
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
@@ -287,6 +288,8 @@ fun AddressSection(boatDetails: BoatDetails?) {
             Image(
                 painter = painterResource(id = R.drawable.ic_captian_cap),
                 contentDescription = stringResource(R.string.seafarer),
+                modifier = Modifier.size(40.dp)
+                    .padding(5.dp)
             )
             Column(
                 modifier = Modifier.padding(horizontal = 9.dp),
@@ -317,7 +320,7 @@ fun AddressSection(boatDetails: BoatDetails?) {
 
                 }
             }
-        }
+        }*/
     }
 }
 
@@ -346,7 +349,7 @@ fun FacilitiesSection(boatDetails: BoatDetails?) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 21.dp, start = PaddingHalf, end = PaddingDouble),
+                    .padding(top = 20.dp, start = PaddingHalf, end = PaddingDouble),
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -376,7 +379,10 @@ fun FacilitiesSection(boatDetails: BoatDetails?) {
                 textAlign = TextAlign.Start,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 20.dp, start = PaddingDouble, end = PaddingDouble)
+                    .padding(
+                        start = PaddingDouble,
+                        end = PaddingDouble
+                    )
             )
         }
     }
@@ -391,7 +397,7 @@ fun BoatGallerySection(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 22.dp)
+            .padding(top = 14.dp)
             .background(Color.White)
     ) {
         if (galleryDetails.isNullOrEmpty()) {
@@ -403,7 +409,7 @@ fun BoatGallerySection(
                 textAlign = TextAlign.Start,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = PaddingDouble)
+                    .padding(horizontal = PaddingDouble, vertical = 20.dp)
             )
         } else {
             Text(
@@ -424,7 +430,7 @@ fun BoatGallerySection(
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                LazyRow(content = {
+                LazyRow {
                     itemsIndexed(
                         galleryDetails
                     ) { index, item ->
@@ -441,14 +447,14 @@ fun BoatGallerySection(
                                 }
                         )
                     }
-                })
+                }
             }
         }
 
 
         boatDetails?.description?.let {
             Text(
-                text = "Description",
+                text = stringResource(R.string.description),
                 fontSize = 17.sp,
                 fontFamily = fontFamily,
                 color = Color.Black,
@@ -459,7 +465,7 @@ fun BoatGallerySection(
                     .padding(
                         start = PaddingDouble,
                         end = PaddingDouble,
-                        top = 70.dp
+                        top = 30.dp
                     )
             )
             Text(
@@ -512,13 +518,13 @@ fun BoatNameDetailsSection(boatDetails: BoatDetails?) {
                 }
 
                 StarRatingBar(
-                    rating = if (boatDetails?.boat_rating != null) boatDetails.boat_rating as Double else 0.0,
+                    rating = if (boatDetails?.boat_rating != null) boatDetails.boat_rating.toString()
+                        .toDouble() else 0.0,
                     modifier = Modifier
                         .background(Color.Transparent)
                         .padding(top = 5.dp)
                         .height(20.dp)
                 )
-
             }
             Column(
                 modifier = Modifier.wrapContentWidth(),

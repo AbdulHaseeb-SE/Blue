@@ -20,6 +20,9 @@ fun NavGraphBuilder.productDetailsComposable(navHostController: NavHostControlle
         entry.arguments?.getString("productId").let { productId ->
             ProductDetailsScreen(
                 productId = productId,
+                onBackButtonClick = {
+                    navHostController.popBackStack()
+                },
                 onCartButtonClick = {
                     navHostController.navigate(ScreenController.Cart.route)
                 },

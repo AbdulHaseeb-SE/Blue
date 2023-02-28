@@ -22,10 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ah.studio.blueapp.R
-import com.ah.studio.blueapp.ui.component.BlueRoundedCornerShape
-import com.ah.studio.blueapp.ui.component.Button
-import com.ah.studio.blueapp.ui.component.CircularProgressBar
-import com.ah.studio.blueapp.ui.component.TopAppBar
+import com.ah.studio.blueapp.ui.component.*
 import com.ah.studio.blueapp.ui.screens.home.HomeViewModel
 import com.ah.studio.blueapp.ui.screens.home.domain.dto.boatDetails.BoatDetails
 import com.ah.studio.blueapp.ui.theme.*
@@ -47,6 +44,7 @@ fun PackageScreen(
 ) {
     val bookingDetailsManager = BookingDetailsManager(LocalContext.current)
     var isLoading by remember { mutableStateOf(true) }
+    var showDialog by remember { mutableStateOf(false) }
     var boatDetails: BoatDetails? by remember { mutableStateOf(null) }
     var packageId: Int? by remember {
         mutableStateOf(null)
@@ -167,8 +165,7 @@ fun PackageScreen(
                         .fillMaxWidth()
                         .height(50.dp)
                         .clickable {
-                            bookingDetailsManager.saveSingleDetails("package_id", "")
-                            onSkipClick()
+                            showDialog = true
                         }
                 ) {
                     Box(
@@ -191,6 +188,22 @@ fun PackageScreen(
             }
             if (isLoading) {
                 CircularProgressBar()
+            }
+            if (showDialog) {
+                ConfirmationDialog(
+                    showDialog = showDialog,
+                    title = stringResource(R.string.confirmation),
+                    message = stringResource(R.string.skip_confirmation_dialog_message),
+                    yesButtonColor = Color.Red,
+                    onConfirm = {
+                        showDialog = false
+                        bookingDetailsManager.saveSingleDetails("package_id", "")
+                        onSkipClick()
+                    },
+                    onCancel = {
+                        showDialog = false
+                    }
+                )
             }
         }
     }

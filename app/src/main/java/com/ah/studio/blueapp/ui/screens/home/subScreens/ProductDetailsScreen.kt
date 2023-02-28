@@ -36,6 +36,7 @@ import org.koin.androidx.compose.getKoin
 @Composable
 fun ProductDetailsScreen(
     productId: String?,
+    onBackButtonClick: () -> Unit,
     onCartButtonClick: () -> Unit,
     onViewCartClick: () -> Unit,
     viewModel: HomeViewModel = getKoin().get()
@@ -84,7 +85,7 @@ fun ProductDetailsScreen(
             TopAppBar(
                 backgroundColor = Color.Transparent,
                 contentColor = Color.Black,
-                navigationIcon = null,
+                navigationIcon = painterResource(id = R.drawable.ic_back),
                 navigationIconContentDescription = "",
                 text = "",
                 actionIcons = {
@@ -118,7 +119,9 @@ fun ProductDetailsScreen(
                         }
                     }
                 },
-                onNavigationIconClick = {}
+                onNavigationIconClick = {
+                    onBackButtonClick()
+                }
             )
         },
         modifier = Modifier
@@ -176,7 +179,7 @@ fun ProductDetailsScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = productDetails!!.price,
+                                text = productDetails!!.price + " KWD",
                                 fontSize = 17.sp,
                                 fontWeight = FontWeight.Bold,
                                 fontFamily = fontFamily,
@@ -262,16 +265,17 @@ fun ProductDetailsScreen(
                         Button(
                             width = 0.dp,
                             height = 50.dp,
-                            text = stringResource(id = R.string.view_cart),
+                            text = stringResource(id = R.string.proceed_to_cart),
                             backgroundColor = SeaBlue400,
                             shape = Shapes.medium,
                             fontWeight = FontWeight.Bold,
+                            buttonIcon = painterResource(id = R.drawable.ic_cart),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(
                                     start = 46.dp,
                                     end = 46.dp,
-                                    bottom = 46.dp
+                                    bottom = 20.dp
                                 )
                         ) {
                             onViewCartClick()
@@ -294,7 +298,9 @@ fun ProductDetailsScreen(
                     }
                 }
             }
-            if (isLoading) CircularProgressBar()
+            if (isLoading) {
+                CircularProgressBar()
+            }
         }
     }
     if (showSnackBar) {

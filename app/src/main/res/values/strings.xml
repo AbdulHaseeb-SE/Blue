@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BlueApp</string>
+    <string name="app_name">BLUE</string>
     <string name="register">Register</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
@@ -161,4 +161,11 @@
     <string name="discount">Discount</string>
     <string name="coupon_amount">Coupon Amount</string>
     <string name="empty_cart">Cart is Empty</string>
+    <string name="logout_confirmation">Logout Confirmation</string>
+    <string name="logout_question">Are you sure you want to log out?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="confirmation">Confirmation</string>
+    <string name="skip_confirmation_dialog_message">By Pressing Skip, Any added package will be removed.</string>
+    <string name="proceed_to_cart">Proceed To Cart</string>
 </resources>

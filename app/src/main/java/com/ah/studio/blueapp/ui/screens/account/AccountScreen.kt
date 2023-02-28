@@ -120,7 +120,7 @@ fun AccountScreen(
                 CircularProgressBar()
             }
             if (showDialog) {
-                LogoutConfirmationDialog(
+                ConfirmationDialog(
                     showDialog = showDialog,
                     onConfirm = {
                         showDialog = false

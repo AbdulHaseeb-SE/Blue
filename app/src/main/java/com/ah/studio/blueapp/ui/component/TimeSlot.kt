@@ -1,6 +1,7 @@
 package com.ah.studio.blueapp.ui.component
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -81,7 +83,7 @@ fun TimeSlotTable(
         itemsIndexed(
             slots
         ) { rowIndex, item ->
-//            val context = LocalContext.current
+            val context = LocalContext.current
             BlueRoundedCornerShape(
                 modifier = Modifier
                     .wrapContentWidth()
@@ -185,7 +187,17 @@ fun TimeSlotTable(
                                 modifier = Modifier.wrapContentSize(),
                                 containerColor = if (text == startingSelectedSlot || text == endingSelectedSlot) OxfordBlue900 else Color.Transparent,
                                 borderColor = if (text == startingSelectedSlot || text == endingSelectedSlot) SeaBlue400 else Color.Transparent,
-                                shape = RoundedCornerShape(50.dp)
+                                shape = if (text == startingSelectedSlot) RoundedCornerShape(
+                                    topStart = 50.dp,
+                                    topEnd = 0.dp,
+                                    bottomStart = 50.dp,
+                                    bottomEnd = 0.dp
+                                ) else RoundedCornerShape(
+                                    topStart = 0.dp,
+                                    topEnd = 50.dp,
+                                    bottomStart = 0.dp,
+                                    bottomEnd = 50.dp
+                                )
                             ) {
                                 Text(
                                     text = text,
@@ -202,7 +214,7 @@ fun TimeSlotTable(
                                         .clickable {
                                             if (
                                                 (currentIndex in (rangeStartIndex..rangeEndIndex)) &&
-                                                (currentIndex <= rangeEndIndex)
+                                                (currentIndex <= (rangeEndIndex - duration))
                                             ) {
                                                 startingSelectedSlot = text
                                                 startingTime(text)
@@ -216,7 +228,16 @@ fun TimeSlotTable(
                                                 endingSelectedSlot =
                                                     if ("$formatTrimmedText:00" <= endingSlot) "$formatTrimmedText:00" else ""
                                                 endingTime(endingSelectedSlot)
+                                            } else {
+                                                Toast
+                                                    .makeText(
+                                                        context,
+                                                        "Not Available for your Starting Time!",
+                                                        Toast.LENGTH_LONG
+                                                    )
+                                                    .show()
                                             }
+
                                         }
                                 )
                             }

@@ -230,7 +230,7 @@ fun ProductListSection(
                 itemName = item.name,
                 itemDescription = item.description,
                 itemImage = coilImageLoadingAsync(imageUrl = item.image),
-                price = item.price,
+                price = item.price + " KWD",
                 modifier = Modifier
                     .padding(bottom = 20.dp)
                     .height(110.dp)

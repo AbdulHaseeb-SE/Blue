@@ -293,7 +293,7 @@ fun CaptainBoatNameSection(boatDetails: BoatDetails) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_profile_filled),
                         contentDescription = stringResource(R.string.clock_icon),
-                        modifier = Modifier.padding(4.dp)
+                        modifier = Modifier.padding(8.dp)
                     )
                 }
             }
@@ -382,6 +382,9 @@ fun TimeDateSection(start: String?, end: String?, dateSelected: String?) {
             Image(
                 painter = painterResource(id = R.drawable.ic_clock),
                 contentDescription = stringResource(R.string.clock_icon),
+                modifier = Modifier
+                    .width(40.dp)
+                    .height(40.dp)
             )
             Text(
                 text = "${
@@ -467,6 +470,9 @@ fun LocationSection(boatDetails: BoatDetails?) {
         Image(
             painter = painterResource(id = R.drawable.ic_circled_location),
             contentDescription = stringResource(R.string.location_icon),
+            modifier = Modifier
+                .width(40.dp)
+                .height(40.dp)
         )
 
         Column(

@@ -23,6 +23,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.core.content.ContextCompat.startActivity
 import com.ah.studio.blueapp.R
 import com.ah.studio.blueapp.ui.component.BlueRoundedCornerShape
@@ -53,9 +55,9 @@ fun SeafarerScreen(
     var seafarerCategoryListResponse: SeafarerCategoryResponse? by remember {
         mutableStateOf(null)
     }
-        var seafarerListResponse: SeafarerListResponse? by remember {
-            mutableStateOf(null)
-        }
+    var seafarerListResponse: SeafarerListResponse? by remember {
+        mutableStateOf(null)
+    }
     val context = LocalContext.current
 
     SideEffect {
@@ -463,20 +465,73 @@ fun TabBarSection(
             itemsIndexed(
                 seafarerCategoryListResponse.data
             ) { index, item ->
-                Text(
-                    text = item.name,
-                    fontFamily = fontFamily,
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = if (selectedIndex == index) Color.Black else Black50Percent,
+                ConstraintLayout(
                     modifier = Modifier
-                        .wrapContentWidth()
-                        .padding(end = 19.dp)
-                        .clickable {
-                            selectedIndex = index
-                            onClick(item.id)
-                        }
-                )
+                        .fillMaxWidth()
+                        .padding(end = PaddingDouble)
+                ) {
+                    val (text, divider) = createRefs()
+
+                    Text(
+                        text = item.name,
+                        fontFamily = fontFamily,
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = if (selectedIndex == index) Color.Black else Black50Percent,
+                        modifier = Modifier
+                            .padding(horizontal = 2.dp)
+                            .constrainAs(text) {
+                                start.linkTo(parent.start)
+                                top.linkTo(parent.top)
+                                end.linkTo(parent.end)
+                            }
+                            .clickable {
+                                selectedIndex = index
+                                onClick(item.id)
+                            }
+                    )
+
+                    Divider(
+                        thickness = (1.5).dp,
+                        color = if (selectedIndex == index) Color.Cyan else Color.Transparent,
+                        modifier = Modifier
+                            .padding(top = PaddingHalf)
+                            .constrainAs(divider) {
+                                start.linkTo(text.start)
+                                end.linkTo(text.end)
+                                top.linkTo(text.bottom)
+                                width = Dimension.fillToConstraints
+                            }
+                    )
+                }
+
+
+                /* Column {
+                        Text(
+                            text = item.name,
+                            fontFamily = fontFamily,
+                            fontSize = 17.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            textAlign = TextAlign.Center,
+                            color = if (selectedIndex == index) Color.Black else Black50Percent,
+                            modifier = Modifier
+                                .wrapContentWidth()
+                                .padding(end = 19.dp)
+                                .clickable {
+                                    selectedIndex = index
+                                    onClick(item.id)
+                                }
+                        )
+                        Divider(
+                            thickness = 1.dp,
+                            color = if (selectedIndex == index) Color.Cyan else Color.Transparent,
+                            modifier = Modifier
+                                .width(80.dp)
+                                .padding(
+                                    top = PaddingHalf
+                                )
+                        )
+                    }*/
             }
         }
     }

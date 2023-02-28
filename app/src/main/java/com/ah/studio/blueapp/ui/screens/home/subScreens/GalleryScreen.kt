@@ -110,7 +110,11 @@ fun GalleyScreen(
                     verticalArrangement = Arrangement.Top,
                     content = {
                         itemsIndexed(
-                            galleryDetails!!
+                            if (galleryDetails != null) {
+                                galleryDetails!!
+                            } else {
+                                listOf()
+                            }
                         ) { index, item ->
                             isLoading = false
                             RoundedCornerImageView(

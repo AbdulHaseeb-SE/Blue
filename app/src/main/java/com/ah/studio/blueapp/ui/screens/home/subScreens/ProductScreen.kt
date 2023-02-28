@@ -156,7 +156,6 @@ fun ProductScreen(
                             "Accessories"
                         )
                     ) { index, item ->
-
                         if (selectedIndex == 0) {
                             selectedProductCategoryId = 1
                         }
