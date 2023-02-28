@@ -6,10 +6,19 @@ import androidx.navigation.compose.composable
 import com.ah.studio.blueapp.navigation.ScreenController
 import com.ah.studio.blueapp.ui.screens.authentication.SignUpScreen
 
-fun NavGraphBuilder.signUpComposable(navHostController: NavHostController){
+fun NavGraphBuilder.signUpComposable(navHostController: NavHostController) {
     composable(
         route = ScreenController.SignUp.route
-    ){
-        SignUpScreen(navHostController = navHostController)
+    ) {
+        SignUpScreen(
+            onRegisterClick = {
+                navHostController.popBackStack()
+                navHostController.navigate(ScreenController.SignIn.route)
+            },
+            onSignInClick = {
+                navHostController.popBackStack()
+                navHostController.navigate(ScreenController.SignIn.route)
+            }
+        )
     }
 }
