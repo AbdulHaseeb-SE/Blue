@@ -25,7 +25,10 @@ fun NavGraphBuilder.packageScreenComposable(
                 boatId.toInt(),
                 onNextClick = { navHostController.navigate(ScreenController.Product.route) },
                 onSkipClick = { navHostController.navigate(ScreenController.Product.route) },
-                onBackButtonClick = { navHostController.popBackStack() }
+                onBackButtonClick = { navHostController.popBackStack() },
+                onNotificationButtonClick = {
+                    navHostController.navigate(ScreenController.Notification.route)
+                }
             )
         }
     }

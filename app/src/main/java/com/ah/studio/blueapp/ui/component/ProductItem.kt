@@ -2,7 +2,7 @@ package com.ah.studio.blueapp.ui.component
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,14 +23,6 @@ fun ProductItem(
     price: String,
     modifier: Modifier = Modifier
 ) {
-
-    var isLoading by remember {
-        mutableStateOf(true)
-    }
-
-
-
-
     Row(
         modifier = modifier
     ) {

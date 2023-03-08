@@ -17,7 +17,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ah.studio.blueapp.R
@@ -35,8 +34,6 @@ fun ReviewScreen() {
             .background(Color.White),
         containerColor = Color.White
     ) { paddingValues ->
-
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -219,11 +216,4 @@ fun ItemSection() {
             .padding(top = 6.dp)
             .fillMaxWidth(0.7f)
     )
-}
-
-
-@Preview
-@Composable
-fun PreviewReview(){
-    ReviewScreen()
 }

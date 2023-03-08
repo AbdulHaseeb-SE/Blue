@@ -35,4 +35,6 @@ object Constants {
     const val PARKING_MAP_ROUTE = "parking_map_route"
     const val PARKING_PAYMENT_ROUTE = "parking_payment_route"
     const val BOOKED_BOAT_DETAIL_ROUTE = "booked_boat_detail_route"
+    const val NOTIFICATION_ROUTE = "notification_route"
+    const val SHOW_REVIEWS_ROUTE = "show_reviews_route"
 }

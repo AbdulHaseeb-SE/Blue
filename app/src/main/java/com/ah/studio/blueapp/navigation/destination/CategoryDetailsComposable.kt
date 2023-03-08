@@ -34,6 +34,9 @@ fun NavGraphBuilder.categoryDetailsComposable(
                     },
                     onBackButtonClick = {
                         navHostController.popBackStack()
+                    },
+                    onNotificationButtonClick = {
+                        navHostController.navigate(ScreenController.Notification.route)
                     }
                 )
             }

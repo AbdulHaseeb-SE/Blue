@@ -15,6 +15,7 @@ fun NavGraphBuilder.homeNavGraph(navHostController: NavHostController) {
         categoryDetailsComposable(navHostController)
         boatDetailsComposable(navHostController)
         galleryScreenComposable(navHostController)
+        notificationComposable(navHostController)
         boatBookingComposable(navHostController)
         selectDestinationComposable(navHostController)
         packageScreenComposable(navHostController)
@@ -23,6 +24,7 @@ fun NavGraphBuilder.homeNavGraph(navHostController: NavHostController) {
         productDetailsComposable(navHostController)
         cartScreenComposable(navHostController)
         paymentScreenComposable(navHostController)
+        showReviewComposable(navHostController)
         thankYouScreenComposable(navHostController)
     }
 }

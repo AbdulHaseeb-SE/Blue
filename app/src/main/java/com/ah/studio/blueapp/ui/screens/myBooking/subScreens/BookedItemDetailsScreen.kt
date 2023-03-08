@@ -1,15 +1,20 @@
 package com.ah.studio.blueapp.ui.screens.myBooking.subScreens
 
 import android.util.Log
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,19 +22,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ah.studio.blueapp.R
-import com.ah.studio.blueapp.ui.component.BlueRoundedCornerShape
-import com.ah.studio.blueapp.ui.component.CircularProgressBar
-import com.ah.studio.blueapp.ui.component.DashedDivider
-import com.ah.studio.blueapp.ui.component.TopAppBar
+import com.ah.studio.blueapp.ui.component.*
 import com.ah.studio.blueapp.ui.screens.myBooking.BoatBookingViewModel
 import com.ah.studio.blueapp.ui.screens.myBooking.domain.dto.bookedBoatDetails.BookedBoatDetail
 import com.ah.studio.blueapp.ui.screens.myBooking.domain.dto.bookedBoatDetails.BookedBoatDetailsResponse
+import com.ah.studio.blueapp.ui.screens.myBooking.domain.dto.review.AddReviewBody
 import com.ah.studio.blueapp.ui.theme.*
 import com.ah.studio.blueapp.util.coilImageLoadingAsync
 import kotlinx.coroutines.CoroutineScope
@@ -40,15 +46,18 @@ import org.koin.androidx.compose.getKoin
 import java.text.SimpleDateFormat
 import java.util.*
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BookedItemDetailsScreen(
     id: String,
-    onBackButtonClick: ()-> Unit,
+    onBackButtonClick: () -> Unit,
     viewModel: BoatBookingViewModel = getKoin().get()
 ) {
     var isLoading by remember {
         mutableStateOf(true)
+    }
+    var isReviewLoading by remember {
+        mutableStateOf(false)
     }
     var bookedBoatDetailsResponse: BookedBoatDetailsResponse? by remember {
         mutableStateOf(null)
@@ -56,6 +65,16 @@ fun BookedItemDetailsScreen(
     var bookedBoatDetails: BookedBoatDetail? by remember {
         mutableStateOf(null)
     }
+    val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
+    val scaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = bottomSheetState
+    )
+    val scope = rememberCoroutineScope()
+    var snackbar by remember { mutableStateOf("") }
+    var showSnackBar by remember { mutableStateOf(false) }
+    val snackbarHostState = remember { SnackbarHostState() }
+
+
     SideEffect {
         CoroutineScope(Dispatchers.IO).launch {
             viewModel.getBookedBoatDetailResponse(if (id.contains("#")) id.substring(1) else id)
@@ -69,7 +88,54 @@ fun BookedItemDetailsScreen(
         }
     }
     Log.d("CheckBookedBoatId", id)
-    Scaffold(
+    BottomSheetScaffold(
+        snackbarHost = {
+            androidx.compose.material3.SnackbarHost(snackbarHostState) { data ->
+                if (showSnackBar) {
+                    androidx.compose.material3.Snackbar(
+                        actionColor = SeaBlue400,
+                        contentColor = Color.Black,
+                        snackbarData = data,
+                        containerColor = Color.White,
+                        shape = RoundedCornerShape(50.dp)
+                    )
+                }
+            }
+        },
+        scaffoldState = scaffoldState,
+        sheetContent = {
+            BottomSheetContent(
+                onCloseButtonClick = {
+                    scope.launch {
+                        bottomSheetState.collapse()
+                    }
+                },
+                onAddReviewButtonClick = { rating, feedback ->
+                    isReviewLoading = true
+                    scope.launch {
+                        viewModel.getAddReviewResponse(
+                            AddReviewBody(
+                                boat_product_booking_id = id,
+                                description = feedback,
+                                entity_id = id,
+                                rating = rating.toString(),
+                                entity_type = "boat"
+                            )
+                        )
+                        viewModel.addReviewResponse.collectLatest {response->
+                            if (response != null){
+                                isReviewLoading = false
+                                showSnackBar = true
+                                snackbar = response.message
+                            }
+                        }
+                    }
+                }
+            )
+        },
+        sheetElevation = 16.dp,
+        sheetShape = Shapes.medium,
+        sheetPeekHeight = 0.dp,
         topBar = {
             TopAppBar(
                 backgroundColor = Color.Transparent,
@@ -84,7 +150,7 @@ fun BookedItemDetailsScreen(
             )
         },
         modifier = Modifier.fillMaxSize(),
-        containerColor = Color.White
+        backgroundColor = Color.White
     ) {
         Box {
             if (id != "null") {
@@ -105,6 +171,26 @@ fun BookedItemDetailsScreen(
                         BookedBoatCaptainBoatNameSection(bookedBoatDetails!!)
                         BookedBoatTimeDateSection(bookedBoatDetails!!)
                         BookedBoatSummarySection(bookedBoatDetails!!)
+                        Button(
+                            width = 0.dp,
+                            height = 50.dp,
+                            text = stringResource(id = R.string.rate_now),
+                            backgroundColor = SeaBlue400,
+                            shape = Shapes.medium,
+                            fontWeight = FontWeight.SemiBold,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    start = 46.dp,
+                                    end = 46.dp,
+                                    bottom = PaddingDouble,
+                                    top = 46.dp
+                                )
+                        ) {
+                            scope.launch {
+                                if (bottomSheetState.isCollapsed) bottomSheetState.expand()
+                            }
+                        }
                     }
                 }
             } else {
@@ -123,6 +209,197 @@ fun BookedItemDetailsScreen(
             }
             if (isLoading) {
                 CircularProgressBar()
+            }
+            if (isReviewLoading) {
+                CircularProgressBar()
+            }
+        }
+    }
+    if (showSnackBar) {
+        LaunchedEffect(key1 = true) {
+            scope.launch {
+                snackbarHostState.showSnackbar(
+                    snackbar, duration = SnackbarDuration.Short
+                )
+                showSnackBar = false
+            }
+        }
+    }
+}
+
+@Composable
+fun BottomSheetContent(
+    onCloseButtonClick: () -> Unit,
+    onAddReviewButtonClick: (rating: Int, feedback: String) -> Unit
+) {
+    Surface(
+        modifier = Modifier
+            .fillMaxHeight(0.9f)
+            .fillMaxWidth(),
+        color = Color.White
+    ) {
+        var rating by remember { mutableStateOf(0) }
+        var feedbackText by remember { mutableStateOf("") }
+        Column(
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth()
+                .padding(horizontal = PaddingDouble),
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.Top
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = stringResource(R.string.rate_your_experience),
+                    fontSize = 17.sp,
+                    fontFamily = fontFamily,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(vertical = PaddingHalf),
+                    color = OxfordBlue900
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.ic_arrow_down),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .size(50.dp)
+                        .width(60.dp)
+                        .padding(vertical = PaddingHalf)
+                        .clickable {
+                            onCloseButtonClick()
+                        }
+                )
+            }
+            Divider(
+                color = Grey200
+            )
+            Text(
+                text = stringResource(R.string.rating),
+                fontSize = 17.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = fontFamily,
+                color = Color.Black,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = PaddingHalf)
+            )
+
+            RatingBar(
+                rating = rating,
+                onRatingChanged = { newRating ->
+                    rating = newRating
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = PaddingDouble)
+            )
+
+            Log.d("CheckRating", rating.toString())
+
+            Text(
+                text = stringResource(R.string.feedback),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = fontFamily,
+                color = Color.Black,
+            )
+
+            BlueRoundedCornerShape(
+                containerColor = SeaBlue08Percent,
+                borderColor = SeaBlue400,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = PaddingHalf)
+                    .wrapContentHeight()
+                    .animateContentSize()
+            ) {
+                TextField(
+                    value = feedbackText,
+                    onValueChange = { newText ->
+                        feedbackText = newText
+                    },
+                    placeholder = {
+                        Text(
+                            text = stringResource(R.string.write_your_feedback_here),
+                            fontSize = 15.sp,
+                            fontFamily = fontFamily
+                        )
+                    },
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = Color.Transparent,
+                        cursorColor = Color.Black,
+                        textColor = Color.Black,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent
+                    ),
+                    textStyle = TextStyle(
+                        fontSize = 15.sp,
+                        fontFamily = fontFamily
+                    ),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Default
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 100.dp)
+                )
+            }
+
+            Button(
+                width = 0.dp,
+                height = 50.dp,
+                text = stringResource(id = R.string.add_review),
+                backgroundColor = SeaBlue400,
+                shape = Shapes.medium,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = 46.dp,
+                        end = 46.dp,
+                        bottom = 100.dp,
+                        top = 46.dp
+                    )
+            ) {
+                onAddReviewButtonClick(rating, feedbackText)
+            }
+        }
+    }
+}
+
+@Composable
+fun RatingBar(
+    rating: Int,
+    onRatingChanged: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        repeat(5) { index ->
+            IconButton(
+                onClick = { onRatingChanged(index + 1) },
+                modifier = Modifier
+                    .padding(4.dp)
+                    .size(28.dp)
+            ) {
+                if (index < rating) {
+                    Image(
+                        painterResource(id = R.drawable.ic_star_filled),
+                        contentDescription = "Filled star"
+                    )
+                } else {
+                    Image(
+                        painterResource(id = R.drawable.ic_star_outlined),
+                        contentDescription = "Empty star"
+                    )
+                }
             }
         }
     }
@@ -407,7 +684,7 @@ fun BookedBoatSummarySection(bookedBoatDetails: BookedBoatDetail) {
             )
         }
 
-        if (bookedBoatDetails.package_name != ""){
+        if (bookedBoatDetails.package_name != "") {
             Divider(
                 thickness = 1.dp,
                 color = Black19Percent,
@@ -442,7 +719,7 @@ fun BookedBoatSummarySection(bookedBoatDetails: BookedBoatDetail) {
                 )
             }
         }
-        if (bookedBoatDetails.product.isNotEmpty()){
+        if (bookedBoatDetails.product.isNotEmpty()) {
             bookedBoatDetails.product.forEach { product ->
                 Divider(
                     thickness = 1.dp,

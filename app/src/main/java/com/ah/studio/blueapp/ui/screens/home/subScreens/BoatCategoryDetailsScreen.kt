@@ -39,6 +39,7 @@ fun BoatCategoryDetailsScreen(
     categoryId: Int,
     onBoatCardClick: (boatId: Int) -> Unit,
     onBackButtonClick: () -> Unit,
+    onNotificationButtonClick: () -> Unit,
     viewModel: HomeViewModel = getKoin().get()
 ) {
     var boatList: List<Boat>? by remember {
@@ -128,6 +129,7 @@ fun BoatCategoryDetailsScreen(
                         modifier = Modifier
                             .padding(end = PaddingDouble)
                             .size(24.dp)
+                            .clickable { onNotificationButtonClick() }
                     )
                 },
                 onNavigationIconClick = {

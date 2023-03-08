@@ -40,6 +40,7 @@ fun PackageScreen(
     onNextClick: () -> Unit,
     onSkipClick: () -> Unit,
     onBackButtonClick: () -> Unit,
+    onNotificationButtonClick: () -> Unit,
     viewModel: HomeViewModel = getKoin().get()
 ) {
     val bookingDetailsManager = BookingDetailsManager(LocalContext.current)
@@ -85,6 +86,7 @@ fun PackageScreen(
                         modifier = Modifier
                             .padding(end = PaddingDouble)
                             .size(24.dp)
+                            .clickable { onNotificationButtonClick() }
                     )
                 },
                 onNavigationIconClick = {

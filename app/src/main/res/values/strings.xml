@@ -168,4 +168,10 @@
     <string name="confirmation">Confirmation</string>
     <string name="skip_confirmation_dialog_message">By Pressing Skip, Any added package will be removed.</string>
     <string name="proceed_to_cart">Proceed To Cart</string>
+    <string name="notifications">Notifications</string>
+    <string name="rate_your_experience">Rate your experience</string>
+    <string name="write_your_feedback_here">Write Your Feedback Here!</string>
+    <string name="feedback">Feedback</string>
+    <string name="add_review">Add Review</string>
+    <string name="rating">Rating</string>
 </resources>

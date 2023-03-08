@@ -16,6 +16,7 @@ import com.ah.studio.blueapp.util.Constants.HOME_ROUTE
 import com.ah.studio.blueapp.util.Constants.MAIN_ROUTE
 import com.ah.studio.blueapp.util.Constants.MY_BOOKING_ROUTE
 import com.ah.studio.blueapp.util.Constants.MY_PARKING_ROUTE
+import com.ah.studio.blueapp.util.Constants.NOTIFICATION_ROUTE
 import com.ah.studio.blueapp.util.Constants.PACKAGE_ROUTE
 import com.ah.studio.blueapp.util.Constants.PARKING_BOOKING_ROUTE
 import com.ah.studio.blueapp.util.Constants.PARKING_MAP_ROUTE
@@ -29,6 +30,7 @@ import com.ah.studio.blueapp.util.Constants.PRODUCT_ROUTE
 import com.ah.studio.blueapp.util.Constants.REFUND_POLICY_ROUTE
 import com.ah.studio.blueapp.util.Constants.SEAFARER_ROUTE
 import com.ah.studio.blueapp.util.Constants.SELECT_DESTINATION_ROUTE
+import com.ah.studio.blueapp.util.Constants.SHOW_REVIEWS_ROUTE
 import com.ah.studio.blueapp.util.Constants.SIGN_IN_ROUTE
 import com.ah.studio.blueapp.util.Constants.SIGN_UP_ROUTE
 import com.ah.studio.blueapp.util.Constants.SPLASH_ROUTE
@@ -70,6 +72,8 @@ sealed class ScreenController(val route: String) {
     object ParkingMap : ScreenController(PARKING_MAP_ROUTE)
     object ParkingPayment : ScreenController(PARKING_PAYMENT_ROUTE)
     object BookedBoatDetail : ScreenController(BOOKED_BOAT_DETAIL_ROUTE)
+    object Notification : ScreenController(NOTIFICATION_ROUTE)
+    object ShowReviews : ScreenController(SHOW_REVIEWS_ROUTE)
 
     fun withArgs(vararg args: String): String {
         return buildString {

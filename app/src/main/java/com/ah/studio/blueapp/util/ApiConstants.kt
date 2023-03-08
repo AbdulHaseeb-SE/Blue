@@ -33,4 +33,5 @@ object ApiConstants{
     const val MY_PARKING_BOOKING_ENDPOINT = "my-parking-booking"
     const val PARKING_LIST_ENDPOINT = "parking-list"
     const val BOOKED_BOAT_DETAILS_ENDPOINT = "boat-booking-detail"
+    const val ADD_REVIEW_ENDPOINT = "review-add"
 }

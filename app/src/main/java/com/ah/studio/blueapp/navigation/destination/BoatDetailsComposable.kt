@@ -29,7 +29,9 @@ fun NavGraphBuilder.boatDetailsComposable(
                 onBookNowClick = {
                     navHostController.navigate(ScreenController.BoatBooking.route + "/$boatId/${null}")
                 },
-                onReviewsClick = {},
+                onReviewsClick = {
+                    navHostController.navigate(ScreenController.ShowReviews.route)
+                },
                 onBackButtonClick = {
                     navHostController.popBackStack()
                 }

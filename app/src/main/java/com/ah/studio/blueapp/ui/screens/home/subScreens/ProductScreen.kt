@@ -274,7 +274,7 @@ fun ProductScreen(
                     modifier = Modifier
                         .fillMaxWidth(0.3f)
                         .height(50.dp)
-                        .clickable { onSkipButtonClick()}
+                        .clickable { onSkipButtonClick() }
                 ) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -538,33 +538,42 @@ fun CategoryCard(
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(
-                top = 34.dp,
+                top = 30.dp,
                 start = PaddingDouble,
                 end = PaddingDouble
             ),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.Start
     ) {
-        Image(
-            painter = image,
-            contentDescription = "",
-            contentScale = ContentScale.Crop,
+        BlueRoundedCornerShape(
             modifier = Modifier
+                .wrapContentSize()
                 .fillMaxWidth()
-                .height(170.dp)
-                .padding(bottom = 10.dp)
-        )
+                .padding(bottom = 10.dp),
+            containerColor = Color.White,
+            borderColor = SeaBlue400
+        ) {
+            Image(
+                painter = image,
+                contentDescription = "",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(170.dp)
+            )
+        }
         Text(
             text = name,
             fontSize = 17.sp,
             fontWeight = FontWeight.SemiBold,
             fontFamily = fontFamily,
             color = Color.Black,
-            maxLines = 1
+            maxLines = 1,
+            modifier = Modifier.padding(start = 2.dp)
         )
         Text(
             text = description,
-            fontSize = 14.sp,
+            fontSize = 12.sp,
             fontWeight = FontWeight.Normal,
             fontFamily = fontFamily,
             color = Grey600,
